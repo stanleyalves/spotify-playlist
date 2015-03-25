@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html ng-app="myApp" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+        <title>London tube info</title>
+
+        <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700%7CDroid+Serif:400,700' rel='stylesheet' type='text/css'>
+        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
+    </head>
+    <body ng-controller="MainCtrl">
+        <div class="wrapper">
+            <header>
+            </header>
+            
+            <div class="logo">
+                <img src="assets/img/underground.svg" alt="">
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a class="stations" href="#">Stations</a></li>
+                    <li><a class="about" href="#">About</a></li>
+                    <li><a class="lines" href="#">Lines</a></li>
+                </ul>
+            </nav>
+        </div>
+
+
+
+        <!-- app.js : environment : DEV -->
+        <script type="text/javascript" src="assets/js/app.js"></script>
+        <!-- app.min.js : environment : PROD -->
+        <!-- <script type="text/javascript" src="assets/scripts/app.min.js"></script> -->
+    </body>
+</html>
