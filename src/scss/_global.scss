@@ -107,8 +107,8 @@ nav {
 	}
 }
 
-.logo {
-	width: 50%;
+.center {
+	width: 40%;
 	max-width: 600px;
 	position: absolute;
 	margin: auto;
@@ -116,9 +116,20 @@ nav {
 	right: 0;
 	top: 0;
 	bottom: 0;
-	height: 50%;
+	height: 20%;
 
 	img {
 		width: 100%;
 	}
+
+	input {
+		border: 1px solid black;
+		width: 70%;
+		margin: auto;
+		margin-top: 10px;
+		display: block;
+		padding: 10px;
+		height: 30px;
+	}
 }
+

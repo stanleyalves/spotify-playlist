@@ -4,11 +4,16 @@
 
     var app = ng.module(ns + '.' + m, [ns + '.services']);
 
-    app.controller('MainCtrl', ['$scope', '$http', '$lineStatus' , function($scope, $http, $lineStatus) {
+    app.controller('MainCtrl', ['$scope', '$http', '$queryAPI' , function($scope, $http, $queryAPI) {
         
- 		var status = $lineStatus.query();
- 		// console.log(status)
+    }]);
 
+    app.controller('SearchCtrl', ['$scope', '$http', '$queryAPI' , function($scope, $http, $queryAPI) {
+        console.log('search controller');
+        d.querySelector('.search form').addEventListener('submit', function (e) {
+		    e.preventDefault();
+		    $queryAPI.query(d.querySelector('.searchbox').value);
+		}, false);
     }]);
 
 
