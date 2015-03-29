@@ -26358,6 +26358,20 @@ function xml2json(xml, tab) {
         
     }]);
 
+    app.controller('BackgroundCtrl', ['$scope', '$http', '$queryAPI' , function($scope, $http, $queryAPI) {
+        var artists = ['Michael Jackson','Jay-z', 'The smiths', 'Beyonce', 'Iron Maiden'],
+            randomArist = artists[Math.floor(Math.random() * artists.length)],
+            url = 'https://api.spotify.com/v1/search?q=' + randomArist + '&type=artist';
+
+        $http.get(url).success(function (data) {
+            console.log(data);
+            //The image;
+            console.log(data.artists.items[0].images)
+
+            $scope.backgroundHero = data.artists.items[0].images[0].url;
+        });
+    }]);
+
     app.controller('SearchCtrl', ['$scope', '$http', '$queryAPI' , function($scope, $http, $queryAPI) {
         console.log('search controller');
         d.querySelector('.search form').addEventListener('submit', function (e) {
@@ -26393,16 +26407,21 @@ function xml2json(xml, tab) {
     var app = ng.module(ns + '.' + m /* module name */, [ ] /* module dependencies */);
 
 	app.factory('$queryAPI', ['$http', function($http) {
-        
-        function query(query) {
-            var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist'
-            $http.get(url).success(function(data) {
+        var query = function (q) {
+            var url = 'https://api.spotify.com/v1/search?q=' + q + '&type=artist'
+
+            $http.get(url).
+            success(function(data) {
+                console.log('success')
                 console.log(data);
+                return data;
+            }).
+            error(function(data) {
+                console.log('fail')
             });
         };
 
-
-	    return {
+        return {
             query: query
         };
 

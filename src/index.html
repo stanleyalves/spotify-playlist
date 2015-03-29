@@ -12,9 +12,10 @@
     </head>
     <body ng-controller="MainCtrl">
         <div class="wrapper">
-            <header>
-            </header>
-            
+            <div ng-controller="BackgroundCtrl" class="background">
+                <img ng-src="{{backgroundHero}}" alt="">
+            </div>
+                        
             <div class="center">
                 <img src="assets/img/spotify-logo.svg" alt="">
                 <div ng-controller="SearchCtrl" class="search">

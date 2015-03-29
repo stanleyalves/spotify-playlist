@@ -5,16 +5,21 @@
     var app = ng.module(ns + '.' + m /* module name */, [ ] /* module dependencies */);
 
 	app.factory('$queryAPI', ['$http', function($http) {
-        
-        function query(query) {
-            var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist'
-            $http.get(url).success(function(data) {
+        var query = function (q) {
+            var url = 'https://api.spotify.com/v1/search?q=' + q + '&type=artist'
+
+            $http.get(url).
+            success(function(data) {
+                console.log('success')
                 console.log(data);
+                return data;
+            }).
+            error(function(data) {
+                console.log('fail')
             });
         };
 
-
-	    return {
+        return {
             query: query
         };
 
