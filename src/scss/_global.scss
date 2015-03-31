@@ -2,76 +2,10 @@
 body {
 	background: white;
 	color: black;
-	max-width: $max-page-width;
 	width: 100%;
-
 }
 
 * {
 	box-sizing: border-box;
-}
-
-p, a, h1, h2, h3, h4, h5 {
-	font-family: 'arial'
-}
-
-.caps {
-	text-transform: uppercase;	
-}
-
-.background {
-	width: 100%;
-	height: auto;
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	z-index: -500;
-	opacity: 0.2;
-
-	img {
-  		display: block;
-  		width: 100%;
-  		position: fixed;
-  	}
-}
-
-.wrapper {
-	height: 100%;
-	position: fixed;
-	width: 100%;
-	background-color: black;
-	margin: auto;
-	left: 0;
-	right: 0;
-}
-
-.center {
-	width: 32%;
-	max-width: 600px;
-	position: relative;
-	left: 0;
-	right: 0;
-	top: 40%;
-	bottom: 0;
-	padding: 20px;
-	background: rgba(255, 255, 255, 0.3);
-	margin: auto;
-
-	img {
-		width: 80%;
-		margin: auto;
-		display: block;
-		margin-bottom: 30px;
-	}
-
-	input {
-		border: 1px solid black;
-		width: 70%;
-		margin: auto;
-		margin-top: 10px;
-		display: block;
-		padding: 10px;
-		height: 30px;
-	}
 }
 

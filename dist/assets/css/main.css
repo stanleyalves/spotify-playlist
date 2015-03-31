@@ -1,7 +1,7 @@
 /*  Base styles, Colours, variables etc.
 /* ======================================= */
-/* Mini Colour variables as defined in the style guide */
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
   border: 0;
   font-size: 100%;
@@ -10,94 +10,39 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   margin: 0;
   padding: 0; }
 
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
   display: block; }
 
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 body {
   line-height: 1; }
 
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 ol, ul {
   list-style: none; }
 
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 blockquote, q {
   quotes: none; }
 
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 blockquote:before, blockquote:after, q:before, q:after {
   content: none; }
 
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_reset.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0; }
 
 /*  All typography styles
 /* ======================================= */
-@font-face {
-  font-family: 'Tube';
-  src: url('../fonts/london-underground.eot?') format('eot'), url('../fonts/london-underground.woff') format('woff'), url('../fonts/london-underground.ttf') format('truetype'), url('../fonts/london-underground.svg#London-Tube') format('svg');
-  font-weight: normal;
-  font-style: normal; }
-
-.f-tube {
-  font-family: 'Tube'; }
-
+/* line 2, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
 body {
   background: white;
   color: black;
-  max-width: 1280;
   width: 100%; }
 
+/* line 8, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
 * {
   box-sizing: border-box; }
-
-p, a, h1, h2, h3, h4, h5 {
-  font-family: 'arial'; }
-
-.caps {
-  text-transform: uppercase; }
-
-.background {
-  width: 100%;
-  height: auto;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  z-index: -500;
-  opacity: 0.2; }
-  .background img {
-    display: block;
-    width: 100%;
-    position: fixed; }
-
-.wrapper {
-  height: 100%;
-  position: fixed;
-  width: 100%;
-  background-color: black;
-  margin: auto;
-  left: 0;
-  right: 0; }
-
-.center {
-  width: 32%;
-  max-width: 600px;
-  position: relative;
-  left: 0;
-  right: 0;
-  top: 40%;
-  bottom: 0;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.3);
-  margin: auto; }
-  .center img {
-    width: 80%;
-    margin: auto;
-    display: block;
-    margin-bottom: 30px; }
-  .center input {
-    border: 1px solid black;
-    width: 70%;
-    margin: auto;
-    margin-top: 10px;
-    display: block;
-    padding: 10px;
-    height: 30px; }

@@ -1,39 +1,18 @@
-<!DOCTYPE html>
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html ng-app="myApp" class="no-js"> <!--<![endif]-->
+
+<!DOCTYPE html><!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]--><!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]--><!--[if IE 8]><html class="no-js lt-ie9"><![endif]--><!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]--><html xmlns:fb="http://ogp.me/ns/fb#">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-        <title>Spotify web search</title>
-
-        <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700%7CDroid+Serif:400,700' rel='stylesheet' type='text/css'>
-        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>React gulp browserify Boilerplate</title>
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
+      <link rel="stylesheet" href="assets/css/main.css">
+      <script src="http://fb.me/react-0.13.1.js"></script>
     </head>
-    <body ng-controller="MainCtrl">
-        <div class="wrapper">
-            <div ng-controller="BackgroundCtrl" class="background">
-                <img ng-src="{{backgroundHero}}" alt="">
-            </div>
-                        
-            <div class="center">
-                <img src="assets/img/spotify-logo.svg" alt="">
-                <div ng-controller="SearchCtrl" class="search">
-                    <form action="#">
-                        <input class="searchbox" type="text">
-                        <input type="submit">
-                    </form>
-                </div>
-            </div>
-            
+    <body>
+        <div id="example"></div>
 
-        </div>
-
-
-
-        <!-- app.js : environment : DEV -->
-        <script type="text/javascript" src="assets/js/app.js"></script>
-        <!-- app.min.js : environment : PROD -->
-        <!-- <script type="text/javascript" src="assets/scripts/app.min.js"></script> -->
+        <script src="assets/js/prod.js"></script>
     </body>
 </html>

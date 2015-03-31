@@ -1,13 +1,6 @@
-(function(w, d, n, ng, ns) {
+var Test = require('./modules/test');
 
-    'use strict';
-
-    var app = ng.module(ns, /* Module name */
-        [ns + '.services', ns + '.directives', ns + '.controllers', ns + '.filters'] /* Module dependencies */);
-
-
-    app.run(['$rootScope', '$http', function($rootScope, $http) {
-
-    }]);
-
-})(window,document,navigator,window.angular,'myApp');
+(function() {
+	console.log('JS working');
+	
+})();

@@ -8,7 +8,12 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     rename = require('gulp-rename'),
     plumber = require('gulp-plumber'),
-    size = require ('gulp-size');
+    size = require ('gulp-size'),
+    reactify = require('reactify');
+
+var browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer');
 
 var onerror = function(err) {
     if (err) gutil.log(gutil.colors.magenta('!! Error'), ':', gutil.colors.cyan(err.plugin), '-', gutil.colors.red(err.message));
@@ -26,13 +31,18 @@ function startExpress() {
 }
 
 gulp.task('scripts', function() {
-    return gulp.src(['./src/js/vendors/angular.min.js','./src/app.js','./src/**/*.js'])
+    return browserify({
+            entries: './src/js/app.js',
+            transform: [reactify]
+        })
+        .bundle()
+        .pipe(source('prod.js'))
         .pipe(plumber({
             errorHandler: onerror
         }))
-        .pipe(concat('app.js'))
         .pipe(gulp.dest('./dist/assets/js'))
-        .pipe(rename('app.min.js'))
+        .pipe(buffer())
+        .pipe(rename('prod.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./dist/assets/js'))
         .pipe(livereload());
