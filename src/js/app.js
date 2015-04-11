@@ -1,4 +1,4 @@
-var Test = require('./modules/test');
+var Test = require('./modules/commentBox');
 
 (function() {
 	console.log('JS working');

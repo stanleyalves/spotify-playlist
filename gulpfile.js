@@ -21,13 +21,43 @@ var onerror = function(err) {
 
 //Server Setup
 function startExpress() { 
-    var express = require('express');
-    var app = express();
-    app.use(require('connect-livereload')());
-    app.use(express.static(__dirname + '/dist'));
-    module.exports = app;
-    app.listen(4000);
-    console.log('http://localhost:4000 running');
+  var express = require('express');
+  var app = express();
+  var bodyParser = require('body-parser');
+  var fs = require('fs');
+  app.use(require('connect-livereload')());
+  app.use(express.static(__dirname + '/dist'));
+  module.exports = app;
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.set('port', (process.env.PORT || 4000));
+  app.listen(app.get('port'), function() {
+    console.log('Server started: http://localhost:' + app.get('port') + '/');
+  });
+
+  console.log('http://localhost:4000 running');
+
+
+  //Set up the routes for out GET and POST for our app.
+  app.get('/assets/data/comments.json', function(req, res) {
+    fs.readFile('src/assets/data/comments.json', function(err, data) {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
+    });
+  });
+
+  app.post('/assets/data/comments.json', function(req, res) {
+    console.log(req);
+    fs.readFile('src/assets/data/comments.json', function(err, data) {
+      var comments = JSON.parse(data);
+      comments.push(req.body);
+      fs.writeFile('src/assets/data/comments.json', JSON.stringify(comments, null, 4), function(err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.send(JSON.stringify(comments));
+      });
+    });
+  });
 }
 
 gulp.task('scripts', function() {
@@ -86,8 +116,16 @@ gulp.task('build', function(){
     console.log('...finished building')
 });
 
-gulp.task('watch', ['styles', 'scripts', 'html'], function() {
+gulp.task('data', function(){
+    console.log('data...')
+    gulp.src(['src/assets/data/*.json'])
+        .pipe(gulp.dest('dist/assets/data'));
+    console.log('...finished data')
+});
+
+gulp.task('watch', ['styles', 'data', 'scripts', 'html'], function() {
     gulp.watch('src/scss/**/*.scss', ['styles']);
+    gulp.watch('src/assets/data/*.json', ['data']);
     gulp.watch('src/**/*.js', ['scripts']);
     gulp.watch('src/**/*.html', ['html']);
     startExpress();

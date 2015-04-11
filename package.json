@@ -4,12 +4,14 @@
   "author": "Simon Holmes <srsholmes@gmail.com>",
   "license": "BSD-2-Clause",
   "devDependencies": {
+    "body-parser": "^1.12.2",
     "browserify": "^8.1.3",
     "compression": "^1.4.1",
     "connect-inject": "^0.3.2",
     "connect-livereload": "^0.5.3",
     "del": "~1.1.1",
     "express": "~4.9.8",
+    "body-parser": "^1.4.3",
     "gulp": "*",
     "gulp-autoprefixer": "*",
     "gulp-concat": "~2.5.2",
@@ -26,5 +28,5 @@
     "reactify": "^1.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0"
-    }
+  }
 }
