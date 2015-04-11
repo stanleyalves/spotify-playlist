@@ -1,2 +1,2 @@
-# react-gulp-browserify-test
-Getting started with react, using gulp and browserify.
+# Spotify webapp
+A Spotify web appplication
