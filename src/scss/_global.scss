@@ -14,6 +14,24 @@ body {
 	height: 100%;
 	position: absolute;
 	width: 100%;
+	background: rgba(blue, 0.8);
+}
+
+.recent-searches {
+		background: rgba(pink, 0.5);
+		
+		ul {
+			text-align: center;
+		}
+		li {
+			width: 18%;
+			display: inline-block;
+		}
+
+		.artist-pic {
+			height: 45px;
+			width: 45px;
+		}
 }
 
 .left-bar {
@@ -22,16 +40,22 @@ body {
 	position: absolute;
 	height: 100%;
 	padding: 10px;
+	background: rgba(red, 0.5);
 
-	input[type="text"] {
-		width: 60%;
-		display: inline-block;
+	header {
+		background: rgba(yellow, 0.5);
+		input[type="text"] {
+			width: 60%;
+			display: inline-block;
+		}
+
+		input[type="submit"] {
+			width: 20%;
+			display: inline-block;
+		}
 	}
 
-	input[type="submit"] {
-		width: 20%;
-		display: inline-block;
-	}
+	
 }
 
 .main {
@@ -44,15 +68,18 @@ body {
 
 .results {
 	text-align: left;
+	background: rgba(orange, 0.5);
+}
+
+.artist-pic {
+	height: 70px;
+	width: 70px;
+	border-radius: 40px;
+	display: inline-block;
 }
 
 .info-wrapper	{
-	img {
-		height: 70px;
-		width: 70px;
-		border-radius: 40px;
-		display: inline-block;
-	}
+	background: rgba(green, 0.5);
 
 	.img-wrapper {
 		display: inline-block;
@@ -67,8 +94,14 @@ body {
 }
 
 .similar-artists {
+	background: rgba(white, 0.5);
+
 	li {
 		display: inline-block;
 		margin-right: 10px;
 	}
+}
+
+.player-wrapper {
+	background: rgba(yellow, 0.5);
 }
