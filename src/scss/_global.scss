@@ -9,3 +9,66 @@ body {
 	box-sizing: border-box;
 }
 
+.wrapper {
+	margin: auto;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+
+.left-bar {
+	border-right: 1px solid grey;
+	width: 25%;
+	position: absolute;
+	height: 100%;
+	padding: 10px;
+
+	input[type="text"] {
+		width: 60%;
+		display: inline-block;
+	}
+
+	input[type="submit"] {
+		width: 20%;
+		display: inline-block;
+	}
+}
+
+.main {
+	position: absolute;
+	right: 0;
+	width: 75%;
+	height: 100%;
+	padding-left: 20px;
+}
+
+.results {
+	text-align: left;
+}
+
+.info-wrapper	{
+	img {
+		height: 70px;
+		width: 70px;
+		border-radius: 40px;
+		display: inline-block;
+	}
+
+	.img-wrapper {
+		display: inline-block;
+		width: 10%;
+		vertical-align: top;
+	}
+
+	.text-wrapper {
+		display: inline-block;
+		width: 80%;
+	}
+}
+
+.similar-artists {
+	li {
+		display: inline-block;
+		margin-right: 10px;
+	}
+}

@@ -8,10 +8,10 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     rename = require('gulp-rename'),
     plumber = require('gulp-plumber'),
-    size = require ('gulp-size'),
-    reactify = require('reactify');
+    size = require ('gulp-size')
 
 var browserify = require('browserify'),
+    babelify = require('babelify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer');
 
@@ -35,9 +35,6 @@ function startExpress() {
     console.log('Server started: http://localhost:' + app.get('port') + '/');
   });
 
-  console.log('http://localhost:4000 running');
-
-
   //Set up the routes for out GET and POST for our app.
   app.get('/assets/data/comments.json', function(req, res) {
     fs.readFile('src/assets/data/comments.json', function(err, data) {
@@ -47,7 +44,6 @@ function startExpress() {
   });
 
   app.post('/assets/data/comments.json', function(req, res) {
-    console.log(req);
     fs.readFile('src/assets/data/comments.json', function(err, data) {
       var comments = JSON.parse(data);
       comments.push(req.body);
@@ -58,24 +54,24 @@ function startExpress() {
       });
     });
   });
-}
+} 
 
 gulp.task('scripts', function() {
-    return browserify({
-            entries: './src/js/app.js',
-            transform: [reactify]
-        })
-        .bundle()
-        .pipe(source('prod.js'))
-        .pipe(plumber({
-            errorHandler: onerror
-        }))
-        .pipe(gulp.dest('./dist/assets/js'))
-        .pipe(buffer())
-        .pipe(rename('prod.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./dist/assets/js'))
-        .pipe(livereload());
+  return browserify({
+      entries: './src/js/app.js',
+      transform: [babelify]
+  })
+  .bundle()
+  .pipe(source('prod.js'))
+  .pipe(plumber({
+      errorHandler: onerror
+  }))
+  .pipe(gulp.dest('./dist/assets/js'))
+  .pipe(buffer())
+  .pipe(rename('prod.min.js'))
+  .pipe(uglify())
+  .pipe(gulp.dest('./dist/assets/js'))
+  .pipe(livereload());
 });
 
 gulp.task('styles', function() {
