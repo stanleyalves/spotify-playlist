@@ -58,9 +58,9 @@ function startExpress() {
 
 gulp.task('scripts', function() {
   return browserify({
-      entries: './src/js/app.js',
-      transform: [babelify]
+      entries: './src/js/app.js'
   })
+  .transform(babelify)
   .bundle()
   .pipe(source('prod.js'))
   .pipe(plumber({

@@ -1,7 +1,5 @@
-var SpotifyApp = require('./modules/spotifySearch');
-var Utils = require('./modules/utils');
+require('babelify/polyfill');
 
-(function() {
-	console.log('JS working');
-	
-})();
+import { start } from './modules/spotifySearch';
+
+start();

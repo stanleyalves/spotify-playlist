@@ -1,13 +1,33 @@
 
+import { ajax } from './utils';
 
+// let arr = [1, 2, 3, 4];
+
+// let [first, ...rest] = arr;
+
+// console.log(first, rest);
+
+// let select = (sel, context = document) => [...context.querySelectorAll(sel)];
+
+// select('div').forEach((el) => (el.innerText = 'shit'));
+
+// var obj = {
+//   a: '1',
+//   b: '2',
+//   c: '3'
+// };
+
+// let { a, b } = obj;
+
+// let mutated = arr.map((x) => x * x);
 
 var SpotifySearch = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
     return {data: []};
   },
 
-  render : function(){
+  render(){
     return (
       <div className = "wrapper">
         <LeftBar/>
@@ -18,7 +38,7 @@ var SpotifySearch = React.createClass({
 });
 
 var Main = React.createClass({
-  render : function() {
+  render() {
     return (
       <div className="main">
         <SelectedArtst/>
@@ -30,7 +50,7 @@ var Main = React.createClass({
 });
 
 var SelectedArtst = React.createClass({
-  render : function() {
+  render() {
     return (
       <div className="info-wrapper">
         <div className="selected-artist">
@@ -48,7 +68,7 @@ var SelectedArtst = React.createClass({
 });
 
 var SimilarArtst = React.createClass({
-  render : function() {
+  render() {
     return (
       <ul className="similar-artists">
         <h3>Similar Artists</h3>
@@ -63,7 +83,7 @@ var SimilarArtst = React.createClass({
 });
 
 var Player = React.createClass({
-  render : function() {
+  render() {
     return (
       <div className="player-wrapper">
         <div className="player">
@@ -80,7 +100,7 @@ var Player = React.createClass({
 });
 
 var LeftBar = React.createClass({
-  render : function() {
+  render() {
     return (
       <div className="left-bar">
         <SearchHeader/>
@@ -93,7 +113,7 @@ var LeftBar = React.createClass({
 
 
 var RecentResults = React.createClass({
-  render: function() {
+  render() {
     return (
       <div className="recent-searches" >
         <h3>Recent searches</h3>
@@ -108,8 +128,7 @@ var RecentResults = React.createClass({
 });
 
 var RecentSearches = React.createClass({
-
-  render: function() {
+  render() {
     return (
       <div className="recent-searches">
         <h3>recent searches</h3>
@@ -121,15 +140,14 @@ var RecentSearches = React.createClass({
       </div>
     );
   }
-
 });
 
 var Results = React.createClass({
-  render: function() {
+  render() {
     return (
       <ul>
         <li>
-          <div class="artist">
+          <div className="artist">
             <h3>Result name</h3>
             <a href="#">View information</a>
           </div>
@@ -141,16 +159,24 @@ var Results = React.createClass({
 
 
 var SearchHeader = React.createClass({
-
-  handleSubmit: function(e) {
+  handleSubmit(e) {
     e.preventDefault();
     console.log('form submit');
-    var query = React.findDOMNode(this.refs.searchBar).value.trim();
+    var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
     console.log(query)
+    var url = 'https://api.spotify.com/v1/search?q='+ query +'&type=artist';
 
+    ajax({
+      url: url,
+      method:'GET',
+      dataType: 'json',
+      success: function(data){
+        console.log(data)
+      }.bind(this)
+    });
   },
 
-  render : function() {
+  render() {
     return (
       <header>
         <h1>Spotify Search</h1>
@@ -166,8 +192,9 @@ var SearchHeader = React.createClass({
 //This is the React render function which renders your App. 
 //It is pasing in the data array into the comment box which will filter down into child
 //components
-React.render(
-  <SpotifySearch />, document.body
-);
-
-
+export function start() {
+  console.log('start');
+  React.render(
+    <SpotifySearch />, document.body
+  );
+}

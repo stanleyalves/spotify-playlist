@@ -28,7 +28,7 @@ function ajax (opts) {
   if (args.method === 'GET' && !args.cache) args.data += '_=' + new Date().getTime();
 
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = () => {
       var rs = xhr.readyState;
       if (rs < 4) return;
       if (rs === 4) {
@@ -52,7 +52,7 @@ function ajax (opts) {
           }
       }
   };
-  xhr.onerror = function() {
+  xhr.onerror = () => {
       args.error.call(this, xhr.responseText);
   };
   xhr.open(args.method, args.url, args.async);
@@ -63,4 +63,4 @@ function ajax (opts) {
   xhr.send(args.data);
 }
 
-
+export default { extend, ajax };  
