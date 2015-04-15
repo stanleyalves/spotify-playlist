@@ -3251,11 +3251,21 @@ var Player = React.createClass({
   }
 });
 
+//Note the initial state needs to reflect the data you want to get from the server.
+// Make an empty object with the keys/arrays you are expecting
 var LeftBar = React.createClass({
   displayName: "LeftBar",
 
   getInitialState: function getInitialState() {
-    return { data: [] };
+    return {
+      data: {
+        data: {
+          artists: {
+            items: []
+          }
+        }
+      }
+    };
   },
 
   handleSearchSubmit: function handleSearchSubmit(data) {
@@ -3277,19 +3287,18 @@ var LeftBar = React.createClass({
 var Results = React.createClass({
   displayName: "Results",
 
-  getInitialState: function getInitialState() {
-    return { data: [] };
-  },
   render: function render() {
-    console.log(this.props.data);
-
-    var searchResults = this.props.data.map(function (data) {
+    var artistArray = this.props.data.data.artists.items.slice(0, 5);
+    // console.log(artistArray);
+    var artists = artistArray.map(function (data) {
+      console.log(data.images[0].url);
       return React.createElement(
         "li",
         null,
         React.createElement(
           "div",
           { className: "artist" },
+          React.createElement("img", { className: "artist-pic", src: data.images[0].url }),
           React.createElement(
             "h3",
             null,
@@ -3297,7 +3306,7 @@ var Results = React.createClass({
           ),
           React.createElement(
             "a",
-            { href: "#" },
+            { href: data.href },
             "View information"
           )
         )
@@ -3307,7 +3316,7 @@ var Results = React.createClass({
     return React.createElement(
       "ul",
       null,
-      searchResults
+      artists
     );
   }
 });
@@ -3326,7 +3335,6 @@ var SearchHeader = React.createClass({
       dataType: "json",
       success: (function (data) {
         this.props.onSearchSubmit({ data: data });
-        console.log(data);
       }).bind(this)
     });
   },
@@ -3403,6 +3411,8 @@ function start() {
   console.log("start");
   React.render(React.createElement(SpotifySearch, null), document.body);
 }
+
+// console.log(data)
 
 },{"./utils":78}],78:[function(require,module,exports){
 'use strict';

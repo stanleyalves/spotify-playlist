@@ -99,9 +99,20 @@ var Player = React.createClass({
   }
 });
 
+
+//Note the initial state needs to reflect the data you want to get from the server.
+// Make an empty object with the keys/arrays you are expecting
 var LeftBar = React.createClass({
   getInitialState() {
-    return {data: []};
+    return {
+      data: {
+        data: {
+          artists: {
+            items :[]
+          }
+        }
+      }
+    };
   },
 
   handleSearchSubmit(data) {
@@ -121,18 +132,18 @@ var LeftBar = React.createClass({
 });
 
 var Results = React.createClass({
-  getInitialState() {
-    return {data: []};
-  },
-  render() {
-    console.log(this.props.data);
 
-    var searchResults = this.props.data.map(function (data){
+  render() {
+    var artistArray = this.props.data.data.artists.items.slice(0, 5);
+    // console.log(artistArray);
+    var artists = artistArray.map(function (data){
+      console.log(data.images[0].url)
       return (
         <li>
           <div className="artist">
+            <img className="artist-pic" src={data.images[0].url}/>
             <h3>{data.name}</h3>
-            <a href="#">View information</a>
+            <a href={data.href}>View information</a>
           </div>
         </li>
       )
@@ -140,7 +151,7 @@ var Results = React.createClass({
 
     return (
       <ul>
-        {searchResults}
+        {artists}
       </ul>
     ) 
     
@@ -160,7 +171,7 @@ var SearchHeader = React.createClass({
       dataType: 'json',
       success: function(data){
         this.props.onSearchSubmit({data:data})
-        console.log(data)
+        // console.log(data)
       }.bind(this)
     });
   },
