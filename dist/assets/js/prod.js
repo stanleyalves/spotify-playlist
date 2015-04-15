@@ -3283,22 +3283,8 @@ var Results = React.createClass({
   render: function render() {
     console.log(this.props.data);
 
-    // var searchResults = this.props.data;
-
-    // var searchResults = this.props.data.map(function (data){
-    //   return (
-    //     <li>
-    //       <div className="artist">
-    //         <h3>{data.name}</h3>
-    //         <a href="#">View information</a>
-    //       </div>
-    //     </li>
-    //   )
-    // });
-
-    var searchResults = [];
-    for (var i = 0; i < 5; i++) {
-      searchResults.push(React.createElement(
+    var searchResults = this.props.data.map(function (data) {
+      return React.createElement(
         "li",
         null,
         React.createElement(
@@ -3307,7 +3293,7 @@ var Results = React.createClass({
           React.createElement(
             "h3",
             null,
-            "Hello"
+            data.name
           ),
           React.createElement(
             "a",
@@ -3315,8 +3301,8 @@ var Results = React.createClass({
             "View information"
           )
         )
-      ));
-    }
+      );
+    });
 
     return React.createElement(
       "ul",

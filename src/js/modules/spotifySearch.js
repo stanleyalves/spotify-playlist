@@ -127,31 +127,16 @@ var Results = React.createClass({
   render() {
     console.log(this.props.data);
 
-    // var searchResults = this.props.data;
-
-
-    // var searchResults = this.props.data.map(function (data){
-    //   return (
-    //     <li>
-    //       <div className="artist">
-    //         <h3>{data.name}</h3>
-    //         <a href="#">View information</a>
-    //       </div>
-    //     </li>
-    //   )
-    // }); 
-
-    var searchResults = [];
-    for (var i=0; i < 5; i++) {
-      searchResults.push(
+    var searchResults = this.props.data.map(function (data){
+      return (
         <li>
           <div className="artist">
-            <h3>Hello</h3>
+            <h3>{data.name}</h3>
             <a href="#">View information</a>
           </div>
         </li>
-      );
-    }
+      )
+    }); 
 
     return (
       <ul>
