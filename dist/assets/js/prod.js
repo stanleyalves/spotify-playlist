@@ -3254,13 +3254,112 @@ var Player = React.createClass({
 var LeftBar = React.createClass({
   displayName: "LeftBar",
 
+  getInitialState: function getInitialState() {
+    return { data: [] };
+  },
+
+  handleSearchSubmit: function handleSearchSubmit(data) {
+    console.log("handle search submit");
+    this.setState({ data: data });
+  },
+
   render: function render() {
     return React.createElement(
       "div",
       { className: "left-bar" },
-      React.createElement(SearchHeader, null),
-      React.createElement(Results, null),
+      React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
+      React.createElement(Results, { data: this.state.data }),
       React.createElement(RecentSearches, null)
+    );
+  }
+});
+
+var Results = React.createClass({
+  displayName: "Results",
+
+  getInitialState: function getInitialState() {
+    return { data: [] };
+  },
+  render: function render() {
+    console.log(this.props.data);
+
+    // var searchResults = this.props.data;
+
+    // var searchResults = this.props.data.map(function (data){
+    //   return (
+    //     <li>
+    //       <div className="artist">
+    //         <h3>{data.name}</h3>
+    //         <a href="#">View information</a>
+    //       </div>
+    //     </li>
+    //   )
+    // });
+
+    var searchResults = [];
+    for (var i = 0; i < 5; i++) {
+      searchResults.push(React.createElement(
+        "li",
+        null,
+        React.createElement(
+          "div",
+          { className: "artist" },
+          React.createElement(
+            "h3",
+            null,
+            "Hello"
+          ),
+          React.createElement(
+            "a",
+            { href: "#" },
+            "View information"
+          )
+        )
+      ));
+    }
+
+    return React.createElement(
+      "ul",
+      null,
+      searchResults
+    );
+  }
+});
+
+var SearchHeader = React.createClass({
+  displayName: "SearchHeader",
+
+  handleSubmit: function handleSubmit(e) {
+    e.preventDefault();
+    var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
+    var url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
+
+    _ajax.ajax({
+      url: url,
+      method: "GET",
+      dataType: "json",
+      success: (function (data) {
+        this.props.onSearchSubmit({ data: data });
+        console.log(data);
+      }).bind(this)
+    });
+  },
+
+  render: function render() {
+    return React.createElement(
+      "header",
+      null,
+      React.createElement(
+        "h1",
+        null,
+        "Spotify Search"
+      ),
+      React.createElement(
+        "form",
+        { className: "search-form", onSubmit: this.handleSubmit },
+        React.createElement("input", { type: "text", placeholder: "search for an artist", ref: "searchBar" }),
+        React.createElement("input", { type: "submit" })
+      )
     );
   }
 });
@@ -3310,74 +3409,6 @@ var RecentSearches = React.createClass({
           null,
           React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg" })
         )
-      )
-    );
-  }
-});
-
-var Results = React.createClass({
-  displayName: "Results",
-
-  render: function render() {
-    return React.createElement(
-      "ul",
-      null,
-      React.createElement(
-        "li",
-        null,
-        React.createElement(
-          "div",
-          { className: "artist" },
-          React.createElement(
-            "h3",
-            null,
-            "Result name"
-          ),
-          React.createElement(
-            "a",
-            { href: "#" },
-            "View information"
-          )
-        )
-      )
-    );
-  }
-});
-
-var SearchHeader = React.createClass({
-  displayName: "SearchHeader",
-
-  handleSubmit: function handleSubmit(e) {
-    e.preventDefault();
-    console.log("form submit");
-    var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
-    console.log(query);
-    var url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
-
-    _ajax.ajax({
-      url: url,
-      method: "GET",
-      dataType: "json",
-      success: (function (data) {
-        console.log(data);
-      }).bind(this)
-    });
-  },
-
-  render: function render() {
-    return React.createElement(
-      "header",
-      null,
-      React.createElement(
-        "h1",
-        null,
-        "Spotify Search"
-      ),
-      React.createElement(
-        "form",
-        { className: "search-form", onSubmit: this.handleSubmit },
-        React.createElement("input", { type: "text", placeholder: "search for an artist", ref: "searchBar" }),
-        React.createElement("input", { type: "submit" })
       )
     );
   }
