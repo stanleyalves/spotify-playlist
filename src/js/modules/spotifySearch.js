@@ -1,5 +1,5 @@
 
-import { ajax } from './utils';
+import { ajax, isEmpty } from './utils';
 
 // let arr = [1, 2, 3, 4];
 
@@ -21,9 +21,7 @@ import { ajax } from './utils';
 
 // let mutated = arr.map((x) => x * x);
 
-function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-}
+
 
 
 var SpotifySearch = React.createClass({
@@ -149,6 +147,7 @@ var Results = React.createClass({
 
     var obj = this.props.data;
 
+    //Check to see if the object is empty
     if (isEmpty(obj)) {
       return (
         <li><p>Please search for an artist</p></li>
@@ -160,11 +159,12 @@ var Results = React.createClass({
     var artistArray = this.props.data.data.artists.items.slice(0, 5);
     // // console.log(artistArray);
     var artists = artistArray.map(function (data){
-      console.log(data.images[0].url)
+      console.log(data);
+
       return (
         <li>
           <div className="artist">
-            <img className="artist-pic" src={data.images[0].url}/>
+            <img className="artist-pic" src={data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150'}/>
             <p>{data.name}</p>
             <a href={data.href}>View information</a>
           </div>

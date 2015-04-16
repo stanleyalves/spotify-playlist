@@ -3102,7 +3102,7 @@ Object.defineProperty(exports, "__esModule", {
 //components
 exports.start = start;
 
-var _ajax = require("./utils");
+var _ajax$isEmpty = require("./utils");
 
 // let arr = [1, 2, 3, 4];
 
@@ -3123,10 +3123,6 @@ var _ajax = require("./utils");
 // let { a, b } = obj;
 
 // let mutated = arr.map((x) => x * x);
-
-function isEmpty(obj) {
-  return Object.keys(obj).length === 0;
-}
 
 var SpotifySearch = React.createClass({
   displayName: "SpotifySearch",
@@ -3301,7 +3297,8 @@ var Results = React.createClass({
 
     var obj = this.props.data;
 
-    if (isEmpty(obj)) {
+    //Check to see if the object is empty
+    if (_ajax$isEmpty.isEmpty(obj)) {
       return React.createElement(
         "li",
         null,
@@ -3318,14 +3315,15 @@ var Results = React.createClass({
     var artistArray = this.props.data.data.artists.items.slice(0, 5);
     // // console.log(artistArray);
     var artists = artistArray.map(function (data) {
-      console.log(data.images[0].url);
+      console.log(data);
+
       return React.createElement(
         "li",
         null,
         React.createElement(
           "div",
           { className: "artist" },
-          React.createElement("img", { className: "artist-pic", src: data.images[0].url }),
+          React.createElement("img", { className: "artist-pic", src: data.images.length > 1 ? data.images[0].url : "http://placehold.it/150x150" }),
           React.createElement(
             "p",
             null,
@@ -3360,7 +3358,7 @@ var SearchHeader = React.createClass({
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
     var url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
 
-    _ajax.ajax({
+    _ajax$isEmpty.ajax({
       url: url,
       method: "GET",
       dataType: "json",
@@ -3517,7 +3515,11 @@ function ajax(opts) {
     xhr.send(args.data);
 }
 
-exports['default'] = { extend: extend, ajax: ajax };
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
+exports['default'] = { extend: extend, ajax: ajax, isEmpty: isEmpty };
 module.exports = exports['default'];
 
 },{}]},{},[1]);
