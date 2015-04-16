@@ -3091,9 +3091,9 @@ module.exports = require("./lib/babel/polyfill");
 module.exports = require("babel-core/polyfill");
 
 },{"babel-core/polyfill":75}],77:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
@@ -3102,7 +3102,7 @@ Object.defineProperty(exports, "__esModule", {
 //components
 exports.start = start;
 
-var _ajax$isEmpty = require("./utils");
+var _ajax$isEmpty = require('./utils');
 
 // let arr = [1, 2, 3, 4];
 
@@ -3125,243 +3125,147 @@ var _ajax$isEmpty = require("./utils");
 // let mutated = arr.map((x) => x * x);
 
 var SpotifySearch = React.createClass({
-  displayName: "SpotifySearch",
+  displayName: 'SpotifySearch',
 
   getInitialState: function getInitialState() {
-    return { data: [] };
+    return { data: {} };
+  },
+
+  handleSearchSubmit: function handleSearchSubmit(data) {
+    console.log('handle search submit');
+    this.setState({ data: data });
+  },
+
+  handleClick: function handleClick() {
+    console.log('handle click on parent');
+  },
+
+  selectedArtistObj: function selectedArtistObj() {
+    var artist = {
+      name: 'Simon Holmes',
+      info: 'Here is some info'
+    };
+    return artist;
   },
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "wrapper" },
-      React.createElement(LeftBar, null),
-      React.createElement(Main, null)
-    );
-  }
-});
-
-var Main = React.createClass({
-  displayName: "Main",
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "main" },
-      React.createElement(SelectedArtst, null),
-      React.createElement(SimilarArtst, null),
-      React.createElement(Player, null)
+      'div',
+      { className: 'wrapper' },
+      React.createElement(
+        'div',
+        { className: 'left-bar' },
+        React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
+        React.createElement(Results, { data: this.state.data, onClick: this.handleClick }),
+        React.createElement(RecentSearches, null)
+      ),
+      React.createElement(
+        'div',
+        { className: 'main' },
+        React.createElement(SelectedArtst, { selectedArtist: this.selectedArtistObj() }),
+        React.createElement(SimilarArtst, null),
+        React.createElement(Player, null)
+      )
     );
   }
 });
 
 var SelectedArtst = React.createClass({
-  displayName: "SelectedArtst",
+  displayName: 'SelectedArtst',
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "info-wrapper" },
+      'div',
+      { className: 'info-wrapper' },
       React.createElement(
-        "div",
-        { className: "selected-artist" },
+        'div',
+        { className: 'selected-artist' },
         React.createElement(
-          "h2",
+          'h2',
           null,
-          "Artist Name"
+          this.props.selectedArtist.name
         ),
         React.createElement(
-          "div",
-          { className: "img-wrapper" },
-          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg", alt: "Artist name" })
+          'div',
+          { className: 'img-wrapper' },
+          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg', alt: 'Artist name' })
         ),
         React.createElement(
-          "div",
-          { className: "text-wrapper" },
-          React.createElement(
-            "p",
-            null,
-            "lorem"
-          )
+          'div',
+          { className: 'text-wrapper' },
+          this.props.selectedArtist.info
         )
       )
-    );
-  }
-});
-
-var SimilarArtst = React.createClass({
-  displayName: "SimilarArtst",
-
-  render: function render() {
-    return React.createElement(
-      "ul",
-      { className: "similar-artists" },
-      React.createElement(
-        "h3",
-        null,
-        "Similar Artists"
-      ),
-      React.createElement(
-        "li",
-        null,
-        React.createElement(
-          "div",
-          { className: "img-wrapper" },
-          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg", alt: "Artist name" })
-        )
-      )
-    );
-  }
-});
-
-var Player = React.createClass({
-  displayName: "Player",
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "player-wrapper" },
-      React.createElement(
-        "div",
-        { className: "player" },
-        React.createElement(
-          "h3",
-          null,
-          "Player Here"
-        )
-      ),
-      React.createElement(
-        "div",
-        { className: "other-tracks" },
-        React.createElement(
-          "ul",
-          null,
-          React.createElement(
-            "li",
-            null,
-            React.createElement(
-              "a",
-              { href: "#" },
-              "Track Name here"
-            )
-          )
-        )
-      )
-    );
-  }
-});
-
-//Note the initial state needs to reflect the data you want to get from the server.
-// Make an empty object with the keys/arrays you are expecting
-var LeftBar = React.createClass({
-  displayName: "LeftBar",
-
-  getInitialState: function getInitialState() {
-    return {
-      data: {}
-    };
-  },
-
-  handleSearchSubmit: function handleSearchSubmit(data) {
-    console.log("handle search submit");
-    this.setState({ data: data });
-  },
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "left-bar" },
-      React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
-      React.createElement(Results, { data: this.state.data }),
-      React.createElement(RecentSearches, null)
     );
   }
 });
 
 var Results = React.createClass({
-  displayName: "Results",
+  displayName: 'Results',
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      data: {
-        data: {
-          artists: {
-            items: []
-          }
-        }
-      }
-    };
+  handleClick: function handleClick() {
+    console.log('handling the click in results');
+    this.props.onClick(this);
   },
 
   render: function render() {
-
     var obj = this.props.data;
-
-    //Check to see if the object is empty
+    //Check to see if the object is empty, if so return an empty <li>
     if (_ajax$isEmpty.isEmpty(obj)) {
-      return React.createElement(
-        "li",
-        null,
-        React.createElement(
-          "p",
+      return React.createElement('li', null);
+    } else {
+      var artistArray = this.props.data.data.artists.items.slice(0, 10);
+      //N.B: http://stackoverflow.com/questions/29549375/react-0-13-class-method-undefined
+      // Because your code is in strict mode (modules are always in strict mode),
+      // this is undefined inside the function you pass to .map.
+      //You either have to explicitly set the context by passing
+      var artists = artistArray.map(function (data, i) {
+        return React.createElement(
+          'li',
           null,
-          "Please search for an artist"
+          React.createElement(
+            'div',
+            { className: 'artist' },
+            React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150' }),
+            React.createElement(
+              'p',
+              null,
+              data.name
+            ),
+            React.createElement(
+              'a',
+              { onClick: this.handleClick },
+              'View more info'
+            )
+          )
+        );
+      }, this);
+
+      return React.createElement(
+        'div',
+        { className: 'results' },
+        React.createElement(
+          'ul',
+          null,
+          artists
         )
       );
     }
-
-    console.log(this.props.data);
-
-    var artistArray = this.props.data.data.artists.items.slice(0, 5);
-    // // console.log(artistArray);
-    var artists = artistArray.map(function (data) {
-      console.log(data);
-
-      return React.createElement(
-        "li",
-        null,
-        React.createElement(
-          "div",
-          { className: "artist" },
-          React.createElement("img", { className: "artist-pic", src: data.images.length > 1 ? data.images[0].url : "http://placehold.it/150x150" }),
-          React.createElement(
-            "p",
-            null,
-            data.name
-          ),
-          React.createElement(
-            "a",
-            { href: data.href },
-            "View information"
-          )
-        )
-      );
-    });
-
-    return React.createElement(
-      "div",
-      { className: "results" },
-      React.createElement(
-        "ul",
-        null,
-        artists
-      )
-    );
   }
 });
 
 var SearchHeader = React.createClass({
-  displayName: "SearchHeader",
+  displayName: 'SearchHeader',
 
   handleSubmit: function handleSubmit(e) {
     e.preventDefault();
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
-    var url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
+    var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
 
     _ajax$isEmpty.ajax({
       url: url,
-      method: "GET",
-      dataType: "json",
+      method: 'GET',
+      dataType: 'json',
       success: (function (data) {
         this.props.onSearchSubmit({ data: data });
       }).bind(this)
@@ -3370,42 +3274,79 @@ var SearchHeader = React.createClass({
 
   render: function render() {
     return React.createElement(
-      "header",
+      'header',
       null,
       React.createElement(
-        "h1",
+        'h1',
         null,
-        "Spotify Search"
+        'Spotify Search'
       ),
       React.createElement(
-        "form",
-        { className: "search-form", onSubmit: this.handleSubmit },
-        React.createElement("input", { type: "text", placeholder: "search for an artist", ref: "searchBar" }),
-        React.createElement("input", { type: "submit" })
+        'form',
+        { className: 'search-form', onSubmit: this.handleSubmit },
+        React.createElement('input', { type: 'text', value: 'Queen', placeholder: 'search for an artist', ref: 'searchBar' }),
+        React.createElement('input', { type: 'submit' })
       )
     );
   }
 });
 
-var RecentResults = React.createClass({
-  displayName: "RecentResults",
+var SimilarArtst = React.createClass({
+  displayName: 'SimilarArtst',
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "recent-searches" },
+      'ul',
+      { className: 'similar-artists' },
       React.createElement(
-        "h3",
+        'h3',
         null,
-        "Recent searches"
+        'Similar Artists'
       ),
       React.createElement(
-        "ul",
+        'li',
         null,
         React.createElement(
-          "li",
+          'div',
+          { className: 'img-wrapper' },
+          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg', alt: 'Artist name' })
+        )
+      )
+    );
+  }
+});
+
+var Player = React.createClass({
+  displayName: 'Player',
+
+  render: function render() {
+    return React.createElement(
+      'div',
+      { className: 'player-wrapper' },
+      React.createElement(
+        'div',
+        { className: 'player' },
+        React.createElement(
+          'h3',
           null,
-          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg" })
+          'Player Here'
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'other-tracks' },
+        React.createElement(
+          'ul',
+          null,
+          React.createElement(
+            'li',
+            null,
+            React.createElement(
+              'a',
+              { href: '#' },
+              'Track Name here'
+            )
+          )
         )
       )
     );
@@ -3413,34 +3354,37 @@ var RecentResults = React.createClass({
 });
 
 var RecentSearches = React.createClass({
-  displayName: "RecentSearches",
+  displayName: 'RecentSearches',
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "recent-searches" },
+      'div',
+      { className: 'recent-searches' },
       React.createElement(
-        "h3",
+        'h3',
         null,
-        "recent searches"
+        'recent searches'
       ),
       React.createElement(
-        "ul",
+        'ul',
         null,
         React.createElement(
-          "li",
+          'li',
           null,
-          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg" })
+          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg' })
         )
       )
     );
   }
 });
 function start() {
-  console.log("start");
+  console.log('start');
   React.render(React.createElement(SpotifySearch, null), document.body);
 }
 
+//http://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
+// childComponent.props
+// childComponent.refs
 // console.log(data)
 
 },{"./utils":78}],78:[function(require,module,exports){

@@ -9,6 +9,10 @@ body {
 	box-sizing: border-box;
 }
 
+ul, li {
+	list-style: none;
+}
+
 .wrapper {
 	margin: auto;
 	height: 100%;
@@ -41,6 +45,7 @@ body {
 	height: 100%;
 	padding: 10px;
 	background: rgba(red, 0.5);
+	overflow: hidden;
 
 	header {
 		background: rgba(yellow, 0.5);
@@ -67,8 +72,10 @@ body {
 }
 
 .results {
+	height: 68%;
 	text-align: left;
-	background: rgba(orange, 0.5);
+	background: rgba(255, 165, 0, 0.5);
+	overflow-y: scroll;
 
 	.artist {
 		margin-top: 5px;
@@ -77,8 +84,8 @@ body {
 
 	p {
 		 width: 69%;
-  	display: inline-block;
-  	margin-left: 4px;
+  		display: inline-block;
+  		margin-left: 4px;
 	}
 
 	.artist-pic {
