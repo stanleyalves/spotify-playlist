@@ -69,6 +69,23 @@ body {
 .results {
 	text-align: left;
 	background: rgba(orange, 0.5);
+
+	.artist {
+		margin-top: 5px;
+		border: 1px solid black;
+	}
+
+	p {
+		 width: 69%;
+  	display: inline-block;
+  	margin-left: 4px;
+	}
+
+	.artist-pic {
+		height: 40px;
+		width: 40px;
+
+	}
 }
 
 .artist-pic {

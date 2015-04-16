@@ -21,6 +21,11 @@ import { ajax } from './utils';
 
 // let mutated = arr.map((x) => x * x);
 
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
+
+
 var SpotifySearch = React.createClass({
 
   getInitialState() {
@@ -106,11 +111,6 @@ var LeftBar = React.createClass({
   getInitialState() {
     return {
       data: {
-        data: {
-          artists: {
-            items :[]
-          }
-        }
       }
     };
   },
@@ -133,16 +133,39 @@ var LeftBar = React.createClass({
 
 var Results = React.createClass({
 
+  getDefaultProps(){
+    return {
+      data: {
+        data: {
+          artists: {
+            items :[]
+          }
+        }
+      }
+    }
+  },
+
   render() {
+
+    var obj = this.props.data;
+
+    if (isEmpty(obj)) {
+      return (
+        <li><p>Please search for an artist</p></li>
+      )
+    }
+
+    console.log(this.props.data)
+
     var artistArray = this.props.data.data.artists.items.slice(0, 5);
-    // console.log(artistArray);
+    // // console.log(artistArray);
     var artists = artistArray.map(function (data){
       console.log(data.images[0].url)
       return (
         <li>
           <div className="artist">
             <img className="artist-pic" src={data.images[0].url}/>
-            <h3>{data.name}</h3>
+            <p>{data.name}</p>
             <a href={data.href}>View information</a>
           </div>
         </li>
@@ -150,9 +173,11 @@ var Results = React.createClass({
     }); 
 
     return (
-      <ul>
-        {artists}
-      </ul>
+      <div className='results'>
+        <ul>
+          {artists}
+        </ul>
+      </div>
     ) 
     
   }

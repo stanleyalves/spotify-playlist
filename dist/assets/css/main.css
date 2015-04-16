@@ -102,35 +102,48 @@ body {
 .results {
   text-align: left;
   background: rgba(255, 165, 0, 0.5); }
+  /* line 73, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  .results .artist {
+    margin-top: 5px;
+    border: 1px solid black; }
+  /* line 78, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  .results p {
+    width: 69%;
+    display: inline-block;
+    margin-left: 4px; }
+  /* line 84, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  .results .artist-pic {
+    height: 40px;
+    width: 40px; }
 
-/* line 74, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 91, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .artist-pic {
   height: 70px;
   width: 70px;
   border-radius: 40px;
   display: inline-block; }
 
-/* line 81, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 98, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .info-wrapper {
   background: rgba(0, 128, 0, 0.5); }
-  /* line 84, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 101, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .info-wrapper .img-wrapper {
     display: inline-block;
     width: 10%;
     vertical-align: top; }
-  /* line 90, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 107, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .info-wrapper .text-wrapper {
     display: inline-block;
     width: 80%; }
 
-/* line 96, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 113, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .similar-artists {
   background: rgba(255, 255, 255, 0.5); }
-  /* line 99, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 116, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .similar-artists li {
     display: inline-block;
     margin-right: 10px; }
 
-/* line 105, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 122, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .player-wrapper {
   background: rgba(255, 255, 0, 0.5); }

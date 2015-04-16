@@ -3124,6 +3124,10 @@ var _ajax = require("./utils");
 
 // let mutated = arr.map((x) => x * x);
 
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
 var SpotifySearch = React.createClass({
   displayName: "SpotifySearch",
 
@@ -3258,13 +3262,7 @@ var LeftBar = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      data: {
-        data: {
-          artists: {
-            items: []
-          }
-        }
-      }
+      data: {}
     };
   },
 
@@ -3287,9 +3285,38 @@ var LeftBar = React.createClass({
 var Results = React.createClass({
   displayName: "Results",
 
+  getDefaultProps: function getDefaultProps() {
+    return {
+      data: {
+        data: {
+          artists: {
+            items: []
+          }
+        }
+      }
+    };
+  },
+
   render: function render() {
+
+    var obj = this.props.data;
+
+    if (isEmpty(obj)) {
+      return React.createElement(
+        "li",
+        null,
+        React.createElement(
+          "p",
+          null,
+          "Please search for an artist"
+        )
+      );
+    }
+
+    console.log(this.props.data);
+
     var artistArray = this.props.data.data.artists.items.slice(0, 5);
-    // console.log(artistArray);
+    // // console.log(artistArray);
     var artists = artistArray.map(function (data) {
       console.log(data.images[0].url);
       return React.createElement(
@@ -3300,7 +3327,7 @@ var Results = React.createClass({
           { className: "artist" },
           React.createElement("img", { className: "artist-pic", src: data.images[0].url }),
           React.createElement(
-            "h3",
+            "p",
             null,
             data.name
           ),
@@ -3314,9 +3341,13 @@ var Results = React.createClass({
     });
 
     return React.createElement(
-      "ul",
-      null,
-      artists
+      "div",
+      { className: "results" },
+      React.createElement(
+        "ul",
+        null,
+        artists
+      )
     );
   }
 });
