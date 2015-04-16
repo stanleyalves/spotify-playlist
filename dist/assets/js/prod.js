@@ -3138,6 +3138,18 @@ var SpotifySearch = React.createClass({
 
   handleClick: function handleClick() {
     console.log('handle click on parent');
+    //http://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
+    // childComponent.props
+    // childComponent.refs
+
+    //Set the props to the Selected artist here
+    var artist = {
+      name: 'changer Holmes',
+      info: 'Here is some info'
+    };
+
+    console.log(this.selectedArtistObj);
+    console.log('after chnage');
   },
 
   selectedArtistObj: function selectedArtistObj() {
@@ -3162,7 +3174,7 @@ var SpotifySearch = React.createClass({
       React.createElement(
         'div',
         { className: 'main' },
-        React.createElement(SelectedArtst, { selectedArtist: this.selectedArtistObj() }),
+        React.createElement(SelectedArtst, { selectedArtist: this.selectedArtistObj }),
         React.createElement(SimilarArtst, null),
         React.createElement(Player, null)
       )
@@ -3382,9 +3394,6 @@ function start() {
   React.render(React.createElement(SpotifySearch, null), document.body);
 }
 
-//http://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
-// childComponent.props
-// childComponent.refs
 // console.log(data)
 
 },{"./utils":78}],78:[function(require,module,exports){

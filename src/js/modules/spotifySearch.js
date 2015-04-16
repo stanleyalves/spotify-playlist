@@ -40,6 +40,17 @@ var SpotifySearch = React.createClass({
     //http://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
      // childComponent.props
     // childComponent.refs
+
+    //Set the props to the Selected artist here
+    var artist = {
+      name: "changer Holmes",
+      info: "Here is some info"
+    }
+
+    
+
+    console.log(this.selectedArtistObj)
+    console.log('after chnage')
   },
 
   selectedArtistObj() {
@@ -59,7 +70,7 @@ var SpotifySearch = React.createClass({
           <RecentSearches/>
         </div>
         <div className="main">
-          <SelectedArtst selectedArtist={this.selectedArtistObj()}/>
+          <SelectedArtst selectedArtist={this.selectedArtistObj}/>
           <SimilarArtst/>
           <Player/>
         </div>
