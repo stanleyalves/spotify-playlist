@@ -95,7 +95,7 @@ ul, li {
       width: 20%;
       display: inline-block; }
 
-/* line 66, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 64, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .main {
   position: absolute;
   right: 0;
@@ -103,54 +103,54 @@ ul, li {
   height: 100%;
   padding-left: 20px; }
 
-/* line 74, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 72, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .results {
   height: 68%;
   text-align: left;
   background: rgba(255, 165, 0, 0.5);
   overflow-y: scroll; }
-  /* line 80, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 78, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .results .artist {
     margin-top: 5px;
     border: 1px solid black; }
-  /* line 85, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 83, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .results p {
     width: 69%;
     display: inline-block;
     margin-left: 4px; }
-  /* line 91, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 89, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .results .artist-pic {
     height: 40px;
     width: 40px; }
 
-/* line 98, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 96, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .artist-pic {
   height: 70px;
   width: 70px;
   border-radius: 40px;
   display: inline-block; }
 
-/* line 105, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 103, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .info-wrapper {
   background: rgba(0, 128, 0, 0.5); }
-  /* line 108, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 106, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .info-wrapper .img-wrapper {
     display: inline-block;
     width: 10%;
     vertical-align: top; }
-  /* line 114, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 112, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .info-wrapper .text-wrapper {
     display: inline-block;
     width: 80%; }
 
-/* line 120, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 118, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .similar-artists {
   background: rgba(255, 255, 255, 0.5); }
-  /* line 123, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+  /* line 121, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
   .similar-artists li {
     display: inline-block;
     margin-right: 10px; }
 
-/* line 129, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
+/* line 127, /Users/simon.holmes/Sites/personal/spotify-playlist/src/scss/_global.scss */
 .player-wrapper {
   background: rgba(255, 255, 0, 0.5); }

@@ -3091,18 +3091,16 @@ module.exports = require("./lib/babel/polyfill");
 module.exports = require("babel-core/polyfill");
 
 },{"babel-core/polyfill":75}],77:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
 //This is the React render function which renders your App.
-//It is pasing in the data array into the comment box which will filter down into child
-//components
 exports.start = start;
 
-var _ajax$isEmpty = require("./utils");
+var _ajax$isEmpty$extend = require('./utils');
 
 // let arr = [1, 2, 3, 4];
 
@@ -3125,53 +3123,58 @@ var _ajax$isEmpty = require("./utils");
 // let mutated = arr.map((x) => x * x);
 
 var App = React.createClass({
-  displayName: "App",
+  displayName: 'App',
 
   getInitialState: function getInitialState() {
     return {
       data: {},
-      selectedArtist: {
-        name: "Initial artist",
-        pic: "http://lorempixel.com/output/people-q-c-300-300-8.jpg"
-      }
+      selectedArtist: undefined,
+      similarArtists: undefined,
+      secentSearches: undefined
     };
   },
 
   handleSearchSubmit: function handleSearchSubmit(data) {
-    console.log("handle search submit");
+    console.log('handle search submit');
     this.setState({
       data: data
     });
   },
 
-  selectArtist: function selectArtist(artist) {
-    console.log(artist);
+  selectArtist: function selectArtist(data) {
+    console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed.
     this.setState({
       selectedArtist: {
-        name: artist.name,
-        pic: artist.pic
+        name: data.name,
+        pic: data.pic,
+        followers: data.followers,
+        href: data.href
+      },
+
+      similarArtists: {
+        artists: data.artists
       }
     });
   },
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "wrapper" },
+      'div',
+      { className: 'wrapper' },
       React.createElement(
-        "div",
-        { className: "left-bar" },
+        'div',
+        { className: 'left-bar' },
         React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
         React.createElement(Results, { data: this.state.data, chooseArtist: this.selectArtist }),
         React.createElement(RecentSearches, null)
       ),
       React.createElement(
-        "div",
-        { className: "main" },
+        'div',
+        { className: 'main' },
         React.createElement(SelectedArtst, { artist: this.state.selectedArtist }),
-        React.createElement(SimilarArtst, null),
+        React.createElement(SimilarArtst, { similarArtists: this.state.similarArtists }),
         React.createElement(Player, null)
       )
     );
@@ -3179,7 +3182,7 @@ var App = React.createClass({
 });
 
 var SelectedArtst = React.createClass({
-  displayName: "SelectedArtst",
+  displayName: 'SelectedArtst',
 
   //Note getDefaultProps get overwritten on render.
   //This is why the name gets overwritten, but the info doesnt
@@ -3187,60 +3190,92 @@ var SelectedArtst = React.createClass({
   getDefaultProps: function getDefaultProps() {
     return {
       selectedArtist: {
-        name: "Default Props",
-        info: "Here is the info"
+        name: 'Default Props',
+        info: 'Here is the default props info'
       }
     };
   },
   render: function render() {
-    return React.createElement(
-      "div",
-      { className: "info-wrapper" },
-      React.createElement(
-        "div",
-        { className: "selected-artist" },
+    if (this.props.artist === undefined) {
+      return React.createElement('div', null);
+    } else {
+      return React.createElement(
+        'div',
+        { className: 'info-wrapper' },
         React.createElement(
-          "h2",
-          null,
-          this.props.artist.name
-        ),
-        React.createElement(
-          "div",
-          { className: "img-wrapper" },
-          React.createElement("img", { className: "artist-pic", src: this.props.artist.pic, alt: "Artist name" })
-        ),
-        React.createElement(
-          "div",
-          { className: "text-wrapper" },
-          this.props.selectedArtist.info
+          'div',
+          { className: 'selected-artist' },
+          React.createElement(
+            'h2',
+            null,
+            this.props.artist.name
+          ),
+          React.createElement(
+            'div',
+            { className: 'img-wrapper' },
+            React.createElement(
+              'a',
+              { target: '_blank', href: this.props.artist.href },
+              React.createElement('img', { className: 'artist-pic', src: this.props.artist.pic, alt: 'Artist name' })
+            ),
+            React.createElement(
+              'p',
+              null,
+              'Followers: ',
+              this.props.artist.followers
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'text-wrapper' },
+            this.props.selectedArtist.info
+          )
         )
-      )
-    );
+      );
+    }
   }
 });
 
 var Results = React.createClass({
-  displayName: "Results",
+  displayName: 'Results',
+
+  relatedArtists: function relatedArtists(selectedArtistData) {
+    console.log('relatedArtists');
+    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists';
+    _ajax$isEmpty$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        // this.props.chooseArtist(selectedArtistData);
+        //Combine the 2 objects
+        var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
+        this.props.chooseArtist(allData);
+      }).bind(this)
+    });
+  },
 
   chooseArtist: function chooseArtist(i) {
     console.log(this.props.data);
+    var artistChosen = this.props.data.data.artists.items[i];
 
     //Build the required data in an object
-
-    var selectedArtist = {
-      name: this.props.data.data.artists.items[i].name,
-      pic: this.props.data.data.artists.items[i].images[1].url
+    var selectedArtistData = {
+      id: artistChosen.id,
+      name: artistChosen.name,
+      pic: artistChosen.images[1].url,
+      followers: artistChosen.followers.total,
+      href: artistChosen.external_urls.spotify
     };
 
-    //Whack that to the parent...
-    this.props.chooseArtist(selectedArtist);
+    this.relatedArtists(selectedArtistData);
   },
 
   render: function render() {
     var obj = this.props.data;
     //Check to see if the object is empty, if so return an empty <li>
-    if (_ajax$isEmpty.isEmpty(obj)) {
-      return React.createElement("li", null);
+    if (_ajax$isEmpty$extend.isEmpty(obj)) {
+      return React.createElement('li', null);
     } else {
       var artistArray = this.props.data.data.artists.items.slice(0, 10);
       //N.B: http://stackoverflow.com/questions/29549375/react-0-13-class-method-undefined
@@ -3249,31 +3284,31 @@ var Results = React.createClass({
       //You either have to explicitly set the context by passing
       var artists = artistArray.map(function (data, i) {
         return React.createElement(
-          "li",
+          'li',
           null,
           React.createElement(
-            "div",
-            { className: "artist" },
-            React.createElement("img", { className: "artist-pic", src: data.images.length > 1 ? data.images[0].url : "http://placehold.it/150x150" }),
+            'div',
+            { className: 'artist' },
+            React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150' }),
             React.createElement(
-              "p",
+              'p',
               null,
               data.name
             ),
             React.createElement(
-              "a",
+              'a',
               { key: data.id, onClick: this.chooseArtist.bind(this, i) },
-              "View more info"
+              'View more info'
             )
           )
         );
       }, this);
 
       return React.createElement(
-        "div",
-        { className: "results" },
+        'div',
+        { className: 'results' },
         React.createElement(
-          "ul",
+          'ul',
           null,
           artists
         )
@@ -3283,17 +3318,17 @@ var Results = React.createClass({
 });
 
 var SearchHeader = React.createClass({
-  displayName: "SearchHeader",
+  displayName: 'SearchHeader',
 
   handleSubmit: function handleSubmit(e) {
     e.preventDefault();
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
-    var url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
+    var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
 
-    _ajax$isEmpty.ajax({
+    _ajax$isEmpty$extend.ajax({
       url: url,
-      method: "GET",
-      dataType: "json",
+      method: 'GET',
+      dataType: 'json',
       success: (function (data) {
         this.props.onSearchSubmit({ data: data });
       }).bind(this)
@@ -3302,77 +3337,87 @@ var SearchHeader = React.createClass({
 
   render: function render() {
     return React.createElement(
-      "header",
+      'header',
       null,
       React.createElement(
-        "h1",
+        'h1',
         null,
-        "Spotify Search"
+        'Spotify Search'
       ),
       React.createElement(
-        "form",
-        { className: "search-form", onSubmit: this.handleSubmit },
-        React.createElement("input", { type: "text", placeholder: "search for an artist", ref: "searchBar" }),
-        React.createElement("input", { type: "submit" })
+        'form',
+        { className: 'search-form', onSubmit: this.handleSubmit },
+        React.createElement('input', { type: 'text', value: 'Queen', placeholder: 'search for an artist', ref: 'searchBar' }),
+        React.createElement('input', { type: 'submit' })
       )
     );
   }
 });
 
 var SimilarArtst = React.createClass({
-  displayName: "SimilarArtst",
+  displayName: 'SimilarArtst',
 
   render: function render() {
-    return React.createElement(
-      "ul",
-      { className: "similar-artists" },
-      React.createElement(
-        "h3",
-        null,
-        "Similar Artists"
-      ),
-      React.createElement(
-        "li",
-        null,
+    if (this.props.similarArtists === undefined) {
+      return React.createElement('div', null);
+    } else {
+      var artistArray = this.props.similarArtists.artists;
+      console.log(artistArray);
+      var artists = artistArray.map(function (data, i) {
+        return React.createElement(
+          'li',
+          null,
+          React.createElement(
+            'div',
+            { className: 'img-wrapper' },
+            React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150', alt: 'Artist name' })
+          )
+        );
+      }, this);
+
+      return React.createElement(
+        'ul',
+        { className: 'similar-artists' },
         React.createElement(
-          "div",
-          { className: "img-wrapper" },
-          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg", alt: "Artist name" })
-        )
-      )
-    );
+          'h3',
+          null,
+          'Similar Artists :'
+        ),
+        artists
+      );
+    }
   }
 });
 
 var Player = React.createClass({
-  displayName: "Player",
+  displayName: 'Player',
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "player-wrapper" },
+      'div',
+      { className: 'player-wrapper' },
       React.createElement(
-        "div",
-        { className: "player" },
+        'div',
+        { className: 'player' },
         React.createElement(
-          "h3",
+          'h3',
           null,
-          "Player Here"
+          'Player Here'
         )
       ),
       React.createElement(
-        "div",
-        { className: "other-tracks" },
+        'div',
+        { className: 'other-tracks' },
         React.createElement(
-          "ul",
+          'ul',
           null,
           React.createElement(
-            "li",
+            'li',
             null,
             React.createElement(
-              "a",
-              { href: "#" },
-              "Track Name here"
+              'a',
+              { href: '#' },
+              'Track Name here'
             )
           )
         )
@@ -3382,24 +3427,24 @@ var Player = React.createClass({
 });
 
 var RecentSearches = React.createClass({
-  displayName: "RecentSearches",
+  displayName: 'RecentSearches',
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "recent-searches" },
+      'div',
+      { className: 'recent-searches' },
       React.createElement(
-        "h3",
+        'h3',
         null,
-        "recent searches"
+        'recent searches'
       ),
       React.createElement(
-        "ul",
+        'ul',
         null,
         React.createElement(
-          "li",
+          'li',
           null,
-          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg" })
+          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg' })
         )
       )
     );
@@ -3409,7 +3454,8 @@ function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-// console.log(data)
+//Whack that to the parent...
+// this.props.chooseArtist(selectedArtistData);
 
 },{"./utils":78}],78:[function(require,module,exports){
 'use strict';

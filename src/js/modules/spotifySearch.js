@@ -1,5 +1,5 @@
 
-import { ajax, isEmpty } from './utils';
+import { ajax, isEmpty, extend } from './utils';
 
 // let arr = [1, 2, 3, 4];
 
@@ -26,10 +26,9 @@ var App = React.createClass({
   getInitialState() {
     return {
       data: {},
-      selectedArtist: {
-        name: "Initial artist", 
-        pic : "http://lorempixel.com/output/people-q-c-300-300-8.jpg"
-      } 
+      selectedArtist : undefined, 
+      similarArtists : undefined,
+      secentSearches : undefined
     };
   },
 
@@ -40,14 +39,20 @@ var App = React.createClass({
     })
   },
 
-  selectArtist(artist){
-    console.log(artist);
+  selectArtist(data){
+    console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed. 
     this.setState({
       selectedArtist: {
-        name: artist.name, 
-        pic : artist.pic
+        name: data.name, 
+        pic : data.pic,
+        followers : data.followers,
+        href : data.href
+      },
+
+      similarArtists: {
+        artists : data.artists
       }
     });
   },
@@ -62,7 +67,7 @@ var App = React.createClass({
         </div>
         <div className="main">
           <SelectedArtst artist={this.state.selectedArtist}/>
-          <SimilarArtst/>
+          <SimilarArtst similarArtists={this.state.similarArtists}/>
           <Player/>
         </div>
       </div>
@@ -78,41 +83,72 @@ var SelectedArtst = React.createClass({
     return {
       selectedArtist : {
         name: "Default Props",
-        info: "Here is the info"
+        info: "Here is the default props info"
       }
     }
-  },  
+  },
   render() {
-    return (
-      <div className="info-wrapper">
-        <div className="selected-artist">
-          <h2>{this.props.artist.name}</h2>
-          <div className="img-wrapper">
-            <img className="artist-pic" src={this.props.artist.pic} alt="Artist name" />
-          </div>
-          <div className="text-wrapper">
-            {this.props.selectedArtist.info}
+    if (this.props.artist === undefined ) {
+      return (
+        <div></div>
+      )
+    } else {
+      return (
+        <div className="info-wrapper">
+          <div className="selected-artist">
+            <h2>{this.props.artist.name}</h2>
+            <div className="img-wrapper">
+              <a target="_blank" href={this.props.artist.href}>
+                <img className="artist-pic" src={this.props.artist.pic} alt="Artist name" />
+              </a>
+              <p>Followers: {this.props.artist.followers}</p>
+            </div>
+            <div className="text-wrapper">
+              {this.props.selectedArtist.info}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 });
 
 var Results = React.createClass({
 
+  relatedArtists(selectedArtistData){
+    console.log('relatedArtists');
+    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists'
+    ajax({
+      url: url,
+      method:'GET',
+      dataType: 'json',
+      success: function(data){
+        // this.props.chooseArtist(selectedArtistData);
+        //Combine the 2 objects
+        var allData = extend(data, selectedArtistData);
+        this.props.chooseArtist(allData);
+      }.bind(this)
+    });
+  },
+
+
   chooseArtist(i){
     console.log(this.props.data);
-
+    var artistChosen = this.props.data.data.artists.items[i];
+    
     //Build the required data in an object
-
-    var selectedArtist = {
-      name : this.props.data.data.artists.items[i].name,
-      pic : this.props.data.data.artists.items[i].images[1].url
+    var selectedArtistData = {
+      id : artistChosen.id,
+      name : artistChosen.name,
+      pic : artistChosen.images[1].url,
+      followers : artistChosen.followers.total,
+      href : artistChosen.external_urls.spotify
     }
 
+    this.relatedArtists(selectedArtistData)
+
     //Whack that to the parent... 
-    this.props.chooseArtist(selectedArtist);
+    // this.props.chooseArtist(selectedArtistData);
   },
 
   render() {
@@ -163,7 +199,6 @@ var SearchHeader = React.createClass({
       dataType: 'json',
       success: function(data){
         this.props.onSearchSubmit({data:data})
-        // console.log(data)
       }.bind(this)
     });
   },
@@ -173,7 +208,7 @@ var SearchHeader = React.createClass({
       <header>
         <h1>Spotify Search</h1>
         <form className="search-form" onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="search for an artist" ref="searchBar" />
+          <input type="text" value="Queen" placeholder="search for an artist" ref="searchBar" />
           <input type="submit" />
         </form>
       </header>
@@ -181,20 +216,33 @@ var SearchHeader = React.createClass({
   }
 });
 
-
-
 var SimilarArtst = React.createClass({
   render() {
-    return (
-      <ul className="similar-artists">
-        <h3>Similar Artists</h3>
-        <li>
-          <div className="img-wrapper">
-            <img className="artist-pic" src="http://lorempixel.com/output/people-q-c-300-300-8.jpg" alt="Artist name" />
-          </div>
-        </li>
-      </ul>
-    )
+    if (this.props.similarArtists === undefined ) {
+      return (
+        <div></div>
+      )
+    } else {
+      var artistArray = this.props.similarArtists.artists;
+      console.log(artistArray)
+      var artists = artistArray.map(function (data, i){
+        return (
+          <li>
+            <div className="img-wrapper">
+              <img className="artist-pic" src={data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150'} alt="Artist name" />
+            </div>
+          </li>
+        )
+      }, this);
+
+      return (
+        <ul className="similar-artists">
+          <h3>Similar Artists :</h3>         
+          {artists}
+        </ul>
+      )
+    }
+    
   }
 });
 
@@ -231,8 +279,6 @@ var RecentSearches = React.createClass({
 });
 
 //This is the React render function which renders your App. 
-//It is pasing in the data array into the comment box which will filter down into child
-//components
 export function start() {
     React.render(
     <App />, document.body
