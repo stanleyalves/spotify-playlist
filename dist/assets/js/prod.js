@@ -3091,9 +3091,9 @@ module.exports = require("./lib/babel/polyfill");
 module.exports = require("babel-core/polyfill");
 
 },{"babel-core/polyfill":75}],77:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
@@ -3102,7 +3102,7 @@ Object.defineProperty(exports, '__esModule', {
 //components
 exports.start = start;
 
-var _ajax$isEmpty = require('./utils');
+var _ajax$isEmpty = require("./utils");
 
 // let arr = [1, 2, 3, 4];
 
@@ -3124,57 +3124,55 @@ var _ajax$isEmpty = require('./utils');
 
 // let mutated = arr.map((x) => x * x);
 
-var SpotifySearch = React.createClass({
-  displayName: 'SpotifySearch',
+var App = React.createClass({
+  displayName: "App",
 
   getInitialState: function getInitialState() {
-    return { data: {} };
+    return {
+      data: {},
+      selectedArtist: {
+        name: "Initial artist",
+        pic: "http://lorempixel.com/output/people-q-c-300-300-8.jpg"
+      }
+    };
   },
 
   handleSearchSubmit: function handleSearchSubmit(data) {
-    console.log('handle search submit');
-    this.setState({ data: data });
+    console.log("handle search submit");
+    console.log(data);
+    this.setState({
+      data: data
+    });
   },
 
-  handleClick: function handleClick() {
-    console.log('handle click on parent');
-    //http://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
-    // childComponent.props
-    // childComponent.refs
-
-    //Set the props to the Selected artist here
-    var artist = {
-      name: 'changer Holmes',
-      info: 'Here is some info'
-    };
-
-    console.log(this.selectedArtistObj);
-    console.log('after chnage');
-  },
-
-  selectedArtistObj: function selectedArtistObj() {
-    var artist = {
-      name: 'Simon Holmes',
-      info: 'Here is some info'
-    };
-    return artist;
+  selectArtist: function selectArtist(artist) {
+    console.log("An artist was chosen: " + artist);
+    console.log(artist);
+    this.setState({
+      selectedArtist: {
+        name: artist.name,
+        pic: artist.pic
+      }
+    });
+    var selectedArtistVar = artist;
+    return selectedArtistVar;
   },
 
   render: function render() {
     return React.createElement(
-      'div',
-      { className: 'wrapper' },
+      "div",
+      { className: "wrapper" },
       React.createElement(
-        'div',
-        { className: 'left-bar' },
+        "div",
+        { className: "left-bar" },
         React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
-        React.createElement(Results, { data: this.state.data, onClick: this.handleClick }),
+        React.createElement(Results, { data: this.state.data, chooseArtist: this.selectArtist }),
         React.createElement(RecentSearches, null)
       ),
       React.createElement(
-        'div',
-        { className: 'main' },
-        React.createElement(SelectedArtst, { selectedArtist: this.selectedArtistObj }),
+        "div",
+        { className: "main" },
+        React.createElement(SelectedArtst, { artist: this.state.selectedArtist }),
         React.createElement(SimilarArtst, null),
         React.createElement(Player, null)
       )
@@ -3183,28 +3181,37 @@ var SpotifySearch = React.createClass({
 });
 
 var SelectedArtst = React.createClass({
-  displayName: 'SelectedArtst',
+  displayName: "SelectedArtst",
 
+  //Note getDefaultProps get overwritten on render.
+  getDefaultProps: function getDefaultProps() {
+    return {
+      selectedArtist: {
+        name: "Default Props",
+        info: "Here is the info"
+      }
+    };
+  },
   render: function render() {
     return React.createElement(
-      'div',
-      { className: 'info-wrapper' },
+      "div",
+      { className: "info-wrapper" },
       React.createElement(
-        'div',
-        { className: 'selected-artist' },
+        "div",
+        { className: "selected-artist" },
         React.createElement(
-          'h2',
+          "h2",
           null,
-          this.props.selectedArtist.name
+          this.props.artist.name
         ),
         React.createElement(
-          'div',
-          { className: 'img-wrapper' },
-          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg', alt: 'Artist name' })
+          "div",
+          { className: "img-wrapper" },
+          React.createElement("img", { className: "artist-pic", src: this.props.artist.pic, alt: "Artist name" })
         ),
         React.createElement(
-          'div',
-          { className: 'text-wrapper' },
+          "div",
+          { className: "text-wrapper" },
           this.props.selectedArtist.info
         )
       )
@@ -3213,18 +3220,27 @@ var SelectedArtst = React.createClass({
 });
 
 var Results = React.createClass({
-  displayName: 'Results',
+  displayName: "Results",
 
-  handleClick: function handleClick() {
-    console.log('handling the click in results');
-    this.props.onClick(this);
+  chooseArtist: function chooseArtist(i) {
+    console.log(this.props.data);
+    console.log("You clicked: " + JSON.stringify(this.props.data.data.artists.items[i]));
+    // var selectedArtist = this.props.data.data.artists.items[i].name;
+    // console.log(selectedArtist);
+
+    var selectedArtist = {
+      name: this.props.data.data.artists.items[i].name,
+      pic: this.props.data.data.artists.items[i].images[1].url
+    };
+
+    this.props.chooseArtist(selectedArtist);
   },
 
   render: function render() {
     var obj = this.props.data;
     //Check to see if the object is empty, if so return an empty <li>
     if (_ajax$isEmpty.isEmpty(obj)) {
-      return React.createElement('li', null);
+      return React.createElement("li", null);
     } else {
       var artistArray = this.props.data.data.artists.items.slice(0, 10);
       //N.B: http://stackoverflow.com/questions/29549375/react-0-13-class-method-undefined
@@ -3233,31 +3249,31 @@ var Results = React.createClass({
       //You either have to explicitly set the context by passing
       var artists = artistArray.map(function (data, i) {
         return React.createElement(
-          'li',
+          "li",
           null,
           React.createElement(
-            'div',
-            { className: 'artist' },
-            React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150' }),
+            "div",
+            { className: "artist" },
+            React.createElement("img", { className: "artist-pic", src: data.images.length > 1 ? data.images[0].url : "http://placehold.it/150x150" }),
             React.createElement(
-              'p',
+              "p",
               null,
               data.name
             ),
             React.createElement(
-              'a',
-              { onClick: this.handleClick },
-              'View more info'
+              "a",
+              { key: data.id, onClick: this.chooseArtist.bind(this, i) },
+              "View more info"
             )
           )
         );
       }, this);
 
       return React.createElement(
-        'div',
-        { className: 'results' },
+        "div",
+        { className: "results" },
         React.createElement(
-          'ul',
+          "ul",
           null,
           artists
         )
@@ -3267,17 +3283,17 @@ var Results = React.createClass({
 });
 
 var SearchHeader = React.createClass({
-  displayName: 'SearchHeader',
+  displayName: "SearchHeader",
 
   handleSubmit: function handleSubmit(e) {
     e.preventDefault();
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
-    var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
+    var url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
 
     _ajax$isEmpty.ajax({
       url: url,
-      method: 'GET',
-      dataType: 'json',
+      method: "GET",
+      dataType: "json",
       success: (function (data) {
         this.props.onSearchSubmit({ data: data });
       }).bind(this)
@@ -3286,42 +3302,42 @@ var SearchHeader = React.createClass({
 
   render: function render() {
     return React.createElement(
-      'header',
+      "header",
       null,
       React.createElement(
-        'h1',
+        "h1",
         null,
-        'Spotify Search'
+        "Spotify Search"
       ),
       React.createElement(
-        'form',
-        { className: 'search-form', onSubmit: this.handleSubmit },
-        React.createElement('input', { type: 'text', value: 'Queen', placeholder: 'search for an artist', ref: 'searchBar' }),
-        React.createElement('input', { type: 'submit' })
+        "form",
+        { className: "search-form", onSubmit: this.handleSubmit },
+        React.createElement("input", { type: "text", value: "Queen", placeholder: "search for an artist", ref: "searchBar" }),
+        React.createElement("input", { type: "submit" })
       )
     );
   }
 });
 
 var SimilarArtst = React.createClass({
-  displayName: 'SimilarArtst',
+  displayName: "SimilarArtst",
 
   render: function render() {
     return React.createElement(
-      'ul',
-      { className: 'similar-artists' },
+      "ul",
+      { className: "similar-artists" },
       React.createElement(
-        'h3',
+        "h3",
         null,
-        'Similar Artists'
+        "Similar Artists"
       ),
       React.createElement(
-        'li',
+        "li",
         null,
         React.createElement(
-          'div',
-          { className: 'img-wrapper' },
-          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg', alt: 'Artist name' })
+          "div",
+          { className: "img-wrapper" },
+          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg", alt: "Artist name" })
         )
       )
     );
@@ -3329,34 +3345,34 @@ var SimilarArtst = React.createClass({
 });
 
 var Player = React.createClass({
-  displayName: 'Player',
+  displayName: "Player",
 
   render: function render() {
     return React.createElement(
-      'div',
-      { className: 'player-wrapper' },
+      "div",
+      { className: "player-wrapper" },
       React.createElement(
-        'div',
-        { className: 'player' },
+        "div",
+        { className: "player" },
         React.createElement(
-          'h3',
+          "h3",
           null,
-          'Player Here'
+          "Player Here"
         )
       ),
       React.createElement(
-        'div',
-        { className: 'other-tracks' },
+        "div",
+        { className: "other-tracks" },
         React.createElement(
-          'ul',
+          "ul",
           null,
           React.createElement(
-            'li',
+            "li",
             null,
             React.createElement(
-              'a',
-              { href: '#' },
-              'Track Name here'
+              "a",
+              { href: "#" },
+              "Track Name here"
             )
           )
         )
@@ -3366,32 +3382,31 @@ var Player = React.createClass({
 });
 
 var RecentSearches = React.createClass({
-  displayName: 'RecentSearches',
+  displayName: "RecentSearches",
 
   render: function render() {
     return React.createElement(
-      'div',
-      { className: 'recent-searches' },
+      "div",
+      { className: "recent-searches" },
       React.createElement(
-        'h3',
+        "h3",
         null,
-        'recent searches'
+        "recent searches"
       ),
       React.createElement(
-        'ul',
+        "ul",
         null,
         React.createElement(
-          'li',
+          "li",
           null,
-          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg' })
+          React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg" })
         )
       )
     );
   }
 });
 function start() {
-  console.log('start');
-  React.render(React.createElement(SpotifySearch, null), document.body);
+  React.render(React.createElement(App, null), document.body);
 }
 
 // console.log(data)

@@ -24,53 +24,49 @@ import { ajax, isEmpty } from './utils';
 
 
 
-var SpotifySearch = React.createClass({
+var App = React.createClass({
 
   getInitialState() {
-    return {data: {}};
+    return {
+      data: {},
+      selectedArtist: {
+        name: "Initial artist", 
+        pic : "http://lorempixel.com/output/people-q-c-300-300-8.jpg"
+      } 
+    };
   },
 
   handleSearchSubmit(data) {
     console.log('handle search submit');
-    this.setState({data:data})
+    console.log(data)
+    this.setState({
+      data:data
+    })
   },
 
-  handleClick() {
-    console.log('handle click on parent')
-    //http://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
-     // childComponent.props
-    // childComponent.refs
-
-    //Set the props to the Selected artist here
-    var artist = {
-      name: "changer Holmes",
-      info: "Here is some info"
-    }
-
-    
-
-    console.log(this.selectedArtistObj)
-    console.log('after chnage')
+  selectArtist(artist){
+    console.log('An artist was chosen: ' + artist);
+    console.log(artist)
+    this.setState({
+      selectedArtist: {
+        name: artist.name, 
+        pic : artist.pic
+      }
+    });
+    var selectedArtistVar = artist;
+    return selectedArtistVar;
   },
-
-  selectedArtistObj() {
-    var artist = {
-      name: "Simon Holmes",
-      info: "Here is some info"
-    };
-    return artist;
-  },
-
+ 
   render(){
     return (
       <div className = "wrapper">
         <div className="left-bar">
           <SearchHeader onSearchSubmit={this.handleSearchSubmit}/>
-          <Results data={this.state.data} onClick={this.handleClick}/>
+          <Results data={this.state.data} chooseArtist={this.selectArtist}/>
           <RecentSearches/>
         </div>
         <div className="main">
-          <SelectedArtst selectedArtist={this.selectedArtistObj}/>
+          <SelectedArtst artist={this.state.selectedArtist}/>
           <SimilarArtst/>
           <Player/>
         </div>
@@ -80,13 +76,22 @@ var SpotifySearch = React.createClass({
 });
 
 var SelectedArtst = React.createClass({
+  //Note getDefaultProps get overwritten on render.
+  getDefaultProps() {
+    return {
+      selectedArtist : {
+        name: "Default Props",
+        info: "Here is the info"
+      }
+    }
+  },  
   render() {
     return (
       <div className="info-wrapper">
         <div className="selected-artist">
-          <h2>{this.props.selectedArtist.name}</h2>
+          <h2>{this.props.artist.name}</h2>
           <div className="img-wrapper">
-            <img className="artist-pic" src="http://lorempixel.com/output/people-q-c-300-300-8.jpg" alt="Artist name" />
+            <img className="artist-pic" src={this.props.artist.pic} alt="Artist name" />
           </div>
           <div className="text-wrapper">
             {this.props.selectedArtist.info}
@@ -99,9 +104,18 @@ var SelectedArtst = React.createClass({
 
 var Results = React.createClass({
 
-  handleClick(){
-    console.log('handling the click in results');
-    this.props.onClick(this);
+  chooseArtist(i){
+    console.log(this.props.data);
+    console.log('You clicked: ' + JSON.stringify(this.props.data.data.artists.items[i]));
+    // var selectedArtist = this.props.data.data.artists.items[i].name;
+    // console.log(selectedArtist);
+
+    var selectedArtist = {
+      name : this.props.data.data.artists.items[i].name,
+      pic : this.props.data.data.artists.items[i].images[1].url
+    }
+
+    this.props.chooseArtist(selectedArtist);
   },
 
   render() {
@@ -123,7 +137,7 @@ var Results = React.createClass({
             <div className="artist">
               <img className="artist-pic" src={data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150'}/>
               <p>{data.name}</p>
-              <a onClick={this.handleClick}>View more info</a>
+              <a key={data.id} onClick={this.chooseArtist.bind(this, i)}>View more info</a>
             </div>
           </li>
         )
@@ -223,8 +237,7 @@ var RecentSearches = React.createClass({
 //It is pasing in the data array into the comment box which will filter down into child
 //components
 export function start() {
-  console.log('start');
-  React.render(
-    <SpotifySearch />, document.body
+    React.render(
+    <App />, document.body
   );
 }
