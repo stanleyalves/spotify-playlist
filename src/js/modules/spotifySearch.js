@@ -21,9 +21,6 @@ import { ajax, isEmpty } from './utils';
 
 // let mutated = arr.map((x) => x * x);
 
-
-
-
 var App = React.createClass({
 
   getInitialState() {
@@ -38,23 +35,21 @@ var App = React.createClass({
 
   handleSearchSubmit(data) {
     console.log('handle search submit');
-    console.log(data)
     this.setState({
       data:data
     })
   },
 
   selectArtist(artist){
-    console.log('An artist was chosen: ' + artist);
-    console.log(artist)
+    console.log(artist);
+    //heres the magic, set the state of the selected artist.
+    //The child components will updated when the state is changed. 
     this.setState({
       selectedArtist: {
         name: artist.name, 
         pic : artist.pic
       }
     });
-    var selectedArtistVar = artist;
-    return selectedArtistVar;
   },
  
   render(){
@@ -77,6 +72,8 @@ var App = React.createClass({
 
 var SelectedArtst = React.createClass({
   //Note getDefaultProps get overwritten on render.
+  //This is why the name gets overwritten, but the info doesnt
+  //The name is getting overwitten by the set props, which are initially done in the state.
   getDefaultProps() {
     return {
       selectedArtist : {
@@ -106,15 +103,15 @@ var Results = React.createClass({
 
   chooseArtist(i){
     console.log(this.props.data);
-    console.log('You clicked: ' + JSON.stringify(this.props.data.data.artists.items[i]));
-    // var selectedArtist = this.props.data.data.artists.items[i].name;
-    // console.log(selectedArtist);
+
+    //Build the required data in an object
 
     var selectedArtist = {
       name : this.props.data.data.artists.items[i].name,
       pic : this.props.data.data.artists.items[i].images[1].url
     }
 
+    //Whack that to the parent... 
     this.props.chooseArtist(selectedArtist);
   },
 
@@ -176,7 +173,7 @@ var SearchHeader = React.createClass({
       <header>
         <h1>Spotify Search</h1>
         <form className="search-form" onSubmit={this.handleSubmit}>
-          <input type="text" value="Queen" placeholder="search for an artist" ref="searchBar" />
+          <input type="text" placeholder="search for an artist" ref="searchBar" />
           <input type="submit" />
         </form>
       </header>
