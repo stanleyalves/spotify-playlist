@@ -3141,7 +3141,16 @@ var App = React.createClass({
     });
   },
 
+  relatedArtists: function relatedArtists(data) {
+    this.setState({
+      similarArtists: {
+        artists: data.artists
+      }
+    });
+  },
+
   selectArtist: function selectArtist(data) {
+    console.log('select AETISTSTSTS');
     console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed.
@@ -3150,11 +3159,8 @@ var App = React.createClass({
         name: data.name,
         pic: data.pic,
         followers: data.followers,
-        href: data.href
-      },
-
-      similarArtists: {
-        artists: data.artists
+        href: data.href,
+        bio: data.artist.bio.summary
       }
     });
   },
@@ -3167,7 +3173,7 @@ var App = React.createClass({
         'div',
         { className: 'left-bar' },
         React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
-        React.createElement(Results, { data: this.state.data, chooseArtist: this.selectArtist }),
+        React.createElement(Results, { data: this.state.data, chooseArtist: this.selectArtist, relatedArtist: this.relatedArtists }),
         React.createElement(RecentSearches, null)
       ),
       React.createElement(
@@ -3228,7 +3234,7 @@ var SelectedArtst = React.createClass({
           React.createElement(
             'div',
             { className: 'text-wrapper' },
-            this.props.selectedArtist.info
+            this.props.artist.bio
           )
         )
       );
@@ -3249,7 +3255,23 @@ var Results = React.createClass({
       success: (function (data) {
         // this.props.chooseArtist(selectedArtistData);
         //Combine the 2 objects
+        this.props.relatedArtist(data);
+      }).bind(this)
+    });
+  },
+
+  artistBio: function artistBio(selectedArtistData) {
+    console.log('artist Bio');
+    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
+    _ajax$isEmpty$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        // this.props.chooseArtist(selectedArtistData);
+        //Combine the 2 objects
         var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
+        console.log(allData);
         this.props.chooseArtist(allData);
       }).bind(this)
     });
@@ -3258,6 +3280,9 @@ var Results = React.createClass({
   chooseArtist: function chooseArtist(i) {
     console.log(this.props.data);
     var artistChosen = this.props.data.data.artists.items[i];
+    //Get the wikipedia entry here, for the bio.
+    //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary/18504997#18504997
+    //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary
 
     //Build the required data in an object
     var selectedArtistData = {
@@ -3267,8 +3292,11 @@ var Results = React.createClass({
       followers: artistChosen.followers.total,
       href: artistChosen.external_urls.spotify
     };
-
     this.relatedArtists(selectedArtistData);
+    this.artistBio(selectedArtistData);
+
+    //Whack that to the parent...
+    // this.props.chooseArtist(selectedArtistData);
   },
 
   render: function render() {
@@ -3347,7 +3375,7 @@ var SearchHeader = React.createClass({
       React.createElement(
         'form',
         { className: 'search-form', onSubmit: this.handleSubmit },
-        React.createElement('input', { type: 'text', value: 'Queen', placeholder: 'search for an artist', ref: 'searchBar' }),
+        React.createElement('input', { type: 'text', placeholder: 'search for an artist', ref: 'searchBar' }),
         React.createElement('input', { type: 'submit' })
       )
     );
@@ -3362,7 +3390,6 @@ var SimilarArtst = React.createClass({
       return React.createElement('div', null);
     } else {
       var artistArray = this.props.similarArtists.artists;
-      console.log(artistArray);
       var artists = artistArray.map(function (data, i) {
         return React.createElement(
           'li',
@@ -3453,9 +3480,6 @@ var RecentSearches = React.createClass({
 function start() {
   React.render(React.createElement(App, null), document.body);
 }
-
-//Whack that to the parent...
-// this.props.chooseArtist(selectedArtistData);
 
 },{"./utils":78}],78:[function(require,module,exports){
 'use strict';

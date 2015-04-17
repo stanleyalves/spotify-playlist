@@ -39,7 +39,17 @@ var App = React.createClass({
     })
   },
 
+  relatedArtists(data) {
+    this.setState({
+        similarArtists: {
+          artists : data.artists
+        }
+      }
+    )
+  },
+
   selectArtist(data){
+    console.log('select AETISTSTSTS')
     console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed. 
@@ -48,11 +58,8 @@ var App = React.createClass({
         name: data.name, 
         pic : data.pic,
         followers : data.followers,
-        href : data.href
-      },
-
-      similarArtists: {
-        artists : data.artists
+        href : data.href,
+        bio : data.artist.bio.summary
       }
     });
   },
@@ -62,7 +69,7 @@ var App = React.createClass({
       <div className = "wrapper">
         <div className="left-bar">
           <SearchHeader onSearchSubmit={this.handleSearchSubmit}/>
-          <Results data={this.state.data} chooseArtist={this.selectArtist}/>
+          <Results data={this.state.data} chooseArtist={this.selectArtist} relatedArtist={this.relatedArtists} />
           <RecentSearches/>
         </div>
         <div className="main">
@@ -104,7 +111,7 @@ var SelectedArtst = React.createClass({
               <p>Followers: {this.props.artist.followers}</p>
             </div>
             <div className="text-wrapper">
-              {this.props.selectedArtist.info}
+              {this.props.artist.bio}
             </div>
           </div>
         </div>
@@ -125,7 +132,23 @@ var Results = React.createClass({
       success: function(data){
         // this.props.chooseArtist(selectedArtistData);
         //Combine the 2 objects
+        this.props.relatedArtist(data);
+      }.bind(this)
+    });
+  },
+
+  artistBio(selectedArtistData) {
+    console.log('artist Bio');
+    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json'
+    ajax({
+      url: url,
+      method:'GET',
+      dataType: 'json',
+      success: function(data){
+        // this.props.chooseArtist(selectedArtistData);
+        //Combine the 2 objects
         var allData = extend(data, selectedArtistData);
+        console.log(allData)
         this.props.chooseArtist(allData);
       }.bind(this)
     });
@@ -135,7 +158,11 @@ var Results = React.createClass({
   chooseArtist(i){
     console.log(this.props.data);
     var artistChosen = this.props.data.data.artists.items[i];
-    
+    //Get the wikipedia entry here, for the bio.
+    //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary/18504997#18504997
+    //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary
+
+
     //Build the required data in an object
     var selectedArtistData = {
       id : artistChosen.id,
@@ -144,8 +171,8 @@ var Results = React.createClass({
       followers : artistChosen.followers.total,
       href : artistChosen.external_urls.spotify
     }
-
-    this.relatedArtists(selectedArtistData)
+    this.relatedArtists(selectedArtistData);
+    this.artistBio(selectedArtistData);
 
     //Whack that to the parent... 
     // this.props.chooseArtist(selectedArtistData);
@@ -208,7 +235,7 @@ var SearchHeader = React.createClass({
       <header>
         <h1>Spotify Search</h1>
         <form className="search-form" onSubmit={this.handleSubmit}>
-          <input type="text" value="Queen" placeholder="search for an artist" ref="searchBar" />
+          <input type="text"  placeholder="search for an artist" ref="searchBar" />
           <input type="submit" />
         </form>
       </header>
@@ -224,7 +251,6 @@ var SimilarArtst = React.createClass({
       )
     } else {
       var artistArray = this.props.similarArtists.artists;
-      console.log(artistArray)
       var artists = artistArray.map(function (data, i){
         return (
           <li>
