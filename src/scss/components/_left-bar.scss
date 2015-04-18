@@ -1,0 +1,49 @@
+/*  Left bar searches
+/* ======================================= */
+
+
+.left-bar {
+	border-right: 1px solid grey;
+	width: 30%;
+	position: fixed;
+	height: 100%;
+	padding: 10px;
+	background: rgba(red, 0.5);
+	overflow: hidden;
+	z-index: 100;
+	left: -30%;
+	transition: all 0.3s ease-in;
+
+	&.open {
+		left: 0%;
+	}
+
+	header {
+		background: rgba(yellow, 0.5);
+		
+		.logo {
+			width: 100%;
+			display: block;
+		}
+
+		.search-form {
+			margin-top: 20px;
+			width: 100%;
+		}
+
+		input[type="text"] {
+			width: 100%;
+			display: inline-block;
+		}
+
+		input[type="submit"] {
+		  width: 60%;
+		  margin: auto;
+		  display: block;
+		  margin-top: 10px;
+		  border: 2px solid black;
+		  background: rgb(108, 188, 47);
+		  font-weight: bold;
+		}
+	}	
+}

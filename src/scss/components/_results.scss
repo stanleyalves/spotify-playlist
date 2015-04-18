@@ -1,0 +1,26 @@
+/*  Left bar results
+/* ======================================= */
+
+.results {
+	height: 68%;
+	text-align: left;
+	background: rgba(255, 165, 0, 0.5);
+	overflow-y: scroll;
+
+	.artist {
+		margin-top: 5px;
+		border: 1px solid black;
+	}
+
+	p {
+		width: 69%;
+  		display: inline-block;
+  		margin-left: 4px;
+	}
+
+	.artist-pic {
+		height: 40px;
+		width: 40px;
+
+	}
+}

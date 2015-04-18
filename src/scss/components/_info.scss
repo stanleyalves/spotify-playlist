@@ -1,0 +1,16 @@
+//Info Bar
+
+.info-wrapper	{
+	background: rgba(green, 0.5);
+
+	.img-wrapper {
+		display: inline-block;
+		width: 10%;
+		vertical-align: top;
+	}
+
+	.text-wrapper {
+		display: inline-block;
+		width: 80%;
+	}
+}

@@ -7,7 +7,7 @@ require('babelify/polyfill');
 
 _start.start();
 
-},{"./modules/spotifySearch":77,"babelify/polyfill":76}],2:[function(require,module,exports){
+},{"./modules/spotifySearch":83,"babelify/polyfill":76}],2:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -3091,156 +3091,107 @@ module.exports = require("./lib/babel/polyfill");
 module.exports = require("babel-core/polyfill");
 
 },{"babel-core/polyfill":75}],77:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-//This is the React render function which renders your App.
-exports.start = start;
+var _ajax$isEmpty$extend = require("../utils");
 
-var _ajax$isEmpty$extend = require('./utils');
-
-// let arr = [1, 2, 3, 4];
-
-// let [first, ...rest] = arr;
-
-// console.log(first, rest);
-
-// let select = (sel, context = document) => [...context.querySelectorAll(sel)];
-
-// select('div').forEach((el) => (el.innerText = 'shit'));
-
-// var obj = {
-//   a: '1',
-//   b: '2',
-//   c: '3'
-// };
-
-// let { a, b } = obj;
-
-// let mutated = arr.map((x) => x * x);
-
-var App = React.createClass({
-  displayName: 'App',
-
-  getInitialState: function getInitialState() {
-    return {
-      data: {},
-      selectedArtist: undefined,
-      similarArtists: undefined,
-      secentSearches: undefined
-    };
-  },
-
-  handleSearchSubmit: function handleSearchSubmit(data) {
-    console.log('handle search submit');
-    this.setState({
-      data: data
-    });
-  },
-
-  relatedArtists: function relatedArtists(data) {
-    this.setState({
-      similarArtists: {
-        artists: data.artists
-      }
-    });
-  },
-
-  selectArtist: function selectArtist(data) {
-    console.log('select AETISTSTSTS');
-    console.log(data);
-    //heres the magic, set the state of the selected artist.
-    //The child components will updated when the state is changed.
-    this.setState({
-      selectedArtist: {
-        name: data.name,
-        pic: data.pic,
-        followers: data.followers,
-        href: data.href,
-        bio: data.artist.bio.summary
-      }
-    });
-  },
+var Player = React.createClass({
+  displayName: "Player",
 
   render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'wrapper' },
-      React.createElement(
-        'div',
-        { className: 'left-bar' },
-        React.createElement(SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
-        React.createElement(Results, { data: this.state.data, chooseArtist: this.selectArtist, relatedArtist: this.relatedArtists }),
-        React.createElement(RecentSearches, null)
-      ),
-      React.createElement(
-        'div',
-        { className: 'main' },
-        React.createElement(SelectedArtst, { artist: this.state.selectedArtist }),
-        React.createElement(SimilarArtst, { similarArtists: this.state.similarArtists }),
-        React.createElement(Player, null)
-      )
-    );
-  }
-});
-
-var SelectedArtst = React.createClass({
-  displayName: 'SelectedArtst',
-
-  //Note getDefaultProps get overwritten on render.
-  //This is why the name gets overwritten, but the info doesnt
-  //The name is getting overwitten by the set props, which are initially done in the state.
-  getDefaultProps: function getDefaultProps() {
-    return {
-      selectedArtist: {
-        name: 'Default Props',
-        info: 'Here is the default props info'
-      }
-    };
-  },
-  render: function render() {
-    if (this.props.artist === undefined) {
-      return React.createElement('div', null);
+    if (this.props.player === undefined) {
+      return React.createElement("div", null);
     } else {
       return React.createElement(
-        'div',
-        { className: 'info-wrapper' },
+        "div",
+        { className: "player-wrapper" },
         React.createElement(
-          'div',
-          { className: 'selected-artist' },
+          "div",
+          { className: "player" },
           React.createElement(
-            'h2',
+            "h3",
             null,
-            this.props.artist.name
-          ),
+            "Player Here"
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "other-tracks" },
           React.createElement(
-            'div',
-            { className: 'img-wrapper' },
+            "ul",
+            null,
             React.createElement(
-              'a',
-              { target: '_blank', href: this.props.artist.href },
-              React.createElement('img', { className: 'artist-pic', src: this.props.artist.pic, alt: 'Artist name' })
-            ),
-            React.createElement(
-              'p',
+              "li",
               null,
-              'Followers: ',
-              this.props.artist.followers
+              React.createElement(
+                "a",
+                { href: "#" },
+                "Track Name here"
+              )
             )
-          ),
-          React.createElement(
-            'div',
-            { className: 'text-wrapper' },
-            this.props.artist.bio
           )
         )
       );
     }
   }
 });
+
+exports["default"] = { Player: Player };
+module.exports = exports["default"];
+
+},{"../utils":84}],78:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ajax$isEmpty$extend = require("../utils");
+
+var RecentSearches = React.createClass({
+  displayName: "RecentSearches",
+
+  render: function render() {
+    if (this.props.similarArtists === undefined) {
+      return React.createElement("div", null);
+    } else {
+      return React.createElement(
+        "div",
+        { className: "recent-searches" },
+        React.createElement(
+          "h3",
+          null,
+          "recent searches"
+        ),
+        React.createElement(
+          "ul",
+          null,
+          React.createElement(
+            "li",
+            null,
+            React.createElement("img", { className: "artist-pic", src: "http://lorempixel.com/output/people-q-c-300-300-8.jpg" })
+          )
+        )
+      );
+    }
+  }
+});
+
+exports["default"] = { RecentSearches: RecentSearches };
+module.exports = exports["default"];
+
+},{"../utils":84}],79:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _ajax$isEmpty$extend = require('../utils');
 
 var Results = React.createClass({
   displayName: 'Results',
@@ -3253,8 +3204,6 @@ var Results = React.createClass({
       method: 'GET',
       dataType: 'json',
       success: (function (data) {
-        // this.props.chooseArtist(selectedArtistData);
-        //Combine the 2 objects
         this.props.relatedArtist(data);
       }).bind(this)
     });
@@ -3268,7 +3217,6 @@ var Results = React.createClass({
       method: 'GET',
       dataType: 'json',
       success: (function (data) {
-        // this.props.chooseArtist(selectedArtistData);
         //Combine the 2 objects
         var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
         console.log(allData);
@@ -3345,6 +3293,18 @@ var Results = React.createClass({
   }
 });
 
+exports['default'] = { Results: Results };
+module.exports = exports['default'];
+
+},{"../utils":84}],80:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _ajax = require('../utils');
+
 var SearchHeader = React.createClass({
   displayName: 'SearchHeader',
 
@@ -3353,7 +3313,7 @@ var SearchHeader = React.createClass({
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
     var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
 
-    _ajax$isEmpty$extend.ajax({
+    _ajax.ajax({
       url: url,
       method: 'GET',
       dataType: 'json',
@@ -3367,48 +3327,120 @@ var SearchHeader = React.createClass({
     return React.createElement(
       'header',
       null,
-      React.createElement(
-        'h1',
-        null,
-        'Spotify Search'
-      ),
+      React.createElement('img', { className: 'logo', src: '/assets/img/spotify-logo.svg' }),
       React.createElement(
         'form',
         { className: 'search-form', onSubmit: this.handleSubmit },
         React.createElement('input', { type: 'text', placeholder: 'search for an artist', ref: 'searchBar' }),
-        React.createElement('input', { type: 'submit' })
+        React.createElement('input', { value: 'Go', name: 'submit', type: 'submit' })
       )
     );
   }
 });
 
+exports['default'] = { SearchHeader: SearchHeader };
+module.exports = exports['default'];
+
+},{"../utils":84}],81:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var SelectedArtst = React.createClass({
+  displayName: "SelectedArtst",
+
+  //Note getDefaultProps get overwritten on render.
+  //This is why the name gets overwritten, but the info doesnt
+  //The name is getting overwitten by the set props, which are initially done in the state.
+  getDefaultProps: function getDefaultProps() {
+    return {
+      selectedArtist: {
+        name: "Default Props",
+        info: "Here is the default props info"
+      }
+    };
+  },
+  render: function render() {
+    if (this.props.artist === undefined) {
+      return React.createElement("div", null);
+    } else {
+      return React.createElement(
+        "div",
+        { className: "info-wrapper" },
+        React.createElement(
+          "div",
+          { className: "selected-artist" },
+          React.createElement(
+            "h2",
+            null,
+            this.props.artist.name
+          ),
+          React.createElement(
+            "div",
+            { className: "img-wrapper" },
+            React.createElement(
+              "a",
+              { target: "_blank", href: this.props.artist.href },
+              React.createElement("img", { className: "artist-pic", src: this.props.artist.pic, alt: "Artist name" })
+            ),
+            React.createElement(
+              "p",
+              null,
+              "Followers: ",
+              this.props.artist.followers
+            )
+          ),
+          React.createElement(
+            "div",
+            { className: "text-wrapper" },
+            this.props.artist.bio
+          )
+        )
+      );
+    }
+  }
+});
+
+exports["default"] = { SelectedArtst: SelectedArtst };
+module.exports = exports["default"];
+
+},{}],82:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ajax$isEmpty$extend = require("../utils");
+
 var SimilarArtst = React.createClass({
-  displayName: 'SimilarArtst',
+  displayName: "SimilarArtst",
 
   render: function render() {
     if (this.props.similarArtists === undefined) {
-      return React.createElement('div', null);
+      return React.createElement("div", null);
     } else {
       var artistArray = this.props.similarArtists.artists;
       var artists = artistArray.map(function (data, i) {
         return React.createElement(
-          'li',
+          "li",
           null,
           React.createElement(
-            'div',
-            { className: 'img-wrapper' },
-            React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150', alt: 'Artist name' })
+            "div",
+            { className: "img-wrapper" },
+            React.createElement("img", { className: "artist-pic", src: data.images.length > 1 ? data.images[0].url : "http://placehold.it/150x150", alt: "Artist name" })
           )
         );
       }, this);
 
       return React.createElement(
-        'ul',
-        { className: 'similar-artists' },
+        "ul",
+        { className: "similar-artists" },
         React.createElement(
-          'h3',
+          "h3",
           null,
-          'Similar Artists :'
+          "Similar Artists :"
         ),
         artists
       );
@@ -3416,72 +3448,102 @@ var SimilarArtst = React.createClass({
   }
 });
 
-var Player = React.createClass({
-  displayName: 'Player',
+exports["default"] = { SimilarArtst: SimilarArtst };
+module.exports = exports["default"];
+
+},{"../utils":84}],83:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.start = start;
+
+var _ajax$isEmpty$extend = require('./utils');
+
+var _SearchHeader = require('./components/searchHeader');
+
+var _SelectedArtst = require('./components/selectedArtist');
+
+var _Results = require('./components/results');
+
+var _Player = require('./components/Player');
+
+var _RecentSearches = require('./components/RecentSearches');
+
+var _SimilarArtst = require('./components/similarArtists');
+
+var App = React.createClass({
+  displayName: 'App',
+
+  getInitialState: function getInitialState() {
+    return {
+      data: {},
+      selectedArtist: undefined,
+      similarArtists: undefined,
+      recentSearches: undefined,
+      player: undefined
+    };
+  },
+
+  handleSearchSubmit: function handleSearchSubmit(data) {
+    console.log('handle search submit');
+    this.setState({
+      data: data
+    });
+  },
+
+  relatedArtists: function relatedArtists(data) {
+    this.setState({
+      similarArtists: {
+        artists: data.artists
+      }
+    });
+  },
+
+  selectArtist: function selectArtist(data) {
+    console.log('select AETISTSTSTS');
+    console.log(data);
+    //heres the magic, set the state of the selected artist.
+    //The child components will updated when the state is changed.
+    this.setState({
+      selectedArtist: {
+        name: data.name,
+        pic: data.pic,
+        followers: data.followers,
+        href: data.href,
+        bio: data.artist.bio.summary
+      }
+    });
+  },
 
   render: function render() {
     return React.createElement(
       'div',
-      { className: 'player-wrapper' },
+      { className: 'wrapper' },
       React.createElement(
         'div',
-        { className: 'player' },
-        React.createElement(
-          'h3',
-          null,
-          'Player Here'
-        )
+        { className: 'left-bar open' },
+        React.createElement(_SearchHeader.SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
+        React.createElement(_Results.Results, { data: this.state.data, chooseArtist: this.selectArtist, relatedArtist: this.relatedArtists }),
+        React.createElement(_RecentSearches.RecentSearches, { recentSearches: this.state.recentSearches })
       ),
       React.createElement(
         'div',
-        { className: 'other-tracks' },
-        React.createElement(
-          'ul',
-          null,
-          React.createElement(
-            'li',
-            null,
-            React.createElement(
-              'a',
-              { href: '#' },
-              'Track Name here'
-            )
-          )
-        )
+        { className: 'main' },
+        React.createElement(_SelectedArtst.SelectedArtst, { artist: this.state.selectedArtist }),
+        React.createElement(_SimilarArtst.SimilarArtst, { similarArtists: this.state.similarArtists }),
+        React.createElement(_Player.Player, { player: this.state.player })
       )
     );
   }
 });
 
-var RecentSearches = React.createClass({
-  displayName: 'RecentSearches',
-
-  render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'recent-searches' },
-      React.createElement(
-        'h3',
-        null,
-        'recent searches'
-      ),
-      React.createElement(
-        'ul',
-        null,
-        React.createElement(
-          'li',
-          null,
-          React.createElement('img', { className: 'artist-pic', src: 'http://lorempixel.com/output/people-q-c-300-300-8.jpg' })
-        )
-      )
-    );
-  }
-});
 function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-},{"./utils":78}],78:[function(require,module,exports){
+},{"./components/Player":77,"./components/RecentSearches":78,"./components/results":79,"./components/searchHeader":80,"./components/selectedArtist":81,"./components/similarArtists":82,"./utils":84}],84:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

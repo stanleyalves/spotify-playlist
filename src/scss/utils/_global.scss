@@ -1,0 +1,42 @@
+//Global styles
+body {
+	background: white;
+	color: black;
+	width: 100%;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+ul, li {
+	list-style: none;
+}
+
+.wrapper {
+	margin: auto;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	background: rgba(blue, 0.8);
+}
+
+
+
+.main {
+	position: absolute;
+	right: 0;
+	width: 75%;
+	height: 100%;
+	padding-left: 20px;
+}
+
+
+.artist-pic {
+	height: 70px;
+	width: 70px;
+	border-radius: 40px;
+	display: inline-block;
+}
+
+
