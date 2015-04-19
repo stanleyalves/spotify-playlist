@@ -1,15 +1,24 @@
 import { ajax, isEmpty, extend } from '../utils';
+import { Mixins } from '../mixins';
+
 var SimilarArtst = React.createClass({
 
-  relatedArtistClick(i, data) {
+  mixins: [Mixins],
+
+  similarArtst(i, data) {
     console.log('Related artist click');
     console.log(i);
-
-    console.log(data)
-
-
+    console.log(data);
+    var url = 'https://api.spotify.com/v1/search?q='+ data.name +'&type=artist';
+    ajax({
+      url: url,
+      method:'GET',
+      dataType: 'json',
+      success: function(data){
+        this.props.similarArtstClick({data:data});
+      }.bind(this)
+    });
   },
-
 
   render() {
     if (this.props.similarArtists === undefined ) {
@@ -22,7 +31,7 @@ var SimilarArtst = React.createClass({
         return (
           <li>
             <div className="img-wrapper">
-              <a onClick={this.relatedArtistClick.bind(this, i, data)} href="#">
+              <a onClick={this.similarArtst.bind(this, i, data)} href="#">
                 <img className="artist-pic" src={data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150'} alt="Artist name" />
               </a>
             </div>

@@ -1,4 +1,4 @@
-
+import { Mixins } from './mixins'
 import { ajax, isEmpty, extend } from './utils';
 import { SearchHeader } from './components/searchHeader';
 import { SelectedArtst } from './components/selectedArtist';
@@ -8,6 +8,8 @@ import { RecentSearches } from './components/RecentSearches';
 import { SimilarArtst } from './components/similarArtists';
 
 var App = React.createClass({
+
+  mixins: [Mixins],
 
   getInitialState() {
     return {
@@ -21,6 +23,7 @@ var App = React.createClass({
 
   handleSearchSubmit(data) {
     console.log('handle search submit');
+    // this.tester();
     this.setState({
       data:data
     })
@@ -60,7 +63,7 @@ var App = React.createClass({
         </div>
         <div className="main">
           <SelectedArtst artist={this.state.selectedArtist}/>
-          <SimilarArtst similarArtists={this.state.similarArtists}/>
+          <SimilarArtst similarArtstClick = {this.selectArtist} similarArtists={this.state.similarArtists}/>
           <Player player={this.state.player}/>
         </div>
       </div>

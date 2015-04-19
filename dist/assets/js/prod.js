@@ -7,7 +7,7 @@ require('babelify/polyfill');
 
 _start.start();
 
-},{"./modules/spotifySearch":83,"babelify/polyfill":76}],2:[function(require,module,exports){
+},{"./modules/spotifySearch":84,"babelify/polyfill":76}],2:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -3143,7 +3143,7 @@ var Player = React.createClass({
 exports["default"] = { Player: Player };
 module.exports = exports["default"];
 
-},{"../utils":84}],78:[function(require,module,exports){
+},{"../utils":85}],78:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3184,7 +3184,7 @@ var RecentSearches = React.createClass({
 exports["default"] = { RecentSearches: RecentSearches };
 module.exports = exports["default"];
 
-},{"../utils":84}],79:[function(require,module,exports){
+},{"../utils":85}],79:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3302,7 +3302,7 @@ var Results = React.createClass({
 exports['default'] = { Results: Results };
 module.exports = exports['default'];
 
-},{"../utils":84}],80:[function(require,module,exports){
+},{"../utils":85}],80:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3347,7 +3347,7 @@ var SearchHeader = React.createClass({
 exports['default'] = { SearchHeader: SearchHeader };
 module.exports = exports['default'];
 
-},{"../utils":84}],81:[function(require,module,exports){
+},{"../utils":85}],81:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3413,14 +3413,26 @@ Object.defineProperty(exports, '__esModule', {
 
 var _ajax$isEmpty$extend = require('../utils');
 
+var _Mixins = require('../mixins');
+
 var SimilarArtst = React.createClass({
   displayName: 'SimilarArtst',
 
-  relatedArtistClick: function relatedArtistClick(i, data) {
+  mixins: [_Mixins.Mixins],
+
+  similarArtst: function similarArtst(i, data) {
     console.log('Related artist click');
     console.log(i);
-
     console.log(data);
+    var url = 'https://api.spotify.com/v1/search?q=' + data.name + '&type=artist';
+    _ajax$isEmpty$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        this.props.similarArtstClick({ data: data });
+      }).bind(this)
+    });
   },
 
   render: function render() {
@@ -3437,7 +3449,7 @@ var SimilarArtst = React.createClass({
             { className: 'img-wrapper' },
             React.createElement(
               'a',
-              { onClick: this.relatedArtistClick.bind(this, i, data), href: '#' },
+              { onClick: this.similarArtst.bind(this, i, data), href: '#' },
               React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150', alt: 'Artist name' })
             )
           )
@@ -3461,13 +3473,46 @@ var SimilarArtst = React.createClass({
 exports['default'] = { SimilarArtst: SimilarArtst };
 module.exports = exports['default'];
 
-},{"../utils":84}],83:[function(require,module,exports){
+},{"../mixins":83,"../utils":85}],83:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _ajax$isEmpty$extend = require('./utils');
+
+var Mixins = {
+  testMixin: function testMixin() {
+    alert('test test');
+  },
+
+  artistBio: function artistBio(selectedArtistData) {
+    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
+    _ajax$isEmpty$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        //Combine the 2 objects
+        var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
+        this.props.chooseArtist(allData);
+      }).bind(this)
+    });
+  } };
+
+exports['default'] = { Mixins: Mixins };
+module.exports = exports['default'];
+
+},{"./utils":85}],84:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.start = start;
+
+var _Mixins = require('./mixins');
 
 var _ajax$isEmpty$extend = require('./utils');
 
@@ -3486,6 +3531,8 @@ var _SimilarArtst = require('./components/similarArtists');
 var App = React.createClass({
   displayName: 'App',
 
+  mixins: [_Mixins.Mixins],
+
   getInitialState: function getInitialState() {
     return {
       data: {},
@@ -3498,6 +3545,7 @@ var App = React.createClass({
 
   handleSearchSubmit: function handleSearchSubmit(data) {
     console.log('handle search submit');
+    // this.tester();
     this.setState({
       data: data
     });
@@ -3541,7 +3589,7 @@ var App = React.createClass({
         'div',
         { className: 'main' },
         React.createElement(_SelectedArtst.SelectedArtst, { artist: this.state.selectedArtist }),
-        React.createElement(_SimilarArtst.SimilarArtst, { similarArtists: this.state.similarArtists }),
+        React.createElement(_SimilarArtst.SimilarArtst, { similarArtstClick: this.selectArtist, similarArtists: this.state.similarArtists }),
         React.createElement(_Player.Player, { player: this.state.player })
       )
     );
@@ -3552,7 +3600,7 @@ function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-},{"./components/Player":77,"./components/RecentSearches":78,"./components/results":79,"./components/searchHeader":80,"./components/selectedArtist":81,"./components/similarArtists":82,"./utils":84}],84:[function(require,module,exports){
+},{"./components/Player":77,"./components/RecentSearches":78,"./components/results":79,"./components/searchHeader":80,"./components/selectedArtist":81,"./components/similarArtists":82,"./mixins":83,"./utils":85}],85:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
