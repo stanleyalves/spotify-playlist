@@ -3430,7 +3430,10 @@ var SimilarArtst = React.createClass({
       method: 'GET',
       dataType: 'json',
       success: (function (data) {
-        this.props.similarArtstClick({ data: data });
+        console.log(data);
+        // this.props.chooseArtist({data:data});
+        this.artistBio(data);
+        this.testMixin();
       }).bind(this)
     });
   },
@@ -3497,6 +3500,7 @@ var Mixins = {
 
   artistBio: function artistBio(selectedArtistData) {
     var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
+    console.log('ksjsjsjkasnjadskcbk');
     _ajax$isEmpty$extend.ajax({
       url: url,
       method: 'GET',
@@ -3504,6 +3508,8 @@ var Mixins = {
       success: (function (data) {
         //Combine the 2 objects
         var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
+        console.log('ALL DATA');
+        console.log(allData);
         this.props.chooseArtist(allData);
       }).bind(this)
     });
@@ -3597,7 +3603,7 @@ var App = React.createClass({
         'div',
         { className: 'main' },
         React.createElement(_SelectedArtst.SelectedArtst, { artist: this.state.selectedArtist }),
-        React.createElement(_SimilarArtst.SimilarArtst, { similarArtstClick: this.selectArtist, similarArtists: this.state.similarArtists }),
+        React.createElement(_SimilarArtst.SimilarArtst, { similarArtists: this.state.similarArtists, chooseArtist: this.selectArtist }),
         React.createElement(_Player.Player, { player: this.state.player })
       )
     );

@@ -63,7 +63,7 @@ var App = React.createClass({
         </div>
         <div className="main">
           <SelectedArtst artist={this.state.selectedArtist}/>
-          <SimilarArtst similarArtstClick = {this.selectArtist} similarArtists={this.state.similarArtists}/>
+          <SimilarArtst similarArtists={this.state.similarArtists}  chooseArtist={this.selectArtist}/>
           <Player player={this.state.player}/>
         </div>
       </div>

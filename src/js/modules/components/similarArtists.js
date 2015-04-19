@@ -15,7 +15,10 @@ var SimilarArtst = React.createClass({
       method:'GET',
       dataType: 'json',
       success: function(data){
-        this.props.similarArtstClick({data:data});
+        console.log(data)
+        // this.props.chooseArtist({data:data});
+        this.artistBio(data);
+        this.testMixin();
       }.bind(this)
     });
   },
