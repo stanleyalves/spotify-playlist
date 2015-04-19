@@ -36,7 +36,6 @@ var App = React.createClass({
   },
 
   selectArtist(data){
-    console.log('select AETISTSTSTS')
     console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed. 

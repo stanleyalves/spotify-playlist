@@ -3197,7 +3197,6 @@ var Results = React.createClass({
   displayName: 'Results',
 
   relatedArtists: function relatedArtists(selectedArtistData) {
-    console.log('relatedArtists');
     var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists';
     _ajax$isEmpty$extend.ajax({
       url: url,
@@ -3210,7 +3209,6 @@ var Results = React.createClass({
   },
 
   artistBio: function artistBio(selectedArtistData) {
-    console.log('artist Bio');
     var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
     _ajax$isEmpty$extend.ajax({
       url: url,
@@ -3219,14 +3217,12 @@ var Results = React.createClass({
       success: (function (data) {
         //Combine the 2 objects
         var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
-        console.log(allData);
         this.props.chooseArtist(allData);
       }).bind(this)
     });
   },
 
   chooseArtist: function chooseArtist(i) {
-    console.log(this.props.data);
     var artistChosen = this.props.data.data.artists.items[i];
     //Get the wikipedia entry here, for the bio.
     //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary/18504997#18504997
@@ -3254,27 +3250,37 @@ var Results = React.createClass({
       return React.createElement('li', null);
     } else {
       var artistArray = this.props.data.data.artists.items.slice(0, 10);
+      console.log('Results Data:');
+      console.log(obj);
       //N.B: http://stackoverflow.com/questions/29549375/react-0-13-class-method-undefined
       // Because your code is in strict mode (modules are always in strict mode),
       // this is undefined inside the function you pass to .map.
       //You either have to explicitly set the context by passing
+
       var artists = artistArray.map(function (data, i) {
+        //Change to swicth statement
+        if (data.images.length > 3) {
+          var imgSrc = data.images[2].url;
+        } else if (data.images.length > 1) {
+          var imgSrc = data.images[0].url;
+        } else {
+          'http://placehold.it/45x45';
+        };
         return React.createElement(
           'li',
           null,
           React.createElement(
-            'div',
-            { className: 'artist' },
-            React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150' }),
+            'a',
+            { className: 'result', key: data.id, onClick: this.chooseArtist.bind(this, i) },
             React.createElement(
-              'p',
-              null,
-              data.name
-            ),
-            React.createElement(
-              'a',
-              { key: data.id, onClick: this.chooseArtist.bind(this, i) },
-              'View more info'
+              'div',
+              { className: 'artist' },
+              React.createElement('img', { className: 'artist-pic', src: imgSrc }),
+              React.createElement(
+                'p',
+                null,
+                data.name
+              )
             )
           )
         );
@@ -3331,7 +3337,7 @@ var SearchHeader = React.createClass({
       React.createElement(
         'form',
         { className: 'search-form', onSubmit: this.handleSubmit },
-        React.createElement('input', { type: 'text', placeholder: 'search for an artist', ref: 'searchBar' }),
+        React.createElement('input', { type: 'text', value: 'queen', placeholder: 'search for an artist', ref: 'searchBar' }),
         React.createElement('input', { value: 'Go', name: 'submit', type: 'submit' })
       )
     );
@@ -3372,29 +3378,22 @@ var SelectedArtst = React.createClass({
           "div",
           { className: "selected-artist" },
           React.createElement(
-            "h2",
-            null,
-            this.props.artist.name
-          ),
-          React.createElement(
             "div",
             { className: "img-wrapper" },
             React.createElement(
               "a",
               { target: "_blank", href: this.props.artist.href },
               React.createElement("img", { className: "artist-pic", src: this.props.artist.pic, alt: "Artist name" })
-            ),
-            React.createElement(
-              "p",
-              null,
-              "Followers: ",
-              this.props.artist.followers
             )
           ),
           React.createElement(
             "div",
-            { className: "text-wrapper" },
-            this.props.artist.bio
+            { className: "current-selection" },
+            React.createElement(
+              "h3",
+              null,
+              this.props.artist.name
+            )
           )
         )
       );
@@ -3406,41 +3405,52 @@ exports["default"] = { SelectedArtst: SelectedArtst };
 module.exports = exports["default"];
 
 },{}],82:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _ajax$isEmpty$extend = require("../utils");
+var _ajax$isEmpty$extend = require('../utils');
 
 var SimilarArtst = React.createClass({
-  displayName: "SimilarArtst",
+  displayName: 'SimilarArtst',
+
+  relatedArtistClick: function relatedArtistClick(i, data) {
+    console.log('Related artist click');
+    console.log(i);
+
+    console.log(data);
+  },
 
   render: function render() {
     if (this.props.similarArtists === undefined) {
-      return React.createElement("div", null);
+      return React.createElement('div', null);
     } else {
-      var artistArray = this.props.similarArtists.artists;
+      var artistArray = this.props.similarArtists.artists.slice(0, 10);
       var artists = artistArray.map(function (data, i) {
         return React.createElement(
-          "li",
+          'li',
           null,
           React.createElement(
-            "div",
-            { className: "img-wrapper" },
-            React.createElement("img", { className: "artist-pic", src: data.images.length > 1 ? data.images[0].url : "http://placehold.it/150x150", alt: "Artist name" })
+            'div',
+            { className: 'img-wrapper' },
+            React.createElement(
+              'a',
+              { onClick: this.relatedArtistClick.bind(this, i, data), href: '#' },
+              React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150', alt: 'Artist name' })
+            )
           )
         );
       }, this);
 
       return React.createElement(
-        "ul",
-        { className: "similar-artists" },
+        'ul',
+        { className: 'similar-artists' },
         React.createElement(
-          "h3",
+          'h3',
           null,
-          "Similar Artists :"
+          'Similar Artists:'
         ),
         artists
       );
@@ -3448,8 +3458,8 @@ var SimilarArtst = React.createClass({
   }
 });
 
-exports["default"] = { SimilarArtst: SimilarArtst };
-module.exports = exports["default"];
+exports['default'] = { SimilarArtst: SimilarArtst };
+module.exports = exports['default'];
 
 },{"../utils":84}],83:[function(require,module,exports){
 'use strict';
@@ -3502,7 +3512,6 @@ var App = React.createClass({
   },
 
   selectArtist: function selectArtist(data) {
-    console.log('select AETISTSTSTS');
     console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed.

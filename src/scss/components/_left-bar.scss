@@ -23,6 +23,7 @@
 		
 		.logo {
 			width: 100%;
+			max-width: 175px;
 			display: block;
 		}
 
@@ -37,6 +38,7 @@
 		}
 
 		input[type="submit"] {
+			outline: none;
 		  width: 60%;
 		  margin: auto;
 		  display: block;

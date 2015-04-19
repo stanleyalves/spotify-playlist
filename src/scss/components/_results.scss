@@ -6,16 +6,21 @@
 	text-align: left;
 	background: rgba(255, 165, 0, 0.5);
 	overflow-y: scroll;
+	
+	a {
+		color: black;
+	}
 
 	.artist {
-		margin-top: 5px;
-		border: 1px solid black;
+		margin-top: 10px;
+		cursor: pointer;
 	}
 
 	p {
 		width: 69%;
-  		display: inline-block;
-  		margin-left: 4px;
+		display: inline-block;
+		margin-left: 4px;
+		vertical-align: middle;
 	}
 
 	.artist-pic {

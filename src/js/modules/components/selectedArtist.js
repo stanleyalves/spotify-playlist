@@ -19,15 +19,13 @@ var SelectedArtst = React.createClass({
       return (
         <div className="info-wrapper">
           <div className="selected-artist">
-            <h2>{this.props.artist.name}</h2>
             <div className="img-wrapper">
               <a target="_blank" href={this.props.artist.href}>
                 <img className="artist-pic" src={this.props.artist.pic} alt="Artist name" />
               </a>
-              <p>Followers: {this.props.artist.followers}</p>
             </div>
-            <div className="text-wrapper">
-              {this.props.artist.bio}
+            <div className = "current-selection">
+              <h3>{this.props.artist.name}</h3>
             </div>
           </div>
         </div>

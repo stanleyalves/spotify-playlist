@@ -20,7 +20,7 @@ var SearchHeader = React.createClass({
       <header>
         <img className="logo" src ="/assets/img/spotify-logo.svg"/>
         <form className="search-form" onSubmit={this.handleSubmit}>
-          <input type="text"  placeholder="search for an artist" ref="searchBar" />
+          <input type="text"  value="queen" placeholder="search for an artist" ref="searchBar" />
           <input value="Go" name="submit" type="submit" />
         </form>
       </header>

@@ -4,6 +4,9 @@ body {
 	color: black;
 	width: 100%;
 }
+a {
+	color: black;
+}
 
 * {
 	box-sizing: border-box;
@@ -26,9 +29,8 @@ ul, li {
 .main {
 	position: absolute;
 	right: 0;
-	width: 75%;
+	width: 70%;
 	height: 100%;
-	padding-left: 20px;
 }
 
 
@@ -37,6 +39,7 @@ ul, li {
 	width: 70px;
 	border-radius: 40px;
 	display: inline-block;
+	border: 2px solid black;
 }
 
 

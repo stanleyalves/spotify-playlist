@@ -2,11 +2,26 @@
 
 .info-wrapper	{
 	background: rgba(green, 0.5);
+	text-align: center;
+	
+	h2,h3 {
+		margin-top: 0;
+		display: inline-block;
+	}
+
+	.img-wrapper, .current-selection {
+		display: inline-block;
+		vertical-align: middle;
+		width: 100%;	
+	}
+
+	.current-selection {
+		width: 70%;
+	}
 
 	.img-wrapper {
-		display: inline-block;
-		width: 10%;
-		vertical-align: top;
+		width: auto;
+		width: 100%;
 	}
 
 	.text-wrapper {
