@@ -3441,6 +3441,14 @@ var SimilarArtst = React.createClass({
     } else {
       var artistArray = this.props.similarArtists.artists.slice(0, 10);
       var artists = artistArray.map(function (data, i) {
+        //Change to swicth statement
+        if (data.images.length > 3) {
+          var imgSrc = data.images[2].url;
+        } else if (data.images.length > 1) {
+          var imgSrc = data.images[0].url;
+        } else {
+          'http://placehold.it/45x45';
+        };
         return React.createElement(
           'li',
           null,
@@ -3450,7 +3458,7 @@ var SimilarArtst = React.createClass({
             React.createElement(
               'a',
               { onClick: this.similarArtst.bind(this, i, data), href: '#' },
-              React.createElement('img', { className: 'artist-pic', src: data.images.length > 1 ? data.images[0].url : 'http://placehold.it/150x150', alt: 'Artist name' })
+              React.createElement('img', { className: 'artist-pic', src: imgSrc, alt: 'Artist name' })
             )
           )
         );
