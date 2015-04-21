@@ -5,7 +5,7 @@ import { SelectedArtst } from './components/selectedArtist';
 import { Results } from './components/results';
 import { Player } from './components/Player';
 import { RecentSearches } from './components/RecentSearches';
-import { SimilarArtst } from './components/similarArtists';
+import { SimilarArtist } from './components/similarArtists';
 
 var App = React.createClass({
 
@@ -29,7 +29,7 @@ var App = React.createClass({
     })
   },
 
-  relatedArtists(data) {
+  similarArtists(data) {
     this.setState({
         similarArtists: {
           artists : data.artists
@@ -38,7 +38,7 @@ var App = React.createClass({
     )
   },
 
-  selectArtist(data){
+  chooseArtist(data){
     console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed. 
@@ -58,12 +58,12 @@ var App = React.createClass({
       <div className = "wrapper">
         <div className="left-bar open">
           <SearchHeader onSearchSubmit={this.handleSearchSubmit}/>
-          <Results data={this.state.data} chooseArtist={this.selectArtist} relatedArtist={this.relatedArtists} />
+          <Results data={this.state.data} chooseArtist={this.chooseArtist} similarArtists={this.similarArtists} />
           <RecentSearches recentSearches = {this.state.recentSearches}/>
         </div>
         <div className="main">
           <SelectedArtst artist={this.state.selectedArtist}/>
-          <SimilarArtst similarArtists={this.state.similarArtists}  chooseArtist={this.selectArtist}/>
+          <SimilarArtist chooseArtist={this.chooseArtist} similarArtists={this.similarArtists} similarArtistsState={this.state.similarArtists}/>
           <Player player={this.state.player}/>
         </div>
       </div>

@@ -3193,41 +3193,15 @@ Object.defineProperty(exports, '__esModule', {
 
 var _ajax$isEmpty$extend = require('../utils');
 
+var _Mixins = require('../mixins');
+
 var Results = React.createClass({
   displayName: 'Results',
 
-  relatedArtists: function relatedArtists(selectedArtistData) {
-    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists';
-    _ajax$isEmpty$extend.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        this.props.relatedArtist(data);
-      }).bind(this)
-    });
-  },
+  mixins: [_Mixins.Mixins],
 
-  artistBio: function artistBio(selectedArtistData) {
-    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
-    _ajax$isEmpty$extend.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        //Combine the 2 objects
-        var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
-        this.props.chooseArtist(allData);
-      }).bind(this)
-    });
-  },
-
-  chooseArtist: function chooseArtist(i) {
+  selectArtist: function selectArtist(i) {
     var artistChosen = this.props.data.data.artists.items[i];
-    //Get the wikipedia entry here, for the bio.
-    //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary/18504997#18504997
-    //http://stackoverflow.com/questions/8555320/is-there-a-clean-wikipedia-api-just-for-retrieve-content-summary
-
     //Build the required data in an object
     var selectedArtistData = {
       id: artistChosen.id,
@@ -3236,11 +3210,9 @@ var Results = React.createClass({
       followers: artistChosen.followers.total,
       href: artistChosen.external_urls.spotify
     };
-    this.relatedArtists(selectedArtistData);
-    this.artistBio(selectedArtistData);
 
-    //Whack that to the parent...
-    // this.props.chooseArtist(selectedArtistData);
+    this.similarArtist(selectedArtistData);
+    this.artistBio(selectedArtistData);
   },
 
   render: function render() {
@@ -3258,20 +3230,13 @@ var Results = React.createClass({
       //You either have to explicitly set the context by passing
 
       var artists = artistArray.map(function (data, i) {
-        //Change to swicth statement
-        if (data.images.length > 3) {
-          var imgSrc = data.images[2].url;
-        } else if (data.images.length > 1) {
-          var imgSrc = data.images[0].url;
-        } else {
-          'http://placehold.it/45x45';
-        };
+        var imgSrc = this.chooseArtistImage(data);
         return React.createElement(
           'li',
           null,
           React.createElement(
             'a',
-            { className: 'result', key: data.id, onClick: this.chooseArtist.bind(this, i) },
+            { className: 'result', key: data.id, onClick: this.selectArtist.bind(this, i) },
             React.createElement(
               'div',
               { className: 'artist' },
@@ -3302,7 +3267,7 @@ var Results = React.createClass({
 exports['default'] = { Results: Results };
 module.exports = exports['default'];
 
-},{"../utils":85}],80:[function(require,module,exports){
+},{"../mixins":83,"../utils":85}],80:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3415,43 +3380,35 @@ var _ajax$isEmpty$extend = require('../utils');
 
 var _Mixins = require('../mixins');
 
-var SimilarArtst = React.createClass({
-  displayName: 'SimilarArtst',
+var SimilarArtist = React.createClass({
+  displayName: 'SimilarArtist',
 
   mixins: [_Mixins.Mixins],
 
-  similarArtst: function similarArtst(i, data) {
-    console.log('Related artist click');
-    console.log(i);
+  selectArtist: function selectArtist(i, data) {
     console.log(data);
-    var url = 'https://api.spotify.com/v1/search?q=' + data.name + '&type=artist';
-    _ajax$isEmpty$extend.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        console.log(data);
-        // this.props.chooseArtist({data:data});
-        this.artistBio(data);
-        this.testMixin();
-      }).bind(this)
-    });
+    var artistChosen = data;
+    //Build the required data in an object
+    var selectedArtistData = {
+      id: artistChosen.id,
+      name: artistChosen.name,
+      pic: artistChosen.images[1].url,
+      followers: artistChosen.followers.total,
+      href: artistChosen.external_urls.spotify
+    };
+
+    this.similarArtist(selectedArtistData);
+    this.artistBio(selectedArtistData);
   },
 
   render: function render() {
-    if (this.props.similarArtists === undefined) {
+    if (this.props.similarArtistsState === undefined) {
       return React.createElement('div', null);
     } else {
-      var artistArray = this.props.similarArtists.artists.slice(0, 10);
+      var artistArray = this.props.similarArtistsState.artists.slice(0, 10);
       var artists = artistArray.map(function (data, i) {
-        //Change to swicth statement
-        if (data.images.length > 3) {
-          var imgSrc = data.images[2].url;
-        } else if (data.images.length > 1) {
-          var imgSrc = data.images[0].url;
-        } else {
-          'http://placehold.it/45x45';
-        };
+        var imgSrc = this.chooseArtistImage(data);
+
         return React.createElement(
           'li',
           null,
@@ -3460,7 +3417,7 @@ var SimilarArtst = React.createClass({
             { className: 'img-wrapper' },
             React.createElement(
               'a',
-              { onClick: this.similarArtst.bind(this, i, data), href: '#' },
+              { onClick: this.selectArtist.bind(this, i, data), href: '#' },
               React.createElement('img', { className: 'artist-pic', src: imgSrc, alt: 'Artist name' })
             )
           )
@@ -3481,7 +3438,7 @@ var SimilarArtst = React.createClass({
   }
 });
 
-exports['default'] = { SimilarArtst: SimilarArtst };
+exports['default'] = { SimilarArtist: SimilarArtist };
 module.exports = exports['default'];
 
 },{"../mixins":83,"../utils":85}],83:[function(require,module,exports){
@@ -3494,8 +3451,23 @@ Object.defineProperty(exports, '__esModule', {
 var _ajax$isEmpty$extend = require('./utils');
 
 var Mixins = {
+
   testMixin: function testMixin() {
     alert('test test');
+  },
+
+  similarArtist: function similarArtist(selectedArtistData) {
+    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists';
+    console.log(url);
+    console.log('similarArtist AJAX');
+    _ajax$isEmpty$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        this.props.similarArtists(data);
+      }).bind(this)
+    });
   },
 
   artistBio: function artistBio(selectedArtistData) {
@@ -3513,7 +3485,22 @@ var Mixins = {
         this.props.chooseArtist(allData);
       }).bind(this)
     });
-  } };
+  },
+
+  //Choose the artist image, if none available, use placeholder.
+  chooseArtistImage: function chooseArtistImage(data) {
+    var imgSrc;
+    if (data.images.length > 3) {
+      imgSrc = data.images[2].url;
+    } else if (data.images.length > 1) {
+      imgSrc = data.images[0].url;
+    } else {
+      imgSrc = 'http://placehold.it/45x45';
+    };
+    return imgSrc;
+  }
+
+};
 
 exports['default'] = { Mixins: Mixins };
 module.exports = exports['default'];
@@ -3540,7 +3527,7 @@ var _Player = require('./components/Player');
 
 var _RecentSearches = require('./components/RecentSearches');
 
-var _SimilarArtst = require('./components/similarArtists');
+var _SimilarArtist = require('./components/similarArtists');
 
 var App = React.createClass({
   displayName: 'App',
@@ -3565,7 +3552,7 @@ var App = React.createClass({
     });
   },
 
-  relatedArtists: function relatedArtists(data) {
+  similarArtists: function similarArtists(data) {
     this.setState({
       similarArtists: {
         artists: data.artists
@@ -3573,7 +3560,7 @@ var App = React.createClass({
     });
   },
 
-  selectArtist: function selectArtist(data) {
+  chooseArtist: function chooseArtist(data) {
     console.log(data);
     //heres the magic, set the state of the selected artist.
     //The child components will updated when the state is changed.
@@ -3596,14 +3583,14 @@ var App = React.createClass({
         'div',
         { className: 'left-bar open' },
         React.createElement(_SearchHeader.SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
-        React.createElement(_Results.Results, { data: this.state.data, chooseArtist: this.selectArtist, relatedArtist: this.relatedArtists }),
+        React.createElement(_Results.Results, { data: this.state.data, chooseArtist: this.chooseArtist, similarArtists: this.similarArtists }),
         React.createElement(_RecentSearches.RecentSearches, { recentSearches: this.state.recentSearches })
       ),
       React.createElement(
         'div',
         { className: 'main' },
         React.createElement(_SelectedArtst.SelectedArtst, { artist: this.state.selectedArtist }),
-        React.createElement(_SimilarArtst.SimilarArtst, { similarArtists: this.state.similarArtists, chooseArtist: this.selectArtist }),
+        React.createElement(_SimilarArtist.SimilarArtist, { chooseArtist: this.chooseArtist, similarArtists: this.similarArtists, similarArtistsState: this.state.similarArtists }),
         React.createElement(_Player.Player, { player: this.state.player })
       )
     );
