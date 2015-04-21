@@ -37,8 +37,6 @@ var Mixins = {
     });
   },
 
-
-
   //Choose the artist image, if none available, use placeholder.
   chooseArtistImage(data) {
   	var imgSrc;
@@ -50,6 +48,18 @@ var Mixins = {
       imgSrc = 'http://placehold.it/45x45';
     };
     return imgSrc;
+  },
+
+  //Construst the selected Artist object
+  selectedArtist(data) {
+  	var selectedArtistData = {
+  		id : data.id,
+      name : data.name,
+      pic : data.images[1].url,
+      followers : data.followers.total,
+      href : data.external_urls.spotify
+  	}
+  	return selectedArtistData;
   }
 	
 };

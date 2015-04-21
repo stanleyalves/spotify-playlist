@@ -7,15 +7,9 @@ var Results = React.createClass({
 
   selectArtist(i){
     var artistChosen = this.props.data.data.artists.items[i];
+    
     //Build the required data in an object
-    var selectedArtistData = {
-      id : artistChosen.id,
-      name : artistChosen.name,
-      pic : artistChosen.images[1].url,
-      followers : artistChosen.followers.total,
-      href : artistChosen.external_urls.spotify
-    };
-
+    var selectedArtistData = this.selectedArtist(artistChosen);
     this.similarArtist(selectedArtistData);
     this.artistBio(selectedArtistData);
   },

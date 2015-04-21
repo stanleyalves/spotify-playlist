@@ -6,17 +6,8 @@ var SimilarArtist = React.createClass({
   mixins: [Mixins],
 
   selectArtist(i, data){
-    console.log(data)
-    var artistChosen = data;
-    //Build the required data in an object
-    var selectedArtistData = {
-      id : artistChosen.id,
-      name : artistChosen.name,
-      pic : artistChosen.images[1].url,
-      followers : artistChosen.followers.total,
-      href : artistChosen.external_urls.spotify
-    };
 
+    var selectedArtistData = this.selectedArtist(data);
     this.similarArtist(selectedArtistData);
     this.artistBio(selectedArtistData);
   },

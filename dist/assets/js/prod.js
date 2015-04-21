@@ -3202,15 +3202,9 @@ var Results = React.createClass({
 
   selectArtist: function selectArtist(i) {
     var artistChosen = this.props.data.data.artists.items[i];
-    //Build the required data in an object
-    var selectedArtistData = {
-      id: artistChosen.id,
-      name: artistChosen.name,
-      pic: artistChosen.images[1].url,
-      followers: artistChosen.followers.total,
-      href: artistChosen.external_urls.spotify
-    };
 
+    //Build the required data in an object
+    var selectedArtistData = this.selectedArtist(artistChosen);
     this.similarArtist(selectedArtistData);
     this.artistBio(selectedArtistData);
   },
@@ -3386,17 +3380,8 @@ var SimilarArtist = React.createClass({
   mixins: [_Mixins.Mixins],
 
   selectArtist: function selectArtist(i, data) {
-    console.log(data);
-    var artistChosen = data;
-    //Build the required data in an object
-    var selectedArtistData = {
-      id: artistChosen.id,
-      name: artistChosen.name,
-      pic: artistChosen.images[1].url,
-      followers: artistChosen.followers.total,
-      href: artistChosen.external_urls.spotify
-    };
 
+    var selectedArtistData = this.selectedArtist(data);
     this.similarArtist(selectedArtistData);
     this.artistBio(selectedArtistData);
   },
@@ -3498,6 +3483,18 @@ var Mixins = {
       imgSrc = 'http://placehold.it/45x45';
     };
     return imgSrc;
+  },
+
+  //Construst the selected Artist object
+  selectedArtist: function selectedArtist(data) {
+    var selectedArtistData = {
+      id: data.id,
+      name: data.name,
+      pic: data.images[1].url,
+      followers: data.followers.total,
+      href: data.external_urls.spotify
+    };
+    return selectedArtistData;
   }
 
 };
