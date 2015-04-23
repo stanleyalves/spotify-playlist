@@ -4,8 +4,15 @@ body {
 	color: black;
 	width: 100%;
 }
+
+//Colours
+$spotify_green : rgb(108, 188, 47);
 a {
-	color: black;
+	color: $spotify_green;
+
+	&:hover {
+		color: $spotify_green;
+	}
 }
 
 * {
@@ -21,7 +28,7 @@ ul, li {
 	height: 100%;
 	position: absolute;
 	width: 100%;
-	background: rgba(blue, 0.8);
+	background: rgba(blue, 0.3);
 }
 
 
@@ -31,6 +38,7 @@ ul, li {
 	right: 0;
 	width: 70%;
 	height: 100%;
+	padding: 10px;
 }
 
 

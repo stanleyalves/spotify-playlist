@@ -26,6 +26,8 @@ var SelectedArtst = React.createClass({
             </div>
             <div className = "current-selection">
               <h3>{this.props.artist.name}</h3>
+              <div dangerouslySetInnerHTML={{__html: this.props.artist.bio}} className="text-wrapper">
+              </div>
             </div>
           </div>
         </div>

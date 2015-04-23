@@ -1,31 +1,37 @@
 //Info Bar
 
 .info-wrapper	{
-	background: rgba(green, 0.5);
-	text-align: center;
-	
+	background: rgba(blue, 0.3);
+	text-align: left;
+	border-bottom: 2px solid black;
+
 	h2,h3 {
 		margin-top: 0;
 		display: inline-block;
 	}
 
+	.selected-artist {
+		padding-bottom: 30px;
+	}
+
 	.img-wrapper, .current-selection {
 		display: inline-block;
-		vertical-align: middle;
+		vertical-align: top;
 		width: 100%;	
 	}
 
 	.current-selection {
-		width: 70%;
+		width: 83%;
 	}
 
 	.img-wrapper {
 		width: auto;
-		width: 100%;
+		margin-right: 10px;
+		// width: 100%;
 	}
 
 	.text-wrapper {
 		display: inline-block;
-		width: 80%;
+		width: 100%;
 	}
 }

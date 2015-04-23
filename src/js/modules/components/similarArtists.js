@@ -20,7 +20,7 @@ var SimilarArtist = React.createClass({
     } else {
       var artistArray = this.props.similarArtistsState.artists.slice(0,10);
       var artists = artistArray.map(function (data, i){
-        var imgSrc = this.chooseArtistImage(data);
+      var imgSrc = this.chooseArtistImage(data);
 
         return (
           <li>

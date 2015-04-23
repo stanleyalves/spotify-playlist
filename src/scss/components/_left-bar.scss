@@ -3,12 +3,12 @@
 
 
 .left-bar {
-	border-right: 1px solid grey;
+	border-right: 2px solid black;
 	width: 30%;
 	position: fixed;
 	height: 100%;
 	padding: 10px;
-	background: rgba(red, 0.5);
+	background: rgba(blue, 0.3);
 	overflow: hidden;
 	z-index: 100;
 	left: -30%;
@@ -19,7 +19,7 @@
 	}
 
 	header {
-		background: rgba(yellow, 0.5);
+		background: rgba(blue, 0.3);
 		
 		.logo {
 			width: 100%;

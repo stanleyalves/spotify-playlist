@@ -3296,8 +3296,8 @@ var SearchHeader = React.createClass({
       React.createElement(
         'form',
         { className: 'search-form', onSubmit: this.handleSubmit },
-        React.createElement('input', { type: 'text', value: 'queen', placeholder: 'search for an artist', ref: 'searchBar' }),
-        React.createElement('input', { value: 'Go', name: 'submit', type: 'submit' })
+        React.createElement('input', { className: 'form-control', type: 'text', defaultValue: 'queen', placeholder: 'search for an artist', ref: 'searchBar' }),
+        React.createElement('input', { value: 'Go', className: 'btn btn-default', name: 'submit', type: 'submit' })
       )
     );
   }
@@ -3352,7 +3352,8 @@ var SelectedArtst = React.createClass({
               "h3",
               null,
               this.props.artist.name
-            )
+            ),
+            React.createElement("div", { dangerouslySetInnerHTML: { __html: this.props.artist.bio }, className: "text-wrapper" })
           )
         )
       );

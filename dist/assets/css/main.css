@@ -41,34 +41,38 @@ body {
   color: black;
   width: 100%; }
 
-/* line 7, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+/* line 10, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
 a {
-  color: black; }
+  color: #6cbc2f; }
+  /* line 13, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+  a:hover {
+    color: #6cbc2f; }
 
-/* line 11, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+/* line 18, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
 * {
   box-sizing: border-box; }
 
-/* line 15, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+/* line 22, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
 ul, li {
   list-style: none; }
 
-/* line 19, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+/* line 26, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
 .wrapper {
   margin: auto;
   height: 100%;
   position: absolute;
   width: 100%;
-  background: rgba(0, 0, 255, 0.8); }
+  background: rgba(0, 0, 255, 0.3); }
 
-/* line 29, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+/* line 36, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
 .main {
   position: absolute;
   right: 0;
   width: 70%;
-  height: 100%; }
+  height: 100%;
+  padding: 10px; }
 
-/* line 37, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
+/* line 45, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/utils/_global.scss */
 .artist-pic {
   height: 70px;
   width: 70px;
@@ -78,39 +82,43 @@ ul, li {
 
 /* line 3, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
 .info-wrapper {
-  background: rgba(0, 128, 0, 0.5);
-  text-align: center; }
-  /* line 7, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  background: rgba(0, 0, 255, 0.3);
+  text-align: left;
+  border-bottom: 2px solid black; }
+  /* line 8, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
   .info-wrapper h2, .info-wrapper h3 {
     margin-top: 0;
     display: inline-block; }
-  /* line 12, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 13, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  .info-wrapper .selected-artist {
+    padding-bottom: 30px; }
+  /* line 17, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
   .info-wrapper .img-wrapper, .info-wrapper .current-selection {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: top;
     width: 100%; }
-  /* line 18, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 23, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
   .info-wrapper .current-selection {
-    width: 70%; }
-  /* line 22, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+    width: 83%; }
+  /* line 27, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
   .info-wrapper .img-wrapper {
     width: auto;
-    width: 100%; }
-  /* line 27, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+    margin-right: 10px; }
+  /* line 33, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
   .info-wrapper .text-wrapper {
     display: inline-block;
-    width: 80%; }
+    width: 100%; }
 
 /*  Left bar searches
 /* ======================================= */
 /* line 5, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_left-bar.scss */
 .left-bar {
-  border-right: 1px solid grey;
+  border-right: 2px solid black;
   width: 30%;
   position: fixed;
   height: 100%;
   padding: 10px;
-  background: rgba(255, 0, 0, 0.5);
+  background: rgba(0, 0, 255, 0.3);
   overflow: hidden;
   z-index: 100;
   left: -30%;
@@ -121,7 +129,7 @@ ul, li {
     left: 0%; }
   /* line 21, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_left-bar.scss */
   .left-bar header {
-    background: rgba(255, 255, 0, 0.5); }
+    background: rgba(0, 0, 255, 0.3); }
     /* line 24, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_left-bar.scss */
     .left-bar header .logo {
       width: 100%;
@@ -148,7 +156,7 @@ ul, li {
 
 /* line 1, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_player.scss */
 .player-wrapper {
-  background: rgba(255, 255, 0, 0.5); }
+  background: rgba(0, 0, 255, 0.3); }
 
 /*  Recent searches
 /* ======================================= */
@@ -158,39 +166,38 @@ ul, li {
 .results {
   height: 68%;
   text-align: left;
-  background: rgba(255, 165, 0, 0.5);
+  background: rgba(0, 0, 255, 0.3);
   overflow-y: scroll; }
   /* line 10, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
   .results a {
     color: black; }
-  /* line 14, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
+  /* line 18, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
   .results .artist {
     margin-top: 10px;
     cursor: pointer; }
-  /* line 19, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
+  /* line 23, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
   .results p {
     width: 69%;
     display: inline-block;
     margin-left: 4px;
     vertical-align: middle; }
-  /* line 26, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
+  /* line 30, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_results.scss */
   .results .artist-pic {
     height: 40px;
     width: 40px; }
 
 /* line 4, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
 .similar-artists {
-  background: rgba(255, 255, 255, 0.5);
-  height: 100%;
-  text-align: center; }
-  /* line 9, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
+  background: rgba(0, 0, 255, 0.3);
+  height: 100%; }
+  /* line 8, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
   .similar-artists h3 {
     margin-top: 0; }
-  /* line 13, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
+  /* line 12, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
   .similar-artists li {
     display: inline-block;
     margin-right: 10px;
     margin-top: 10px; }
-    /* line 18, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
+    /* line 17, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_similar-artists.scss */
     .similar-artists li:last-child {
       margin-right: 0; }
