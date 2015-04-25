@@ -12,6 +12,7 @@ var Results = React.createClass({
     var selectedArtistData = this.selectedArtist(artistChosen);
     this.similarArtist(selectedArtistData);
     this.artistBio(selectedArtistData);
+    this.artistAlbum(selectedArtistData);
   },
 
   render() {

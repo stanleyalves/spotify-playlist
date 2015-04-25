@@ -17,7 +17,8 @@ var App = React.createClass({
       selectedArtist : undefined, 
       similarArtists : undefined,
       recentSearches : undefined,
-      player: undefined
+      player: undefined,
+      albums:undefined
     };
   },
 
@@ -33,6 +34,15 @@ var App = React.createClass({
     this.setState({
         similarArtists: {
           artists : data.artists
+        }
+      }
+    )
+  },
+
+  artistAlbums(data) {
+    this.setState({
+        artistAlbums: {
+          albums : data.items
         }
       }
     )
@@ -58,11 +68,11 @@ var App = React.createClass({
       <div className = "wrapper">
         <div className="left-bar open">
           <SearchHeader onSearchSubmit={this.handleSearchSubmit}/>
-          <Results data={this.state.data} chooseArtist={this.chooseArtist} similarArtists={this.similarArtists} />
+          <Results data={this.state.data} chooseArtist={this.chooseArtist} similarArtists={this.similarArtists} artistAlbums={this.artistAlbums} />
           <RecentSearches recentSearches = {this.state.recentSearches}/>
         </div>
         <div className="main">
-          <SelectedArtst artist={this.state.selectedArtist}/>
+          <SelectedArtst albums={this.state.artistAlbums}  artist={this.state.selectedArtist}/>
           <SimilarArtist chooseArtist={this.chooseArtist} similarArtists={this.similarArtists} similarArtistsState={this.state.similarArtists}/>
           <Player player={this.state.player}/>
         </div>

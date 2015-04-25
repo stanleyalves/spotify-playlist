@@ -20,6 +20,20 @@ var Mixins = {
     });
   },
 
+  artistAlbum(selectedArtistData) {
+    var url =  'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/albums';
+    ajax({
+      url: url,
+      method:'GET',
+      dataType: 'json',
+      success: function(data){
+        this.props.artistAlbums(data);
+        console.log('ARTIST ALBUMS')
+        console.log(data)
+      }.bind(this)
+    });
+  },
+
 	artistBio(selectedArtistData) {
     var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json'
     console.log('ksjsjsjkasnjadskcbk')

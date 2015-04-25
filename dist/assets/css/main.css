@@ -80,31 +80,36 @@ ul, li {
   display: inline-block;
   border: 2px solid black; }
 
-/* line 3, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+/* line 3, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
 .info-wrapper {
   background: rgba(0, 0, 255, 0.3);
   text-align: left;
   border-bottom: 2px solid black; }
-  /* line 8, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 8, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
   .info-wrapper h2, .info-wrapper h3 {
     margin-top: 0;
     display: inline-block; }
-  /* line 13, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 13, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
   .info-wrapper .selected-artist {
     padding-bottom: 30px; }
-  /* line 17, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 17, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
+  .info-wrapper .artist-albums {
+    width: 100%;
+    background: red;
+    height: 100px; }
+  /* line 23, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
   .info-wrapper .img-wrapper, .info-wrapper .current-selection {
     display: inline-block;
     vertical-align: top;
     width: 100%; }
-  /* line 23, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 29, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
   .info-wrapper .current-selection {
     width: 83%; }
-  /* line 27, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 33, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
   .info-wrapper .img-wrapper {
     width: auto;
     margin-right: 10px; }
-  /* line 33, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_info.scss */
+  /* line 39, /Users/cabbio540/Sites/personal/spotify-playlist/src/scss/components/_selectedArtist.scss */
   .info-wrapper .text-wrapper {
     display: inline-block;
     width: 100%; }

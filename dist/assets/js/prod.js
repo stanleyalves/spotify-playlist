@@ -3207,6 +3207,7 @@ var Results = React.createClass({
     var selectedArtistData = this.selectedArtist(artistChosen);
     this.similarArtist(selectedArtistData);
     this.artistBio(selectedArtistData);
+    this.artistAlbum(selectedArtistData);
   },
 
   render: function render() {
@@ -3330,6 +3331,24 @@ var SelectedArtst = React.createClass({
     if (this.props.artist === undefined) {
       return React.createElement("div", null);
     } else {
+      var albumArray = this.props.albums.albums;
+      console.log(albumArray);
+
+      var albums = albumArray.map(function (data, i) {
+        return React.createElement(
+          "li",
+          null,
+          React.createElement(
+            "a",
+            { className: "result" },
+            React.createElement(
+              "div",
+              { className: "artist" },
+              React.createElement("img", { className: "artist-pic", src: "http://placehold.it/45x45" })
+            )
+          )
+        );
+      }, this);
       return React.createElement(
         "div",
         { className: "info-wrapper" },
@@ -3353,7 +3372,17 @@ var SelectedArtst = React.createClass({
               null,
               this.props.artist.name
             ),
-            React.createElement("div", { dangerouslySetInnerHTML: { __html: this.props.artist.bio }, className: "text-wrapper" })
+            React.createElement("div", { dangerouslySetInnerHTML: { __html: this.props.artist.bio }, className: "text-wrapper" }),
+            React.createElement(
+              "div",
+              { className: "artist-albums" },
+              React.createElement(
+                "h3",
+                null,
+                "Artist Albums:"
+              ),
+              this.props.albums
+            )
           )
         )
       );
@@ -3456,6 +3485,20 @@ var Mixins = {
     });
   },
 
+  artistAlbum: function artistAlbum(selectedArtistData) {
+    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/albums';
+    _ajax$isEmpty$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        this.props.artistAlbums(data);
+        console.log('ARTIST ALBUMS');
+        console.log(data);
+      }).bind(this)
+    });
+  },
+
   artistBio: function artistBio(selectedArtistData) {
     var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
     console.log('ksjsjsjkasnjadskcbk');
@@ -3538,7 +3581,8 @@ var App = React.createClass({
       selectedArtist: undefined,
       similarArtists: undefined,
       recentSearches: undefined,
-      player: undefined
+      player: undefined,
+      albums: undefined
     };
   },
 
@@ -3554,6 +3598,14 @@ var App = React.createClass({
     this.setState({
       similarArtists: {
         artists: data.artists
+      }
+    });
+  },
+
+  artistAlbums: function artistAlbums(data) {
+    this.setState({
+      artistAlbums: {
+        albums: data.items
       }
     });
   },
@@ -3581,13 +3633,13 @@ var App = React.createClass({
         'div',
         { className: 'left-bar open' },
         React.createElement(_SearchHeader.SearchHeader, { onSearchSubmit: this.handleSearchSubmit }),
-        React.createElement(_Results.Results, { data: this.state.data, chooseArtist: this.chooseArtist, similarArtists: this.similarArtists }),
+        React.createElement(_Results.Results, { data: this.state.data, chooseArtist: this.chooseArtist, similarArtists: this.similarArtists, artistAlbums: this.artistAlbums }),
         React.createElement(_RecentSearches.RecentSearches, { recentSearches: this.state.recentSearches })
       ),
       React.createElement(
         'div',
         { className: 'main' },
-        React.createElement(_SelectedArtst.SelectedArtst, { artist: this.state.selectedArtist }),
+        React.createElement(_SelectedArtst.SelectedArtst, { albums: this.state.artistAlbums, artist: this.state.selectedArtist }),
         React.createElement(_SimilarArtist.SimilarArtist, { chooseArtist: this.chooseArtist, similarArtists: this.similarArtists, similarArtistsState: this.state.similarArtists }),
         React.createElement(_Player.Player, { player: this.state.player })
       )
