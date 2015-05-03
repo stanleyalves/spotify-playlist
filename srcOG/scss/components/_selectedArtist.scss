@@ -1,0 +1,43 @@
+//Info Bar
+
+.info-wrapper	{
+	background: rgba(blue, 0.3);
+	text-align: left;
+	border-bottom: 2px solid black;
+
+	h2,h3 {
+		margin-top: 0;
+		display: inline-block;
+	}
+
+	.selected-artist {
+		padding-bottom: 30px;
+	}
+
+	.artist-albums {
+		width: 100%;
+		background: red;
+		height: 100px;
+	}
+
+	.img-wrapper, .current-selection {
+		display: inline-block;
+		vertical-align: top;
+		width: 100%;	
+	}
+
+	.current-selection {
+		width: 83%;
+	}
+
+	.img-wrapper {
+		width: auto;
+		margin-right: 10px;
+		// width: 100%;
+	}
+
+	.text-wrapper {
+		display: inline-block;
+		width: 100%;
+	}
+}
