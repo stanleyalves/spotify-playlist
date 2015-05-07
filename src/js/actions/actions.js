@@ -2,7 +2,8 @@ var Reflux = require('reflux');
 
 var actions = Reflux.createActions([
   'updateAge', 
-  'searchArtist'
+  'searchArtist',
+  'updateResult'
 ]);
 
 module.exports = actions;

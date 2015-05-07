@@ -4,21 +4,22 @@ var person = require('../data/person');
 var actions = require('../actions/actions');
 import { ajax } from '../modules/utils';
 
-var storeSearchHeader = Reflux.createStore({
+var SearchStore = Reflux.createStore({
   listenables: [actions],
 
-  searchArtist(query){
+  onSearchArtist(query){
   	var url = 'https://api.spotify.com/v1/search?q='+ query +'&type=artist';
     ajax({
       url: url,
       method:'GET',
       dataType: 'json',
       success: function(data){
-		    console.log(data)
+        console.log(data)
+		    actions.updateResult(data);
       }.bind(this)
     });
   }
 
 });
 
-module.exports = storeSearchHeader;
+module.exports = SearchStore;

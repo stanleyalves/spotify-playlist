@@ -24172,7 +24172,7 @@ exports.throwIf = function(val,msg){
 
 var Reflux = require('reflux');
 
-var actions = Reflux.createActions(['updateAge', 'searchArtist']);
+var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult']);
 
 module.exports = actions;
 
@@ -24184,9 +24184,9 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.start = start;
 
-//Import the components
+//Components
 
-var _Search = require('./searchHeader');
+var _Search = require('./search');
 
 var _Results = require('./results');
 
@@ -24195,12 +24195,15 @@ var Reflux = require('reflux');
 var person = require('../data/person');
 var actions = require('../actions/actions');
 var store = require('../stores/store');
-var storeSearchHeader = require('../stores/storeSearchHeader');
+
+//Stores
+var SearchStore = require('../stores/searchStore');
+var ResultStore = require('../stores/resultStore');
 
 var App = React.createClass({
   displayName: 'App',
 
-  mixins: [Reflux.connect(store)],
+  mixins: [Reflux.connect(store), Reflux.connect(SearchStore), Reflux.connect(ResultStore)],
 
   render: function render() {
     var p = this.state.person;
@@ -24212,16 +24215,6 @@ var App = React.createClass({
         { className: 'left-bar open' },
         React.createElement(_Search.Search, null),
         React.createElement(_Results.Results, null),
-        React.createElement(
-          'h1',
-          null,
-          'Howdy'
-        ),
-        React.createElement(
-          'h2',
-          null,
-          p.name
-        ),
         React.createElement(
           'h2',
           { onClick: actions.updateAge },
@@ -24236,7 +24229,7 @@ function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-},{"../actions/actions":253,"../data/person":257,"../stores/store":260,"../stores/storeSearchHeader":261,"./results":255,"./searchHeader":256,"react":232,"reflux":233}],255:[function(require,module,exports){
+},{"../actions/actions":253,"../data/person":257,"../stores/resultStore":260,"../stores/searchStore":261,"../stores/store":262,"./results":255,"./search":256,"react":232,"reflux":233}],255:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24498,6 +24491,58 @@ module.exports = exports['default'];
 },{}],260:[function(require,module,exports){
 'use strict';
 
+var _ajax = require('../modules/utils');
+
+var React = require('react');
+var Reflux = require('reflux');
+var person = require('../data/person');
+var actions = require('../actions/actions');
+
+var ResultStore = Reflux.createStore({
+  listenables: [actions],
+
+  updateResult: function updateResult(data) {
+    alert(data);
+    //Set state in here for results.
+  }
+
+});
+
+module.exports = ResultStore;
+
+},{"../actions/actions":253,"../data/person":257,"../modules/utils":259,"react":232,"reflux":233}],261:[function(require,module,exports){
+'use strict';
+
+var _ajax = require('../modules/utils');
+
+var React = require('react');
+var Reflux = require('reflux');
+var person = require('../data/person');
+var actions = require('../actions/actions');
+
+var SearchStore = Reflux.createStore({
+  listenables: [actions],
+
+  onSearchArtist: function onSearchArtist(query) {
+    var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
+    _ajax.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        console.log(data);
+        actions.updateResult(data);
+      }).bind(this)
+    });
+  }
+
+});
+
+module.exports = SearchStore;
+
+},{"../actions/actions":253,"../data/person":257,"../modules/utils":259,"react":232,"reflux":233}],262:[function(require,module,exports){
+'use strict';
+
 var Reflux = require('reflux');
 var person = require('../data/person');
 var actions = require('../actions/actions');
@@ -24518,33 +24563,4 @@ var store = Reflux.createStore({
 
 module.exports = store;
 
-},{"../actions/actions":253,"../data/person":257,"reflux":233}],261:[function(require,module,exports){
-'use strict';
-
-var _ajax = require('../modules/utils');
-
-var React = require('react');
-var Reflux = require('reflux');
-var person = require('../data/person');
-var actions = require('../actions/actions');
-
-var storeSearchHeader = Reflux.createStore({
-  listenables: [actions],
-
-  searchArtist: function searchArtist(query) {
-    var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
-    _ajax.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        console.log(data);
-      }).bind(this)
-    });
-  }
-
-});
-
-module.exports = storeSearchHeader;
-
-},{"../actions/actions":253,"../data/person":257,"../modules/utils":259,"react":232,"reflux":233}]},{},[1]);
+},{"../actions/actions":253,"../data/person":257,"reflux":233}]},{},[1]);

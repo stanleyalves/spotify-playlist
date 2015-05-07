@@ -3,15 +3,22 @@ var Reflux = require('reflux');
 var person = require('../data/person');
 var actions = require('../actions/actions');
 var store = require('../stores/store');
-var storeSearchHeader = require('../stores/storeSearchHeader');
 
-//Import the components
-import { Search } from './searchHeader';
+//Stores
+var SearchStore = require('../stores/searchStore');
+var ResultStore = require('../stores/resultStore');
+
+//Components
+import { Search } from './search';
 import { Results } from './results';
 
 var App = React.createClass({ 
 
-  mixins: [Reflux.connect(store)],
+  mixins: [
+    Reflux.connect(store),
+    Reflux.connect(SearchStore),
+    Reflux.connect(ResultStore)
+  ],
 
   render(){
     var p = this.state.person;
@@ -20,8 +27,6 @@ var App = React.createClass({
         <div className="left-bar open">
           <Search/>
           <Results/> 
-          <h1>Howdy</h1>
-          <h2>{p.name}</h2>
           <h2 onClick={actions.updateAge}>{p.age}</h2>         
         </div>       
       </div>
