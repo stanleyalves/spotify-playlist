@@ -24214,7 +24214,7 @@ var App = React.createClass({
         'div',
         { className: 'left-bar open' },
         React.createElement(_Search.Search, null),
-        React.createElement(_Results.Results, null),
+        React.createElement(_Results.Results, { results: this.state.results }),
         React.createElement(
           'h2',
           { onClick: actions.updateAge },
@@ -24248,20 +24248,53 @@ var actions = require('../actions/actions');
 var Results = React.createClass({
   displayName: 'Results',
 
+  mixins: [_Mixins.Mixins],
   render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'results' },
-      React.createElement(
-        'ul',
-        null,
-        React.createElement(
-          'h2',
+    var obj = this.props.results;
+    //Check to see if the object is empty, if so return an empty <li>
+    if (_ajax$isEmpty$extend.isEmpty(obj)) {
+      return React.createElement('li', null);
+    } else {
+      console.log(obj);
+      var artistArray = obj.artists.items.slice(0, 10);
+      console.log('Results Data:');
+      //N.B: http://stackoverflow.com/questions/29549375/react-0-13-class-method-undefined
+      // Because your code is in strict mode (modules are always in strict mode),
+      // this is undefined inside the function you pass to .map.
+      //You either have to explicitly set the context by passing
+
+      var artists = artistArray.map(function (data, i) {
+        var imgSrc = this.chooseArtistImage(data);
+        return React.createElement(
+          'li',
           null,
-          'results here'
+          React.createElement(
+            'a',
+            { className: 'result', key: data.id },
+            React.createElement(
+              'div',
+              { className: 'artist' },
+              React.createElement('img', { className: 'artist-pic', src: imgSrc }),
+              React.createElement(
+                'p',
+                null,
+                data.name
+              )
+            )
+          )
+        );
+      }, this);
+
+      return React.createElement(
+        'div',
+        { className: 'results' },
+        React.createElement(
+          'ul',
+          null,
+          artists
         )
-      )
-    );
+      );
+    }
   }
 });
 
@@ -24381,6 +24414,7 @@ var Mixins = {
 
   //Choose the artist image, if none available, use placeholder.
   chooseArtistImage: function chooseArtistImage(data) {
+    console.log(data);
     var imgSrc;
     if (data.images.length > 3) {
       imgSrc = data.images[2].url;
@@ -24501,9 +24535,16 @@ var actions = require('../actions/actions');
 var ResultStore = Reflux.createStore({
   listenables: [actions],
 
-  updateResult: function updateResult(data) {
-    alert(data);
-    //Set state in here for results.
+  getInitialState: function getInitialState() {
+    return {
+      results: {}
+    };
+  },
+  //Set state in here for results.
+  onUpdateResult: function onUpdateResult(data) {
+    this.trigger({
+      results: data
+    });
   }
 
 });

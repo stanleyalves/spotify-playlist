@@ -26,7 +26,7 @@ var App = React.createClass({
       <div className = "wrapper">
         <div className="left-bar open">
           <Search/>
-          <Results/> 
+          <Results results={this.state.results}/> 
           <h2 onClick={actions.updateAge}>{p.age}</h2>         
         </div>       
       </div>

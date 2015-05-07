@@ -7,9 +7,16 @@ import { ajax } from '../modules/utils';
 var ResultStore = Reflux.createStore({
   listenables: [actions],
 
-  updateResult(data){
-  	alert(data);
-  	//Set state in here for results. 
+  getInitialState() {
+    return { 
+    	results: {}
+    };
+  },
+  //Set state in here for results. 
+  onUpdateResult(data){
+  	this.trigger({
+  		results: data
+  	});
   }
 
 });

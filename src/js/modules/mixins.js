@@ -53,6 +53,7 @@ var Mixins = {
 
   //Choose the artist image, if none available, use placeholder.
   chooseArtistImage(data) {
+    console.log(data)
   	var imgSrc;
   	if (data.images.length > 3) {
       imgSrc = data.images[2].url;
