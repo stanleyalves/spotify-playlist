@@ -24459,7 +24459,7 @@ exports.throwIf = function(val,msg){
 
 var Reflux = require('reflux');
 
-var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult']);
+var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult', 'selectArtist']);
 
 module.exports = actions;
 
@@ -24477,6 +24477,8 @@ var _Search = require('./search');
 
 var _Results = require('./results');
 
+var _SelectedArtist = require('./selectedArtist');
+
 var React = require('react');
 var Reflux = require('reflux');
 var person = require('../data/person');
@@ -24486,11 +24488,12 @@ var store = require('../stores/store');
 //Stores
 var SearchStore = require('../stores/searchStore');
 var ResultStore = require('../stores/resultStore');
+var SelectedArtistStore = require('../stores/selectedArtistStore');
 
 var App = React.createClass({
   displayName: 'App',
 
-  mixins: [Reflux.connect(store), Reflux.connect(SearchStore), Reflux.connect(ResultStore)],
+  mixins: [Reflux.connect(store), Reflux.connect(SearchStore), Reflux.connect(ResultStore), Reflux.connect(SelectedArtistStore)],
 
   render: function render() {
     var p = this.state.person;
@@ -24507,6 +24510,11 @@ var App = React.createClass({
           { onClick: actions.updateAge },
           p.age
         )
+      ),
+      React.createElement(
+        'div',
+        { className: 'main' },
+        React.createElement(_SelectedArtist.SelectedArtist, { artist: this.state.selectedArtist })
       )
     );
   }
@@ -24516,7 +24524,7 @@ function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-},{"../actions/actions":266,"../data/person":270,"../stores/resultStore":273,"../stores/searchStore":274,"../stores/store":275,"./results":268,"./search":269,"react":245,"reflux":246}],268:[function(require,module,exports){
+},{"../actions/actions":266,"../data/person":271,"../stores/resultStore":274,"../stores/searchStore":275,"../stores/selectedArtistStore":276,"../stores/store":277,"./results":268,"./search":269,"./selectedArtist":270,"react":245,"reflux":246}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24557,7 +24565,7 @@ var Results = React.createClass({
           null,
           React.createElement(
             'a',
-            { className: 'result', key: data.id },
+            { onClick: actions.selectArtist, className: 'result', key: data.id },
             React.createElement(
               'div',
               { className: 'artist' },
@@ -24588,7 +24596,7 @@ var Results = React.createClass({
 exports['default'] = { Results: Results };
 module.exports = exports['default'];
 
-},{"../actions/actions":266,"../data/person":270,"../modules/mixins":271,"../modules/utils":272,"react":245,"reflux":246}],269:[function(require,module,exports){
+},{"../actions/actions":266,"../data/person":271,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24629,7 +24637,102 @@ var Search = React.createClass({
 exports['default'] = { Search: Search };
 module.exports = exports['default'];
 
-},{"../actions/actions":266,"../modules/utils":272,"react":245,"reflux":246}],270:[function(require,module,exports){
+},{"../actions/actions":266,"../modules/utils":273,"react":245,"reflux":246}],270:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _ajax$isEmpty$extend = require('../modules/utils');
+
+var _Mixins = require('../modules/mixins');
+
+var React = require('react');
+var Reflux = require('reflux');
+var person = require('../data/person');
+var actions = require('../actions/actions');
+
+var SelectedArtst = React.createClass({
+  displayName: 'SelectedArtst',
+
+  mixins: [_Mixins.Mixins],
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      selectedArtist: {
+        name: 'Default Props',
+        info: 'Here is the default props info'
+      }
+    };
+  },
+  render: function render() {
+    if (this.props.artist === undefined) {
+      return React.createElement('div', null);
+    } else {
+      var albumArray = this.props.albums.albums;
+      console.log(albumArray);
+
+      var albums = albumArray.map(function (data, i) {
+        return React.createElement(
+          'li',
+          null,
+          React.createElement(
+            'a',
+            { className: 'result' },
+            React.createElement(
+              'div',
+              { className: 'artist' },
+              React.createElement('img', { className: 'artist-pic', src: 'http://placehold.it/45x45' })
+            )
+          )
+        );
+      }, this);
+      return React.createElement(
+        'div',
+        { className: 'info-wrapper' },
+        React.createElement(
+          'div',
+          { className: 'selected-artist' },
+          React.createElement(
+            'div',
+            { className: 'img-wrapper' },
+            React.createElement(
+              'a',
+              { target: '_blank', href: this.props.artist.href },
+              React.createElement('img', { className: 'artist-pic', src: this.props.artist.pic, alt: 'Artist name' })
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'current-selection' },
+            React.createElement(
+              'h3',
+              null,
+              this.props.artist.name
+            ),
+            React.createElement('div', { dangerouslySetInnerHTML: { __html: this.props.artist.bio }, className: 'text-wrapper' }),
+            React.createElement(
+              'div',
+              { className: 'artist-albums' },
+              React.createElement(
+                'h3',
+                null,
+                'Artist Albums:'
+              ),
+              this.props.albums
+            )
+          )
+        )
+      );
+    }
+  }
+});
+
+exports['default'] = { SelectedArtst: SelectedArtst };
+module.exports = exports['default'];
+
+},{"../actions/actions":266,"../data/person":271,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],271:[function(require,module,exports){
 'use strict';
 
 var person = {
@@ -24639,7 +24742,7 @@ var person = {
 
 module.exports = person;
 
-},{}],271:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24730,7 +24833,7 @@ var Mixins = {
 exports['default'] = { Mixins: Mixins };
 module.exports = exports['default'];
 
-},{"./utils":272}],272:[function(require,module,exports){
+},{"./utils":273}],273:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24808,14 +24911,13 @@ function isEmpty(obj) {
 exports['default'] = { extend: extend, ajax: ajax, isEmpty: isEmpty };
 module.exports = exports['default'];
 
-},{}],273:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 'use strict';
 
 var _ajax = require('../modules/utils');
 
 var React = require('react');
 var Reflux = require('reflux');
-var person = require('../data/person');
 var actions = require('../actions/actions');
 
 var ResultStore = Reflux.createStore({
@@ -24837,7 +24939,7 @@ var ResultStore = Reflux.createStore({
 
 module.exports = ResultStore;
 
-},{"../actions/actions":266,"../data/person":270,"../modules/utils":272,"react":245,"reflux":246}],274:[function(require,module,exports){
+},{"../actions/actions":266,"../modules/utils":273,"react":245,"reflux":246}],275:[function(require,module,exports){
 'use strict';
 
 var _ajax = require('../modules/utils');
@@ -24867,7 +24969,33 @@ var SearchStore = Reflux.createStore({
 
 module.exports = SearchStore;
 
-},{"../actions/actions":266,"../data/person":270,"../modules/utils":272,"react":245,"reflux":246}],275:[function(require,module,exports){
+},{"../actions/actions":266,"../data/person":271,"../modules/utils":273,"react":245,"reflux":246}],276:[function(require,module,exports){
+'use strict';
+
+var _ajax = require('../modules/utils');
+
+var React = require('react');
+var Reflux = require('reflux');
+var actions = require('../actions/actions');
+
+var SelectedArtistStore = Reflux.createStore({
+  listenables: [actions],
+
+  getInitialState: function getInitialState() {
+    return {
+      selectedArtist: {}
+    };
+  },
+  //Set state in here for results.
+  onSelectArtist: function onSelectArtist() {
+    alert('select artist');
+  }
+
+});
+
+module.exports = SelectedArtistStore;
+
+},{"../actions/actions":266,"../modules/utils":273,"react":245,"reflux":246}],277:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');
@@ -24890,4 +25018,4 @@ var store = Reflux.createStore({
 
 module.exports = store;
 
-},{"../actions/actions":266,"../data/person":270,"reflux":246}]},{},[1]);
+},{"../actions/actions":266,"../data/person":271,"reflux":246}]},{},[1]);

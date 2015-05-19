@@ -27,7 +27,7 @@ var Results = React.createClass({
         var imgSrc = this.chooseArtistImage(data);
         return (
           <li>
-            <a className="result" key={data.id}>
+            <a onClick={actions.selectArtist} className="result" key={data.id}>
               <div className="artist">
                 <img className="artist-pic" src={imgSrc}/>
                 <p>{data.name}</p>

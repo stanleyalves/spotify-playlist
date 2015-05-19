@@ -3,21 +3,19 @@ var Reflux = require('reflux');
 var actions = require('../actions/actions');
 import { ajax } from '../modules/utils';
 
-var ResultStore = Reflux.createStore({
+var SelectedArtistStore = Reflux.createStore({
   listenables: [actions],
 
   getInitialState() {
     return { 
-    	results: {}
+    	selectedArtist : {}
     };
   },
   //Set state in here for results. 
-  onUpdateResult(data){
-  	this.trigger({
-  		results: data
-  	});
+  onSelectArtist(){
+    alert('select artist')
   }
 
 });
 
-module.exports = ResultStore;
+module.exports = SelectedArtistStore;
