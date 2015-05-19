@@ -24459,7 +24459,7 @@ exports.throwIf = function(val,msg){
 
 var Reflux = require('reflux');
 
-var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult', 'selectArtist']);
+var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult', 'selectArtist', 'getArtistBio']);
 
 module.exports = actions;
 
@@ -24537,22 +24537,26 @@ var _Mixins = require('../modules/mixins');
 
 var React = require('react');
 var Reflux = require('reflux');
-var person = require('../data/person');
 var actions = require('../actions/actions');
 
 var Results = React.createClass({
   displayName: 'Results',
 
   mixins: [_Mixins.Mixins],
+
+  selectArtist: function selectArtist(i) {
+    var artist = this.props.results.artists.items[i];
+    actions.selectArtist(artist);
+    actions.getArtistBio(artist);
+  },
+
   render: function render() {
     var obj = this.props.results;
     //Check to see if the object is empty, if so return an empty <li>
     if (_ajax$isEmpty$extend.isEmpty(obj)) {
       return React.createElement('li', null);
     } else {
-      console.log(obj);
       var artistArray = obj.artists.items.slice(0, 10);
-      console.log('Results Data:');
       //N.B: http://stackoverflow.com/questions/29549375/react-0-13-class-method-undefined
       // Because your code is in strict mode (modules are always in strict mode),
       // this is undefined inside the function you pass to .map.
@@ -24565,7 +24569,7 @@ var Results = React.createClass({
           null,
           React.createElement(
             'a',
-            { onClick: actions.selectArtist, className: 'result', key: data.id },
+            { onClick: this.selectArtist.bind(data, i), className: 'result', key: data.id },
             React.createElement(
               'div',
               { className: 'artist' },
@@ -24596,7 +24600,7 @@ var Results = React.createClass({
 exports['default'] = { Results: Results };
 module.exports = exports['default'];
 
-},{"../actions/actions":266,"../data/person":271,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],269:[function(require,module,exports){
+},{"../actions/actions":266,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24650,44 +24654,21 @@ var _Mixins = require('../modules/mixins');
 
 var React = require('react');
 var Reflux = require('reflux');
-var person = require('../data/person');
 var actions = require('../actions/actions');
 
-var SelectedArtst = React.createClass({
-  displayName: 'SelectedArtst',
+var SelectedArtist = React.createClass({
+  displayName: 'SelectedArtist',
 
   mixins: [_Mixins.Mixins],
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      selectedArtist: {
-        name: 'Default Props',
-        info: 'Here is the default props info'
-      }
-    };
-  },
   render: function render() {
-    if (this.props.artist === undefined) {
+    var artist = this.props.artist;
+
+    if (_ajax$isEmpty$extend.isEmpty(artist)) {
       return React.createElement('div', null);
     } else {
-      var albumArray = this.props.albums.albums;
-      console.log(albumArray);
-
-      var albums = albumArray.map(function (data, i) {
-        return React.createElement(
-          'li',
-          null,
-          React.createElement(
-            'a',
-            { className: 'result' },
-            React.createElement(
-              'div',
-              { className: 'artist' },
-              React.createElement('img', { className: 'artist-pic', src: 'http://placehold.it/45x45' })
-            )
-          )
-        );
-      }, this);
+      console.log('SLECTED ARTIST');
+      console.log(artist);
       return React.createElement(
         'div',
         { className: 'info-wrapper' },
@@ -24699,8 +24680,8 @@ var SelectedArtst = React.createClass({
             { className: 'img-wrapper' },
             React.createElement(
               'a',
-              { target: '_blank', href: this.props.artist.href },
-              React.createElement('img', { className: 'artist-pic', src: this.props.artist.pic, alt: 'Artist name' })
+              { target: '_blank', href: artist.href },
+              React.createElement('img', { className: 'artist-pic', src: artist.pic, alt: 'Artist name' })
             )
           ),
           React.createElement(
@@ -24709,9 +24690,9 @@ var SelectedArtst = React.createClass({
             React.createElement(
               'h3',
               null,
-              this.props.artist.name
+              artist.name
             ),
-            React.createElement('div', { dangerouslySetInnerHTML: { __html: this.props.artist.bio }, className: 'text-wrapper' }),
+            React.createElement('div', { dangerouslySetInnerHTML: { __html: artist.bio }, className: 'text-wrapper' }),
             React.createElement(
               'div',
               { className: 'artist-albums' },
@@ -24729,10 +24710,10 @@ var SelectedArtst = React.createClass({
   }
 });
 
-exports['default'] = { SelectedArtst: SelectedArtst };
+exports['default'] = { SelectedArtist: SelectedArtist };
 module.exports = exports['default'];
 
-},{"../actions/actions":266,"../data/person":271,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],271:[function(require,module,exports){
+},{"../actions/actions":266,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],271:[function(require,module,exports){
 'use strict';
 
 var person = {
@@ -24787,7 +24768,7 @@ var Mixins = {
 
   artistBio: function artistBio(selectedArtistData) {
     var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
-    console.log('ksjsjsjkasnjadskcbk');
+    console.log('Artist BIO');
     _ajax$isEmpty$extend.ajax({
       url: url,
       method: 'GET',
@@ -24804,7 +24785,6 @@ var Mixins = {
 
   //Choose the artist image, if none available, use placeholder.
   chooseArtistImage: function chooseArtistImage(data) {
-    console.log(data);
     var imgSrc;
     if (data.images.length > 3) {
       imgSrc = data.images[2].url;
@@ -24987,8 +24967,33 @@ var SelectedArtistStore = Reflux.createStore({
     };
   },
   //Set state in here for results.
-  onSelectArtist: function onSelectArtist() {
-    alert('select artist');
+  onSelectArtist: function onSelectArtist(artist) {
+    this.trigger({
+      selectedArtist: {
+        id: artist.id,
+        name: artist.name,
+        pic: artist.images[1].url,
+        followers: artist.followers.total,
+        href: artist.external_urls.spotify
+      }
+    });
+  },
+
+  onGetArtistBio: function onGetArtistBio(artist) {
+    console.log('ON Artist BIO');
+    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + artist.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
+    _ajax.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: (function (data) {
+        this.trigger({
+          selectedArtist: {
+            bio: data.artist.bio.summary
+          }
+        });
+      }).bind(this)
+    });
   }
 
 });

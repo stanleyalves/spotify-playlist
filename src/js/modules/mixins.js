@@ -36,7 +36,7 @@ var Mixins = {
 
 	artistBio(selectedArtistData) {
     var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json'
-    console.log('ksjsjsjkasnjadskcbk')
+    console.log('Artist BIO')
     ajax({
       url: url,
       method:'GET',
@@ -53,7 +53,6 @@ var Mixins = {
 
   //Choose the artist image, if none available, use placeholder.
   chooseArtistImage(data) {
-    console.log(data)
   	var imgSrc;
   	if (data.images.length > 3) {
       imgSrc = data.images[2].url;

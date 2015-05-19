@@ -4,7 +4,9 @@ var actions = Reflux.createActions([
   'updateAge', 
   'searchArtist',
   'updateResult',
-  'selectArtist'
+  'selectArtist',
+  'getArtistBio'
+
 ]);
 
 module.exports = actions;
