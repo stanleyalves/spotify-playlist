@@ -2,15 +2,12 @@ var React = require('react');
 var Reflux = require('reflux');
 var actions = require('../actions/actions');
 import { ajax, isEmpty, extend } from '../modules/utils';
-import { Mixins } from '../modules/mixins';
+import { GetArtistImage } from '../modules/mixins';
 
 var Results = React.createClass({
-	mixins: [Mixins],
-
   selectArtist(i){
     var artist = this.props.results.artists.items[i];
     actions.selectArtist(artist);
-    actions.getArtistBio(artist);
   },
 
   render() {
@@ -28,13 +25,14 @@ var Results = React.createClass({
       //You either have to explicitly set the context by passing
 
       var artists = artistArray.map(function (data, i){
-        var imgSrc = this.chooseArtistImage(data);
+        var artistImage = GetArtistImage(data),
+            artistName = data.name;
         return (
           <li>
-            <a onClick={this.selectArtist.bind(data, i)} className="result" key={data.id}>
+            <a onClick={this.selectArtist.bind(data, i)} className="result">
               <div className="artist">
-                <img className="artist-pic" src={imgSrc}/>
-                <p>{data.name}</p>
+                <img className="artist-pic" src={artistImage}/>
+                <p>{artistName}</p>
               </div>
             </a>
           </li>

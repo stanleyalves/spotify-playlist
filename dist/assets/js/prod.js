@@ -24457,13 +24457,19 @@ exports.throwIf = function(val,msg){
 },{"eventemitter3":247,"native-promise-only":248}],266:[function(require,module,exports){
 'use strict';
 
+var _GetArtistBio$GetArtistAlbums = require('../modules/mixins');
+
 var Reflux = require('reflux');
 
-var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult', 'selectArtist', 'getArtistBio']);
+var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult', 'selectArtist']);
 
-module.exports = actions;
+var ActionsAsync = Reflux.createActions({
+  'statusAdded': { asyncResult: true }
+});
 
-},{"reflux":246}],267:[function(require,module,exports){
+module.exports = actions, ActionsAsync;
+
+},{"../modules/mixins":272,"reflux":246}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24533,7 +24539,7 @@ Object.defineProperty(exports, '__esModule', {
 
 var _ajax$isEmpty$extend = require('../modules/utils');
 
-var _Mixins = require('../modules/mixins');
+var _GetArtistImage = require('../modules/mixins');
 
 var React = require('react');
 var Reflux = require('reflux');
@@ -24542,12 +24548,9 @@ var actions = require('../actions/actions');
 var Results = React.createClass({
   displayName: 'Results',
 
-  mixins: [_Mixins.Mixins],
-
   selectArtist: function selectArtist(i) {
     var artist = this.props.results.artists.items[i];
     actions.selectArtist(artist);
-    actions.getArtistBio(artist);
   },
 
   render: function render() {
@@ -24563,21 +24566,22 @@ var Results = React.createClass({
       //You either have to explicitly set the context by passing
 
       var artists = artistArray.map(function (data, i) {
-        var imgSrc = this.chooseArtistImage(data);
+        var artistImage = _GetArtistImage.GetArtistImage(data),
+            artistName = data.name;
         return React.createElement(
           'li',
           null,
           React.createElement(
             'a',
-            { onClick: this.selectArtist.bind(data, i), className: 'result', key: data.id },
+            { onClick: this.selectArtist.bind(data, i), className: 'result' },
             React.createElement(
               'div',
               { className: 'artist' },
-              React.createElement('img', { className: 'artist-pic', src: imgSrc }),
+              React.createElement('img', { className: 'artist-pic', src: artistImage }),
               React.createElement(
                 'p',
                 null,
-                data.name
+                artistName
               )
             )
           )
@@ -24667,7 +24671,7 @@ var SelectedArtist = React.createClass({
     if (_ajax$isEmpty$extend.isEmpty(artist)) {
       return React.createElement('div', null);
     } else {
-      console.log('SLECTED ARTIST');
+      console.log('SELECTED ARTIST');
       console.log(artist);
       return React.createElement(
         'div',
@@ -24692,16 +24696,10 @@ var SelectedArtist = React.createClass({
               null,
               artist.name
             ),
-            React.createElement('div', { dangerouslySetInnerHTML: { __html: artist.bio }, className: 'text-wrapper' }),
             React.createElement(
               'div',
-              { className: 'artist-albums' },
-              React.createElement(
-                'h3',
-                null,
-                'Artist Albums:'
-              ),
-              this.props.albums
+              { className: 'text-wrapper artist-bio' },
+              artist.bio
             )
           )
         )
@@ -24732,85 +24730,63 @@ Object.defineProperty(exports, '__esModule', {
 
 var _ajax$isEmpty$extend = require('./utils');
 
-var Mixins = {
-
-  testMixin: function testMixin() {
-    alert('test test');
-  },
-
-  similarArtist: function similarArtist(selectedArtistData) {
-    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists';
-    console.log(url);
-    console.log('similarArtist AJAX');
-    _ajax$isEmpty$extend.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        this.props.similarArtists(data);
-      }).bind(this)
-    });
-  },
-
-  artistAlbum: function artistAlbum(selectedArtistData) {
-    var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/albums';
-    _ajax$isEmpty$extend.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        this.props.artistAlbums(data);
-        console.log('ARTIST ALBUMS');
-        console.log(data);
-      }).bind(this)
-    });
-  },
-
-  artistBio: function artistBio(selectedArtistData) {
-    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + selectedArtistData.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
-    console.log('Artist BIO');
-    _ajax$isEmpty$extend.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        //Combine the 2 objects
-        var allData = _ajax$isEmpty$extend.extend(data, selectedArtistData);
-        console.log('ALL DATA');
-        console.log(allData);
-        this.props.chooseArtist(allData);
-      }).bind(this)
-    });
-  },
-
-  //Choose the artist image, if none available, use placeholder.
-  chooseArtistImage: function chooseArtistImage(data) {
-    var imgSrc;
-    if (data.images.length > 3) {
-      imgSrc = data.images[2].url;
-    } else if (data.images.length > 1) {
-      imgSrc = data.images[0].url;
-    } else {
-      imgSrc = 'http://placehold.it/45x45';
-    };
-    return imgSrc;
-  },
-
-  //Construst the selected Artist object
-  selectedArtist: function selectedArtist(data) {
-    var selectedArtistData = {
-      id: data.id,
-      name: data.name,
-      pic: data.images[1].url,
-      followers: data.followers.total,
-      href: data.external_urls.spotify
-    };
-    return selectedArtistData;
-  }
-
+var GetSimilarArtist = function GetSimilarArtist(selectedArtistData) {
+  var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/related-artists';
+  console.log(url);
+  console.log('similarArtist AJAX');
+  _ajax$isEmpty$extend.ajax({
+    url: url,
+    method: 'GET',
+    dataType: 'json',
+    success: function success(data) {
+      this.props.similarArtists(data);
+    }
+  });
 };
 
-exports['default'] = { Mixins: Mixins };
+var GetArtistAlbums = function GetArtistAlbums(selectedArtistData) {
+  var url = 'https://api.spotify.com/v1/artists/' + selectedArtistData.id + '/albums';
+  _ajax$isEmpty$extend.ajax({
+    url: url,
+    method: 'GET',
+    dataType: 'json',
+    success: function success(data) {
+      console.log('ARTIST ALBUMS');
+      console.log(data);
+    }
+  });
+};
+
+//Get the artist bio from lastfm
+var GetArtistBio = function GetArtistBio(artist) {
+  console.log('ON Artist BIO');
+  var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + artist.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
+  console.log(url);
+  _ajax$isEmpty$extend.ajax({
+    url: url,
+    method: 'GET',
+    dataType: 'json',
+    success: function success(data) {
+      console.log(data);
+      return data.artist.bio.summary;
+    }
+  });
+};
+
+//Choose the artist image, if none available, use placeholder.
+var GetArtistImage = function GetArtistImage(data) {
+  var imgSrc;
+  if (data.images.length > 3) {
+    imgSrc = data.images[2].url;
+  } else if (data.images.length > 1) {
+    imgSrc = data.images[0].url;
+  } else {
+    imgSrc = 'http://placehold.it/45x45';
+  };
+  return imgSrc;
+};
+
+exports['default'] = { GetSimilarArtist: GetSimilarArtist, GetArtistAlbums: GetArtistAlbums, GetArtistBio: GetArtistBio, GetArtistImage: GetArtistImage };
 module.exports = exports['default'];
 
 },{"./utils":273}],273:[function(require,module,exports){
@@ -24952,55 +24928,59 @@ module.exports = SearchStore;
 },{"../actions/actions":266,"../data/person":271,"../modules/utils":273,"react":245,"reflux":246}],276:[function(require,module,exports){
 'use strict';
 
+var _GetArtistBioAction = require('../actions/actions');
+
+var _GetArtistBio$GetArtistAlbums = require('../modules/mixins');
+
 var _ajax = require('../modules/utils');
 
 var React = require('react');
 var Reflux = require('reflux');
 var actions = require('../actions/actions');
+var ActionsAsync = require('../actions/actions');
 
 var SelectedArtistStore = Reflux.createStore({
-  listenables: [actions],
+  listenables: [actions, ActionsAsync],
 
   getInitialState: function getInitialState() {
     return {
       selectedArtist: {}
     };
   },
-  //Set state in here for results.
-  onSelectArtist: function onSelectArtist(artist) {
-    this.trigger({
-      selectedArtist: {
-        id: artist.id,
-        name: artist.name,
-        pic: artist.images[1].url,
-        followers: artist.followers.total,
-        href: artist.external_urls.spotify
-      }
-    });
+
+  onGetArtistBio: function onGetArtistBio() {
+    alert('getting the bio');
   },
 
-  onGetArtistBio: function onGetArtistBio(artist) {
-    console.log('ON Artist BIO');
-    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + artist.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
-    _ajax.ajax({
-      url: url,
-      method: 'GET',
-      dataType: 'json',
-      success: (function (data) {
-        this.trigger({
-          selectedArtist: {
-            bio: data.artist.bio.summary
-          }
-        });
-      }).bind(this)
-    });
+  onStatusAdded: function onStatusAdded() {
+    alert('async');
+  },
+
+  //Set state in here for results.
+  onSelectArtist: function onSelectArtist(artist) {
+    var bio = ActionsAsync.statusAdded();
+    // var albums = GetArtistAlbums(artist);
+
+    // this.trigger({
+    //   selectedArtist : {
+    //     id : artist.id,
+    //     name : artist.name,
+    //     pic : artist.images[1].url,
+    //     followers : artist.followers.total,
+    //     href : artist.external_urls.spotify,
+    //     bio: bio
+    //   }
+    // });  
   }
 
 });
 
 module.exports = SelectedArtistStore;
+// doSomethingAsync()
+// .then(Actions.statusAdded.completed)
+// .catch(Actions.statusAdded.failed)
 
-},{"../actions/actions":266,"../modules/utils":273,"react":245,"reflux":246}],277:[function(require,module,exports){
+},{"../actions/actions":266,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],277:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');

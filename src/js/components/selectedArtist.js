@@ -15,7 +15,7 @@ var SelectedArtist = React.createClass({
         <div></div>
       )
     } else {
-      console.log('SLECTED ARTIST')
+      console.log('SELECTED ARTIST')
       console.log(artist)
       return (
         <div className="info-wrapper">
@@ -27,11 +27,8 @@ var SelectedArtist = React.createClass({
             </div>
             <div className = "current-selection">
               <h3>{artist.name}</h3>
-              <div dangerouslySetInnerHTML={{__html: artist.bio}} className="text-wrapper">
-              </div>
-              <div className="artist-albums">
-              <h3>Artist Albums:</h3>
-                {this.props.albums}
+              <div className="text-wrapper artist-bio">
+                {artist.bio}
               </div>
             </div>
           </div>
