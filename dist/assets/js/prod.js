@@ -24457,6 +24457,12 @@ exports.throwIf = function(val,msg){
 },{"eventemitter3":247,"native-promise-only":248}],266:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _GetArtistBio = require('../modules/mixins');
+
 var Reflux = require('reflux');
 
 var Actions = Reflux.createActions({
@@ -24467,9 +24473,12 @@ var Actions = Reflux.createActions({
   'getArtistBio': { asyncResult: true }
 });
 
-module.exports = Actions;
+Actions.getArtistBio.listenAndPromise(_GetArtistBio.GetArtistBio);
 
-},{"reflux":246}],267:[function(require,module,exports){
+exports['default'] = Actions;
+module.exports = exports['default'];
+
+},{"../modules/mixins":272,"reflux":246}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24928,10 +24937,6 @@ module.exports = SearchStore;
 },{"../actions/actions":266,"../data/person":271,"../modules/utils":273,"react":245,"reflux":246}],276:[function(require,module,exports){
 'use strict';
 
-var _GetArtistBio$GetArtistAlbums = require('../modules/mixins');
-
-var _ajax = require('../modules/utils');
-
 var React = require('react');
 var Reflux = require('reflux');
 var Actions = require('../actions/actions');
@@ -24951,7 +24956,7 @@ var SelectedArtistStore = Reflux.createStore({
 
   //Set state in here for results.
   onSelectArtist: function onSelectArtist(artist) {
-    var bio = Actions.getArtistBio();
+    var bio = Actions.getArtistBio(artist);
     // var albums = GetArtistAlbums(artist);
 
     this.trigger({
@@ -24970,7 +24975,7 @@ var SelectedArtistStore = Reflux.createStore({
 
 module.exports = SelectedArtistStore;
 
-},{"../actions/actions":266,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],277:[function(require,module,exports){
+},{"../actions/actions":266,"react":245,"reflux":246}],277:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');

@@ -2,9 +2,6 @@ var React = require('react');
 var Reflux = require('reflux');
 var Actions = require('../actions/actions');
 
-import { GetArtistBio, GetArtistAlbums } from '../modules/mixins';
-import { ajax } from '../modules/utils';
-
 var SelectedArtistStore = Reflux.createStore({
   listenables: [Actions],
 
@@ -20,7 +17,7 @@ var SelectedArtistStore = Reflux.createStore({
 
   //Set state in here for results. 
   onSelectArtist(artist){
-    var bio = Actions.getArtistBio();
+    var bio = Actions.getArtistBio(artist);
     // var albums = GetArtistAlbums(artist);
 
     this.trigger({

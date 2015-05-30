@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
+import { GetArtistBio } from '../modules/mixins';
 
-var Actions = Reflux.createActions({
+let Actions = Reflux.createActions({
   'updateAge': {}, 
   'searchArtist': {},
   'updateResult': {},
@@ -8,4 +9,7 @@ var Actions = Reflux.createActions({
   'getArtistBio': { asyncResult: true }
 });
 
-module.exports = Actions;
+Actions.getArtistBio.listenAndPromise(GetArtistBio);
+
+
+export default Actions;
