@@ -1,9 +1,9 @@
 var Reflux = require('reflux');
 var person = require('../data/person');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var store = Reflux.createStore({
-  listenables: [actions],
+  listenables: [Actions],
 
   onUpdateAge(){
     person.age = Math.random() * 100;

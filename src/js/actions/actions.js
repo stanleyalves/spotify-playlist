@@ -1,15 +1,11 @@
 var Reflux = require('reflux');
-import { GetArtistBio, GetArtistAlbums } from '../modules/mixins';
 
-var actions = Reflux.createActions([
-  'updateAge', 
-  'searchArtist',
-  'updateResult',
-  'selectArtist'
-]);
-
-var ActionsAsync = Reflux.createActions({
-  'statusAdded': { asyncResult: true }
+var Actions = Reflux.createActions({
+  'updateAge': {}, 
+  'searchArtist': {},
+  'updateResult': {},
+  'selectArtist': {},
+  'getArtistBio': { asyncResult: true }
 });
 
-module.exports = actions, ActionsAsync;
+module.exports = Actions;

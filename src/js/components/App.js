@@ -1,7 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var person = require('../data/person');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 var store = require('../stores/store');
 
 //Stores
@@ -30,7 +30,7 @@ var App = React.createClass({
         <div className="left-bar open">
           <Search/>
           <Results results={this.state.results}/> 
-          <h2 onClick={actions.updateAge}>{p.age}</h2>         
+          <h2 onClick={Actions.updateAge}>{p.age}</h2>         
         </div>
         <div className="main">
           <SelectedArtist artist={this.state.selectedArtist}/>

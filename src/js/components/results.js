@@ -1,13 +1,13 @@
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 import { ajax, isEmpty, extend } from '../modules/utils';
 import { GetArtistImage } from '../modules/mixins';
 
 var Results = React.createClass({
   selectArtist(i){
     var artist = this.props.results.artists.items[i];
-    actions.selectArtist(artist);
+    Actions.selectArtist(artist);
   },
 
   render() {

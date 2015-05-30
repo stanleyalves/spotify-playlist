@@ -1,10 +1,10 @@
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 import { ajax } from '../modules/utils';
 
 var ResultStore = Reflux.createStore({
-  listenables: [actions],
+  listenables: [Actions],
 
   getInitialState() {
     return { 

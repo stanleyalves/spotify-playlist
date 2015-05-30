@@ -1,6 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 import { ajax, isEmpty, extend } from '../modules/utils';
 import { Mixins } from '../modules/mixins';
 

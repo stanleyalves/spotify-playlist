@@ -24457,19 +24457,19 @@ exports.throwIf = function(val,msg){
 },{"eventemitter3":247,"native-promise-only":248}],266:[function(require,module,exports){
 'use strict';
 
-var _GetArtistBio$GetArtistAlbums = require('../modules/mixins');
-
 var Reflux = require('reflux');
 
-var actions = Reflux.createActions(['updateAge', 'searchArtist', 'updateResult', 'selectArtist']);
-
-var ActionsAsync = Reflux.createActions({
-  'statusAdded': { asyncResult: true }
+var Actions = Reflux.createActions({
+  'updateAge': {},
+  'searchArtist': {},
+  'updateResult': {},
+  'selectArtist': {},
+  'getArtistBio': { asyncResult: true }
 });
 
-module.exports = actions, ActionsAsync;
+module.exports = Actions;
 
-},{"../modules/mixins":272,"reflux":246}],267:[function(require,module,exports){
+},{"reflux":246}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -24488,7 +24488,7 @@ var _SelectedArtist = require('./selectedArtist');
 var React = require('react');
 var Reflux = require('reflux');
 var person = require('../data/person');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 var store = require('../stores/store');
 
 //Stores
@@ -24513,7 +24513,7 @@ var App = React.createClass({
         React.createElement(_Results.Results, { results: this.state.results }),
         React.createElement(
           'h2',
-          { onClick: actions.updateAge },
+          { onClick: Actions.updateAge },
           p.age
         )
       ),
@@ -24543,14 +24543,14 @@ var _GetArtistImage = require('../modules/mixins');
 
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var Results = React.createClass({
   displayName: 'Results',
 
   selectArtist: function selectArtist(i) {
     var artist = this.props.results.artists.items[i];
-    actions.selectArtist(artist);
+    Actions.selectArtist(artist);
   },
 
   render: function render() {
@@ -24615,7 +24615,7 @@ var _ajax = require('../modules/utils');
 
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var Search = React.createClass({
   displayName: 'Search',
@@ -24624,7 +24624,7 @@ var Search = React.createClass({
     e.preventDefault();
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
     //Do the action;
-    actions.searchArtist(query);
+    Actions.searchArtist(query);
   },
 
   render: function render() {
@@ -24658,7 +24658,7 @@ var _Mixins = require('../modules/mixins');
 
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var SelectedArtist = React.createClass({
   displayName: 'SelectedArtist',
@@ -24874,10 +24874,10 @@ var _ajax = require('../modules/utils');
 
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var ResultStore = Reflux.createStore({
-  listenables: [actions],
+  listenables: [Actions],
 
   getInitialState: function getInitialState() {
     return {
@@ -24903,10 +24903,10 @@ var _ajax = require('../modules/utils');
 var React = require('react');
 var Reflux = require('reflux');
 var person = require('../data/person');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var SearchStore = Reflux.createStore({
-  listenables: [actions],
+  listenables: [Actions],
 
   onSearchArtist: function onSearchArtist(query) {
     var url = 'https://api.spotify.com/v1/search?q=' + query + '&type=artist';
@@ -24916,7 +24916,7 @@ var SearchStore = Reflux.createStore({
       dataType: 'json',
       success: (function (data) {
         console.log(data);
-        actions.updateResult(data);
+        Actions.updateResult(data);
       }).bind(this)
     });
   }
@@ -24928,19 +24928,16 @@ module.exports = SearchStore;
 },{"../actions/actions":266,"../data/person":271,"../modules/utils":273,"react":245,"reflux":246}],276:[function(require,module,exports){
 'use strict';
 
-var _GetArtistBioAction = require('../actions/actions');
-
 var _GetArtistBio$GetArtistAlbums = require('../modules/mixins');
 
 var _ajax = require('../modules/utils');
 
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('../actions/actions');
-var ActionsAsync = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var SelectedArtistStore = Reflux.createStore({
-  listenables: [actions, ActionsAsync],
+  listenables: [Actions],
 
   getInitialState: function getInitialState() {
     return {
@@ -24952,43 +24949,36 @@ var SelectedArtistStore = Reflux.createStore({
     alert('getting the bio');
   },
 
-  onStatusAdded: function onStatusAdded() {
-    alert('async');
-  },
-
   //Set state in here for results.
   onSelectArtist: function onSelectArtist(artist) {
-    var bio = ActionsAsync.statusAdded();
+    var bio = Actions.getArtistBio();
     // var albums = GetArtistAlbums(artist);
 
-    // this.trigger({
-    //   selectedArtist : {
-    //     id : artist.id,
-    //     name : artist.name,
-    //     pic : artist.images[1].url,
-    //     followers : artist.followers.total,
-    //     href : artist.external_urls.spotify,
-    //     bio: bio
-    //   }
-    // });  
+    this.trigger({
+      selectedArtist: {
+        id: artist.id,
+        name: artist.name,
+        pic: artist.images[1].url,
+        followers: artist.followers.total,
+        href: artist.external_urls.spotify,
+        bio: bio
+      }
+    });
   }
 
 });
 
 module.exports = SelectedArtistStore;
-// doSomethingAsync()
-// .then(Actions.statusAdded.completed)
-// .catch(Actions.statusAdded.failed)
 
 },{"../actions/actions":266,"../modules/mixins":272,"../modules/utils":273,"react":245,"reflux":246}],277:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');
 var person = require('../data/person');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 
 var store = Reflux.createStore({
-  listenables: [actions],
+  listenables: [Actions],
 
   onUpdateAge: function onUpdateAge() {
     person.age = Math.random() * 100;

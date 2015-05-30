@@ -1,11 +1,11 @@
 var React = require('react');
 var Reflux = require('reflux');
 var person = require('../data/person');
-var actions = require('../actions/actions');
+var Actions = require('../actions/actions');
 import { ajax } from '../modules/utils';
 
 var SearchStore = Reflux.createStore({
-  listenables: [actions],
+  listenables: [Actions],
 
   onSearchArtist(query){
   	var url = 'https://api.spotify.com/v1/search?q='+ query +'&type=artist';
@@ -15,7 +15,7 @@ var SearchStore = Reflux.createStore({
       dataType: 'json',
       success: function(data){
         console.log(data)
-		    actions.updateResult(data);
+		    Actions.updateResult(data);
       }.bind(this)
     });
   }
