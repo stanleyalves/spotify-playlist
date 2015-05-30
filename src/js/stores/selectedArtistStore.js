@@ -11,15 +11,12 @@ var SelectedArtistStore = Reflux.createStore({
     };
   },
 
-  onGetArtistBio(){
-    alert('getting the bio');
-  },
-
   //Set state in here for results. 
   onSelectArtist(artist){
     var bio = Actions.getArtistBio(artist);
     // var albums = GetArtistAlbums(artist);
-
+    console.log('AFTER BIO');
+    console.log(bio)
     this.trigger({
       selectedArtist : {
         id : artist.id,

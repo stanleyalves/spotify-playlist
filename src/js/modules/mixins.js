@@ -31,7 +31,7 @@ var GetArtistAlbums = (selectedArtistData) => {
 var GetArtistBio = (artist) => {
   console.log('ON Artist BIO')
   var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + artist.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json'
-  console.log(url)
+  console.log(url);
   ajax({
     url: url,
     method:'GET',
