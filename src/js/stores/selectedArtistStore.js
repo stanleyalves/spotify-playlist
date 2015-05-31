@@ -11,12 +11,27 @@ var SelectedArtistStore = Reflux.createStore({
     };
   },
 
+  init() {
+    this.listenTo(Actions.getArtistBio, this.onGetArtistBio);
+  },
+
+  onGetArtistBio(artist) {
+    console.log('ON get artist BIO')
+    console.log(artist)
+    // alert('on get artist bio');
+    
+  },
+
   //Set state in here for results. 
   onSelectArtist(artist){
-    var bio = Actions.getArtistBio(artist);
+    var bio = Actions.getArtistBio(artist).load(
+      console.log(resolve)
+    );
     // var albums = GetArtistAlbums(artist);
     console.log('AFTER BIO');
-    console.log(bio)
+    console.log(bio); //Returns the promise
+
+
     this.trigger({
       selectedArtist : {
         id : artist.id,

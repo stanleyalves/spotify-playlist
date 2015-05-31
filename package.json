@@ -4,8 +4,9 @@
   "author": "Simon Holmes <srsholmes@gmail.com>",
   "license": "Yaaar",
   "devDependencies": {
-    "body-parser": "^1.4.3",
     "babelify": "^6.0.1",
+    "bluebird": "^2.9.27",
+    "body-parser": "^1.4.3",
     "browserify": "^8.1.3",
     "compression": "^1.4.1",
     "connect-inject": "^0.3.2",
