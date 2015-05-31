@@ -30084,26 +30084,39 @@ var SelectedArtistStore = Reflux.createStore({
 
   //Set state in here for results.
   onSelectArtist: function onSelectArtist(artist) {
-    // var bio = Actions.getArtistBio(artist).then(function(contents) {
-    //     var response = JSON.parse(contents.currentTarget.response);
-    //     console.log(response.artist.bio.content);
-    //     console.log(typeof(response));
 
-    // }).catch(function(e) {
-    //     alert("Exception " + e);
-    // });
-    // var albums = GetArtistAlbums(artist);
-    Actions.getArtistBio(artist);
+    var self = this;
 
-    this.trigger({
-      selectedArtist: {
-        id: artist.id,
-        name: artist.name,
-        pic: artist.images[1].url,
-        followers: artist.followers.total,
-        href: artist.external_urls.spotify
-      }
+    var bio = Actions.getArtistBio(artist).then(function (contents) {
+      var response = JSON.parse(contents.currentTarget.response);
+      console.log(response.artist.bio.content);
+      console.log(typeof response);
+
+      self.trigger({
+        selectedArtist: {
+          id: artist.id,
+          name: artist.name,
+          pic: artist.images[1].url,
+          followers: artist.followers.total,
+          href: artist.external_urls.spotify,
+          bio: response.artist.bio.content
+        }
+      });
+    })['catch'](function (e) {
+      alert('Exception ' + e);
     });
+    // var albums = GetArtistAlbums(artist);
+    // Actions.getArtistBio(artist);
+
+    // this.trigger({
+    //   selectedArtist : {
+    //     id : artist.id,
+    //     name : artist.name,
+    //     pic : artist.images[1].url,
+    //     followers : artist.followers.total,
+    //     href : artist.external_urls.spotify
+    //   }
+    // });  
   }
 
 });
