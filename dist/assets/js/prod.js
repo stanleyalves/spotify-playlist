@@ -29893,8 +29893,8 @@ var GetArtistBio = function GetArtistBio(artist) {
     xhr.addEventListener('load', resolve);
     xhr.open('GET', url);
     xhr.send(null);
-    console.log('resolve');
-    console.log(resolve);
+    console.log('xhr');
+    console.log(xhr);
   });
 };
 
@@ -30070,17 +30070,16 @@ var SelectedArtistStore = Reflux.createStore({
     this.listenTo(Actions.getArtistBio, this.onGetArtistBio);
   },
 
-  onGetArtistBio: function onGetArtistBio(artist) {
-    console.log('ON get artist BIO');
-    console.log(artist);
-  },
-
   //Set state in here for results.
   onSelectArtist: function onSelectArtist(artist) {
-    var bio = Actions.getArtistBio(artist).load(console.log(resolve));
+    var bio = Actions.getArtistBio(artist).then(function (contents) {
+      var response = JSON.parse(contents.currentTarget.response);
+      console.log(response.artist.bio.content);
+      console.log(typeof response);
+    })['catch'](function (e) {
+      alert('Exception ' + e);
+    });
     // var albums = GetArtistAlbums(artist);
-    console.log('AFTER BIO');
-    console.log(bio); //Returns the promise
 
     this.trigger({
       selectedArtist: {
@@ -30088,8 +30087,7 @@ var SelectedArtistStore = Reflux.createStore({
         name: artist.name,
         pic: artist.images[1].url,
         followers: artist.followers.total,
-        href: artist.external_urls.spotify,
-        bio: bio
+        href: artist.external_urls.spotify
       }
     });
   }
@@ -30097,7 +30095,6 @@ var SelectedArtistStore = Reflux.createStore({
 });
 
 module.exports = SelectedArtistStore;
-// alert('on get artist bio');
 
 },{"../actions/actions":267,"react":246,"reflux":247}],278:[function(require,module,exports){
 'use strict';

@@ -15,22 +15,17 @@ var SelectedArtistStore = Reflux.createStore({
     this.listenTo(Actions.getArtistBio, this.onGetArtistBio);
   },
 
-  onGetArtistBio(artist) {
-    console.log('ON get artist BIO')
-    console.log(artist)
-    // alert('on get artist bio');
-    
-  },
-
   //Set state in here for results. 
   onSelectArtist(artist){
-    var bio = Actions.getArtistBio(artist).load(
-      console.log(resolve)
-    );
-    // var albums = GetArtistAlbums(artist);
-    console.log('AFTER BIO');
-    console.log(bio); //Returns the promise
+    var bio = Actions.getArtistBio(artist).then(function(contents) {
+        var response = JSON.parse(contents.currentTarget.response);
+        console.log(response.artist.bio.content);
+        console.log(typeof(response));
 
+    }).catch(function(e) {
+        alert("Exception " + e);
+    });
+    // var albums = GetArtistAlbums(artist);
 
     this.trigger({
       selectedArtist : {
@@ -38,8 +33,7 @@ var SelectedArtistStore = Reflux.createStore({
         name : artist.name,
         pic : artist.images[1].url,
         followers : artist.followers.total,
-        href : artist.external_urls.spotify,
-        bio: bio
+        href : artist.external_urls.spotify
       }
     });    
   }

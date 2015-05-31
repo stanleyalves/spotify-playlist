@@ -48,8 +48,8 @@ var GetArtistBio = (artist) => {
       xhr.addEventListener("load", resolve);
       xhr.open("GET", url);
       xhr.send(null);
-      console.log('resolve')
-      console.log(resolve)
+      console.log('xhr')
+      console.log(xhr)
   });  
 }
 

@@ -11,5 +11,4 @@ let Actions = Reflux.createActions({
 
 Actions.getArtistBio.listenAndPromise(GetArtistBio);
 
-
 export default Actions;
