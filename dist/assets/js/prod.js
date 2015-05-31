@@ -30060,26 +30060,40 @@ var Actions = require('../actions/actions');
 var SelectedArtistStore = Reflux.createStore({
   listenables: [Actions],
 
+  init: function init() {
+    this.listenTo(Actions.getArtistBio, 'onGetArtistBio');
+  },
+
   getInitialState: function getInitialState() {
     return {
       selectedArtist: {}
     };
   },
 
-  init: function init() {
-    this.listenTo(Actions.getArtistBio, this.onGetArtistBio);
+  onGetArtistBio: function onGetArtistBio(promise) {
+    console.log('ON GET ARTIST BIO');
+    console.log(promise);
+    console.log('ONGETARTISTBIO XHR');
+    console.log(xhr);
+    this.setState({
+      selectedArtist: {
+        bio: response.artist.bio.content
+      }
+    });
   },
 
   //Set state in here for results.
   onSelectArtist: function onSelectArtist(artist) {
-    var bio = Actions.getArtistBio(artist).then(function (contents) {
-      var response = JSON.parse(contents.currentTarget.response);
-      console.log(response.artist.bio.content);
-      console.log(typeof response);
-    })['catch'](function (e) {
-      alert('Exception ' + e);
-    });
+    // var bio = Actions.getArtistBio(artist).then(function(contents) {
+    //     var response = JSON.parse(contents.currentTarget.response);
+    //     console.log(response.artist.bio.content);
+    //     console.log(typeof(response));
+
+    // }).catch(function(e) {
+    //     alert("Exception " + e);
+    // });
     // var albums = GetArtistAlbums(artist);
+    Actions.getArtistBio(artist);
 
     this.trigger({
       selectedArtist: {
