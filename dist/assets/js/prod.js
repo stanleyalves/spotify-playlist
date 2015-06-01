@@ -29566,7 +29566,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _GetArtistBio = require('../modules/mixins');
+var _SelectArtist = require('../modules/selectArtist');
+
+var _GetArtistBio = require('../modules/GetArtistBio');
 
 var Reflux = require('reflux');
 
@@ -29574,16 +29576,17 @@ var Actions = Reflux.createActions({
   'updateAge': {},
   'searchArtist': {},
   'updateResult': {},
-  'selectArtist': {},
+  'selectArtist': { asyncResult: true },
   'getArtistBio': { asyncResult: true }
 });
 
+Actions.selectArtist.listenAndPromise(_SelectArtist.SelectArtist);
 Actions.getArtistBio.listenAndPromise(_GetArtistBio.GetArtistBio);
 
 exports['default'] = Actions;
 module.exports = exports['default'];
 
-},{"../modules/mixins":273,"reflux":247}],268:[function(require,module,exports){
+},{"../modules/GetArtistBio":273,"../modules/selectArtist":275,"reflux":247}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29644,7 +29647,7 @@ function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-},{"../actions/actions":267,"../data/person":272,"../stores/resultStore":275,"../stores/searchStore":276,"../stores/selectedArtistStore":277,"../stores/store":278,"./results":269,"./search":270,"./selectedArtist":271,"react":246,"reflux":247}],269:[function(require,module,exports){
+},{"../actions/actions":267,"../data/person":272,"../stores/resultStore":277,"../stores/searchStore":278,"../stores/selectedArtistStore":279,"../stores/store":280,"./results":269,"./search":270,"./selectedArtist":271,"react":246,"reflux":247}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29718,7 +29721,7 @@ var Results = React.createClass({
 exports['default'] = { Results: Results };
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"../modules/mixins":273,"../modules/utils":274,"react":246,"reflux":247}],270:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/mixins":274,"../modules/utils":276,"react":246,"reflux":247}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29759,7 +29762,7 @@ var Search = React.createClass({
 exports['default'] = { Search: Search };
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"../modules/utils":274,"react":246,"reflux":247}],271:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/utils":276,"react":246,"reflux":247}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29781,12 +29784,9 @@ var SelectedArtist = React.createClass({
 
   render: function render() {
     var artist = this.props.artist;
-
     if (_ajax$isEmpty$extend.isEmpty(artist)) {
       return React.createElement('div', null);
     } else {
-      console.log('SELECTED ARTIST');
-      console.log(artist);
       return React.createElement(
         'div',
         { className: 'info-wrapper' },
@@ -29825,7 +29825,7 @@ var SelectedArtist = React.createClass({
 exports['default'] = { SelectedArtist: SelectedArtist };
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"../modules/mixins":273,"../modules/utils":274,"react":246,"reflux":247}],272:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/mixins":274,"../modules/utils":276,"react":246,"reflux":247}],272:[function(require,module,exports){
 'use strict';
 
 var person = {
@@ -29836,6 +29836,37 @@ var person = {
 module.exports = person;
 
 },{}],273:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _ajax$extend = require('./utils');
+
+var Promise = require('bluebird');
+
+var GetArtistBio = function GetArtistBio(artist) {
+  console.log('GetArtistBio promise');
+  var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + artist.name + '&api_key=cd27c4053cad0d05231bfdc4bf14b7d2&format=json';
+
+  return new Promise(function (resolve, reject) {
+    _ajax$extend.ajax({
+      url: url,
+      method: 'GET',
+      dataType: 'json',
+      success: function success(data) {
+        console.log(data);
+      }
+    });
+    return data;
+  });
+};
+
+exports['default'] = { GetArtistBio: GetArtistBio };
+module.exports = exports['default'];
+
+},{"./utils":276,"bluebird":90}],274:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29893,8 +29924,6 @@ var GetArtistBio = function GetArtistBio(artist) {
     xhr.addEventListener('load', resolve);
     xhr.open('GET', url);
     xhr.send(null);
-    console.log('xhr');
-    console.log(xhr);
   });
 };
 
@@ -29914,7 +29943,46 @@ var GetArtistImage = function GetArtistImage(data) {
 exports['default'] = { GetSimilarArtist: GetSimilarArtist, GetArtistAlbums: GetArtistAlbums, GetArtistBio: GetArtistBio, GetArtistImage: GetArtistImage };
 module.exports = exports['default'];
 
-},{"./utils":274,"bluebird":90}],274:[function(require,module,exports){
+},{"./utils":276,"bluebird":90}],275:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _ajax$extend = require('./utils');
+
+var Actions = require('../actions/actions');
+var Promise = require('bluebird');
+
+var SelectArtist = function SelectArtist(artist) {
+	console.log('before promise');
+	return new Promise(function (resolve, reject) {
+		console.log('PROMISE');
+		console.log(artist);
+		var artistData;
+		//We need to make a single artist object here, using our extend util.
+		var orignalArtist = artist;
+		// var bio = Actions.getArtistBio(orignalArtist).then(function(contents) {
+		//       var response = JSON.parse(contents.currentTarget.response);
+		//       console.log(response.artist.bio.content);
+		//       console.log(typeof(response));
+		//       //combine the respnse into the original artist
+		//   }).catch(function(e) {
+		//       alert("Exception " + e);
+		//   });
+
+		var artistData = _ajax$extend.extend({ bio: 'hard coded bio data extended in' }, artist);
+		console.log(artistData);
+
+		return artistData;
+	});
+};
+
+exports['default'] = { SelectArtist: SelectArtist };
+module.exports = exports['default'];
+
+},{"../actions/actions":267,"./utils":276,"bluebird":90}],276:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29992,7 +30060,7 @@ function isEmpty(obj) {
 exports['default'] = { extend: extend, ajax: ajax, isEmpty: isEmpty };
 module.exports = exports['default'];
 
-},{}],275:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 'use strict';
 
 var _ajax = require('../modules/utils');
@@ -30020,7 +30088,7 @@ var ResultStore = Reflux.createStore({
 
 module.exports = ResultStore;
 
-},{"../actions/actions":267,"../modules/utils":274,"react":246,"reflux":247}],276:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/utils":276,"react":246,"reflux":247}],278:[function(require,module,exports){
 'use strict';
 
 var _ajax = require('../modules/utils');
@@ -30050,7 +30118,7 @@ var SearchStore = Reflux.createStore({
 
 module.exports = SearchStore;
 
-},{"../actions/actions":267,"../data/person":272,"../modules/utils":274,"react":246,"reflux":247}],277:[function(require,module,exports){
+},{"../actions/actions":267,"../data/person":272,"../modules/utils":276,"react":246,"reflux":247}],279:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -30059,71 +30127,33 @@ var Actions = require('../actions/actions');
 
 var SelectedArtistStore = Reflux.createStore({
   listenables: [Actions],
-
-  init: function init() {
-    this.listenTo(Actions.getArtistBio, 'onGetArtistBio');
-  },
-
   getInitialState: function getInitialState() {
     return {
       selectedArtist: {}
     };
   },
 
-  onGetArtistBio: function onGetArtistBio(promise) {
-    console.log('ON GET ARTIST BIO');
-    console.log(promise);
-    console.log('ONGETARTISTBIO XHR');
-    console.log(xhr);
-    this.setState({
+  //Set state in here for results.
+  onSelectArtistCompleted: function onSelectArtistCompleted(artist) {
+    console.log('on selected artist in store');
+    console.log(artist);
+    this.trigger({
       selectedArtist: {
-        bio: response.artist.bio.content
+        id: artist.id,
+        name: artist.name,
+        pic: artist.images[1].url,
+        followers: artist.followers.total,
+        // href : artist.external_urls.spotify,
+        bio: artist.bio
       }
     });
-  },
-
-  //Set state in here for results.
-  onSelectArtist: function onSelectArtist(artist) {
-
-    var self = this;
-
-    var bio = Actions.getArtistBio(artist).then(function (contents) {
-      var response = JSON.parse(contents.currentTarget.response);
-      console.log(response.artist.bio.content);
-      console.log(typeof response);
-
-      self.trigger({
-        selectedArtist: {
-          id: artist.id,
-          name: artist.name,
-          pic: artist.images[1].url,
-          followers: artist.followers.total,
-          href: artist.external_urls.spotify,
-          bio: response.artist.bio.content
-        }
-      });
-    })['catch'](function (e) {
-      alert('Exception ' + e);
-    });
-    // var albums = GetArtistAlbums(artist);
-    // Actions.getArtistBio(artist);
-
-    // this.trigger({
-    //   selectedArtist : {
-    //     id : artist.id,
-    //     name : artist.name,
-    //     pic : artist.images[1].url,
-    //     followers : artist.followers.total,
-    //     href : artist.external_urls.spotify
-    //   }
-    // });  
   }
 
 });
 
 module.exports = SelectedArtistStore;
 
-},{"../actions/actions":267,"react":246,"reflux":247}],278:[function(require,module,exports){
+},{"../actions/actions":267,"react":246,"reflux":247}],280:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');

@@ -9,14 +9,11 @@ var SelectedArtist = React.createClass({
 
   render() {
     var artist = this.props.artist;
-
     if (isEmpty(artist)) {
       return (
         <div></div>
       )
     } else {
-      console.log('SELECTED ARTIST')
-      console.log(artist)
       return (
         <div className="info-wrapper">
           <div className="selected-artist">

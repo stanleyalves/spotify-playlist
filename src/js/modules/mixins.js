@@ -43,13 +43,11 @@ var GetArtistBio = (artist) => {
   //   }
   // });
   return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest;
-      xhr.addEventListener("error", reject);
-      xhr.addEventListener("load", resolve);
-      xhr.open("GET", url);
-      xhr.send(null);
-      console.log('xhr')
-      console.log(xhr)
+    var xhr = new XMLHttpRequest;
+    xhr.addEventListener("error", reject);
+    xhr.addEventListener("load", resolve);
+    xhr.open("GET", url);
+    xhr.send(null);
   });  
 }
 
