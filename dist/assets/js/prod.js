@@ -29975,7 +29975,7 @@ var SelectArtist = function SelectArtist(artist) {
 		var artistData = _ajax$extend.extend({ bio: 'hard coded bio data extended in' }, artist);
 		console.log(artistData);
 
-		return artistData;
+		resolve(artistData);
 	});
 };
 
