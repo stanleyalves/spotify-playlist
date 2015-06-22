@@ -3,13 +3,11 @@ var Promise = require('bluebird')
 import { ajax, extend } from './utils';
 
 var SelectArtist = (artist) => {
-	console.log('before promise')
 	return new Promise(function(resolve, reject) {
-		console.log('PROMISE');
-		console.log(artist);
 		var artistData;
 		//We need to make a single artist object here, using our extend util.
 		var orignalArtist = artist;
+
 		// var bio = Actions.getArtistBio(orignalArtist).then(function(contents) {
   //       var response = JSON.parse(contents.currentTarget.response);
   //       console.log(response.artist.bio.content);
@@ -19,7 +17,15 @@ var SelectArtist = (artist) => {
   //       alert("Exception " + e);
   //   });
 
-    var artistData = extend({ bio : 'hard coded bio data extended in'}, artist);
+	// console.log(Actions);
+	// console.log(Actions.getArtistBio)
+	// 	console.log(Actions.default.getArtistBio)
+
+	//    var bio = Actions.getArtistBio(orignalArtist);
+
+    // var artistData = extend({ bio : 'hard coded bio data extended in'}, artist);
+
+    var artistData = extend({ bio : bio}, artist);
 		console.log(artistData);
 
 		resolve(artistData);
