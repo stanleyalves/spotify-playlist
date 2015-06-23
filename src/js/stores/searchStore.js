@@ -10,7 +10,6 @@ var SearchStore = Reflux.createStore({
 
   init() {
     console.log('search artist store init');
-    
   },
 
   getInitialState() {
@@ -20,7 +19,6 @@ var SearchStore = Reflux.createStore({
   },
 
   onSearchArtistCompleted(data){
-    console.log('onSearchArtistCompleted')
     this.trigger({
       results: data
     });

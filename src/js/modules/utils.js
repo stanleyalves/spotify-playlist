@@ -62,7 +62,7 @@ function ajax (opts) {
 }
 
 function isEmpty(obj) {
-  // return Object.keys(obj).length === 0;
+  return Object.keys(obj).length === 0;
 }
 
 export default { extend, ajax, isEmpty };  

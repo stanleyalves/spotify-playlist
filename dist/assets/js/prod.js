@@ -29672,37 +29672,55 @@ var Results = React.createClass({
   },
 
   render: function render() {
-    // var obj = this.props.results;
-    //Check to see if the object is empty, if so return an empty <li>
-
-    //   var artists = artistArray.map(function (data, i){
-    //     var artistImage = GetArtistImage(data),
-    //         artistName = data.name;
-    //     return (
-    //       <li>
-    //         <a onClick={this.selectArtist.bind(data, i)} className="result">
-    //           <div className="artist">
-    //             <img className="artist-pic" src={artistImage}/>
-    //             <p>{artistName}</p>
-    //           </div>
-    //         </a>
-    //       </li>
-    //     )
-    //   }, this);
-
-    return React.createElement(
-      'div',
-      { className: 'results' },
-      React.createElement(
-        'ul',
-        null,
+    var results = this.props.results;
+    if (_ajax$isEmpty$extend.isEmpty(results)) {
+      return React.createElement(
+        'div',
+        { className: 'results' },
         React.createElement(
+          'ul',
+          null,
+          React.createElement(
+            'li',
+            null,
+            'Please search for an artist'
+          )
+        )
+      );
+    } else {
+      var artists = results.artists.items.map(function (data, i) {
+        var artistImage = _GetArtistImage.GetArtistImage(data),
+            artistName = data.name;
+        return React.createElement(
           'li',
           null,
-          'im a stupid cunt'
+          React.createElement(
+            'a',
+            { onClick: this.selectArtist.bind(data, i), className: 'result' },
+            React.createElement(
+              'div',
+              { className: 'artist' },
+              React.createElement('img', { className: 'artist-pic', src: artistImage }),
+              React.createElement(
+                'p',
+                null,
+                artistName
+              )
+            )
+          )
+        );
+      }, this);
+
+      return React.createElement(
+        'div',
+        { className: 'results' },
+        React.createElement(
+          'ul',
+          null,
+          artists
         )
-      )
-    );
+      );
+    }
   }
 });
 
@@ -30018,12 +30036,12 @@ function ajax(opts) {
     xhr.send(args.data);
 }
 
-function isEmpty(obj) {}
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
 
 exports['default'] = { extend: extend, ajax: ajax, isEmpty: isEmpty };
 module.exports = exports['default'];
-
-// return Object.keys(obj).length === 0;
 
 },{}],277:[function(require,module,exports){
 'use strict';
@@ -30050,7 +30068,6 @@ var SearchStore = Reflux.createStore({
   },
 
   onSearchArtistCompleted: function onSearchArtistCompleted(data) {
-    console.log('onSearchArtistCompleted');
     this.trigger({
       results: data
     });
