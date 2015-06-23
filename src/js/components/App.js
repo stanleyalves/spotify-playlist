@@ -6,8 +6,6 @@ var store = require('../stores/store');
 
 //Stores
 var SearchStore = require('../stores/searchStore');
-var ResultStore = require('../stores/resultStore');
-var SelectedArtistStore = require('../stores/selectedArtistStore');
 
 //Components
 import { Search } from './search';
@@ -18,9 +16,7 @@ var App = React.createClass({
 
   mixins: [
     Reflux.connect(store),
-    Reflux.connect(SearchStore),
-    Reflux.connect(ResultStore),
-    Reflux.connect(SelectedArtistStore)
+    Reflux.connect(SearchStore)
   ],
 
   render(){
@@ -31,9 +27,6 @@ var App = React.createClass({
           <Search/>
           <Results results={this.state.results}/> 
           <h2 onClick={Actions.updateAge}>{p.age}</h2>         
-        </div>
-        <div className="main">
-          <SelectedArtist artist={this.state.selectedArtist}/>
         </div>     
       </div>
     )

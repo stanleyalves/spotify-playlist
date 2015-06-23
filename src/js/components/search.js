@@ -8,7 +8,6 @@ var Search = React.createClass({
   handleSubmit(e) {
     e.preventDefault();    
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
-    //Do the action;
     Actions.searchArtist(query);  
   },
 

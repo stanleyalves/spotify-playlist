@@ -11,6 +11,7 @@ var ResultStore = Reflux.createStore({
     	results: {}
     };
   },
+  
   //Set state in here for results. 
   onUpdateResult(data){
   	this.trigger({

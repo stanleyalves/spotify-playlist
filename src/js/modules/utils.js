@@ -1,5 +1,3 @@
-
-
 function extend() {
   var args = [].slice.call(arguments),
       ret = args[0];
@@ -64,7 +62,7 @@ function ajax (opts) {
 }
 
 function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
+  // return Object.keys(obj).length === 0;
 }
 
 export default { extend, ajax, isEmpty };  
