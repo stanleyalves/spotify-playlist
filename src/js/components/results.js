@@ -10,12 +10,6 @@ var Results = React.createClass({
     Actions.selectArtist(artist);
   },
 
-  getInitialState() {
-    return { 
-      results: {}
-    };
-  },
-
   render() {
     var results = this.props.results;
     if (isEmpty(results)) {

@@ -3,11 +3,11 @@ var Reflux = require('reflux');
 var Actions = require('../actions/actions');
 
 var SelectedArtistStore = Reflux.createStore({
+  
   listenables: [Actions],
-  getInitialState() {
-    return { 
-    	selectedArtist : {}
-    };
+
+  init() {
+    console.log('Selected artist store init');
   },
 
   //Set state in here for results. 

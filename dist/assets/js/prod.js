@@ -29566,18 +29566,18 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _searchArtist = require('../modules');
+var _searchArtist$selectArtist = require('../modules');
 
 var Reflux = require('reflux');
 
 var Actions = Reflux.createActions({
   'updateAge': {},
-  'searchArtist': { asyncResult: true }
-});
+  'searchArtist': { asyncResult: true },
+  'selectArtist': { asyncResult: true } });
 
-Actions.searchArtist.listenAndPromise(_searchArtist.searchArtist);
+Actions.searchArtist.listenAndPromise(_searchArtist$selectArtist.searchArtist);
+Actions.selectArtist.listenAndPromise(_searchArtist$selectArtist.selectArtist);
 
-// Actions.selectArtist.listenAndPromise(SelectArtist);
 // // Actions.getArtistBio.listenAndPromise(GetArtistBio);
 
 // //Do the chain of actions here.
@@ -29612,14 +29612,17 @@ var store = require('../stores/store');
 
 //Stores
 var SearchStore = require('../stores/searchStore');
+var SelectedArtistStore = require('../stores/selectedArtistStore');
 
 var App = React.createClass({
   displayName: 'App',
 
-  mixins: [Reflux.connect(store), Reflux.connect(SearchStore)],
+  mixins: [Reflux.connect(store), Reflux.connect(SearchStore), Reflux.connect(SelectedArtistStore)],
 
   render: function render() {
     var p = this.state.person;
+    console.log(this.state.selectedArtist);
+    console.log(this.state.results);
     return React.createElement(
       'div',
       { className: 'wrapper' },
@@ -29633,6 +29636,11 @@ var App = React.createClass({
           { onClick: Actions.updateAge },
           p.age
         )
+      ),
+      React.createElement(
+        'div',
+        { className: 'main' },
+        React.createElement(_SelectedArtist.SelectedArtist, { artist: this.state.selectedArtist })
       )
     );
   }
@@ -29642,7 +29650,7 @@ function start() {
   React.render(React.createElement(App, null), document.body);
 }
 
-},{"../actions/actions":267,"../data/person":272,"../stores/searchStore":277,"../stores/store":278,"./results":269,"./search":270,"./selectedArtist":271,"react":246,"reflux":247}],269:[function(require,module,exports){
+},{"../actions/actions":267,"../data/person":272,"../stores/searchStore":278,"../stores/selectedArtistStore":279,"../stores/store":280,"./results":269,"./search":270,"./selectedArtist":271,"react":246,"reflux":247}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29663,12 +29671,6 @@ var Results = React.createClass({
   selectArtist: function selectArtist(i) {
     var artist = this.props.results.artists.items[i];
     Actions.selectArtist(artist);
-  },
-
-  getInitialState: function getInitialState() {
-    return {
-      results: {}
-    };
   },
 
   render: function render() {
@@ -29727,7 +29729,7 @@ var Results = React.createClass({
 exports['default'] = { Results: Results };
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"../modules/mixins":274,"../modules/utils":276,"react":246,"reflux":247}],270:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/mixins":274,"../modules/utils":277,"react":246,"reflux":247}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29767,7 +29769,7 @@ var Search = React.createClass({
 exports['default'] = { Search: Search };
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"../modules/utils":276,"react":246,"reflux":247}],271:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/utils":277,"react":246,"reflux":247}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29789,6 +29791,7 @@ var SelectedArtist = React.createClass({
 
   render: function render() {
     var artist = this.props.artist;
+
     if (_ajax$isEmpty$extend.isEmpty(artist)) {
       return React.createElement('div', null);
     } else {
@@ -29830,7 +29833,7 @@ var SelectedArtist = React.createClass({
 exports['default'] = { SelectedArtist: SelectedArtist };
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"../modules/mixins":274,"../modules/utils":276,"react":246,"reflux":247}],272:[function(require,module,exports){
+},{"../actions/actions":267,"../modules/mixins":274,"../modules/utils":277,"react":246,"reflux":247}],272:[function(require,module,exports){
 'use strict';
 
 var person = {
@@ -29853,12 +29856,17 @@ var _searchArtist = require('./searchArtist');
 
 var _searchArtist2 = _interopRequireDefault(_searchArtist);
 
+var _selectArtist = require('./selectArtist');
+
+var _selectArtist2 = _interopRequireDefault(_selectArtist);
+
 exports['default'] = {
-	searchArtist: _searchArtist2['default']
+	searchArtist: _searchArtist2['default'],
+	selectArtist: _selectArtist2['default']
 };
 module.exports = exports['default'];
 
-},{"./searchArtist":275}],274:[function(require,module,exports){
+},{"./searchArtist":275,"./selectArtist":276}],274:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29935,7 +29943,7 @@ var GetArtistImage = function GetArtistImage(data) {
 exports['default'] = { GetSimilarArtist: GetSimilarArtist, GetArtistAlbums: GetArtistAlbums, GetArtistBio: GetArtistBio, GetArtistImage: GetArtistImage };
 module.exports = exports['default'];
 
-},{"./utils":276,"bluebird":90}],275:[function(require,module,exports){
+},{"./utils":277,"bluebird":90}],275:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -29966,7 +29974,33 @@ function searchArtist(artist) {
 
 module.exports = exports['default'];
 
-},{"../actions/actions":267,"./utils":276,"bluebird":90}],276:[function(require,module,exports){
+},{"../actions/actions":267,"./utils":277,"bluebird":90}],276:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+exports['default'] = selectArtist;
+
+var _ajax$extend = require('./utils');
+
+var Actions = require('../actions/actions');
+var Promise = require('bluebird');
+
+function selectArtist(artist) {
+	return new Promise(function (resolve, reject) {
+		var artistData;
+		//We need to make a single artist object here, using our extend util.
+		var orignalArtist = artist;
+		var artistData = _ajax$extend.extend({ bio: 'hard coded bio data extended in' }, artist);
+		console.log(artistData);
+		resolve(artistData);
+	});
+}
+
+module.exports = exports['default'];
+
+},{"../actions/actions":267,"./utils":277,"bluebird":90}],277:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -30043,7 +30077,7 @@ function isEmpty(obj) {
 exports['default'] = { extend: extend, ajax: ajax, isEmpty: isEmpty };
 module.exports = exports['default'];
 
-},{}],277:[function(require,module,exports){
+},{}],278:[function(require,module,exports){
 'use strict';
 
 var _ajax = require('../modules/utils');
@@ -30063,7 +30097,8 @@ var SearchStore = Reflux.createStore({
 
   getInitialState: function getInitialState() {
     return {
-      results: {}
+      results: {},
+      selectedArtist: {}
     };
   },
 
@@ -30077,7 +30112,42 @@ var SearchStore = Reflux.createStore({
 
 module.exports = SearchStore;
 
-},{"../actions/actions":267,"../data/person":272,"../modules/utils":276,"react":246,"reflux":247}],278:[function(require,module,exports){
+},{"../actions/actions":267,"../data/person":272,"../modules/utils":277,"react":246,"reflux":247}],279:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+var Reflux = require('reflux');
+var Actions = require('../actions/actions');
+
+var SelectedArtistStore = Reflux.createStore({
+
+  listenables: [Actions],
+
+  init: function init() {
+    console.log('Selected artist store init');
+  },
+
+  //Set state in here for results.
+  onSelectArtistCompleted: function onSelectArtistCompleted(artist) {
+    console.log('on selected artist in store');
+    console.log(artist);
+    this.trigger({
+      selectedArtist: {
+        id: artist.id,
+        name: artist.name,
+        pic: artist.images[1].url,
+        followers: artist.followers.total,
+        // href : artist.external_urls.spotify,
+        bio: artist.bio
+      }
+    });
+  }
+
+});
+
+module.exports = SelectedArtistStore;
+
+},{"../actions/actions":267,"react":246,"reflux":247}],280:[function(require,module,exports){
 'use strict';
 
 var Reflux = require('reflux');

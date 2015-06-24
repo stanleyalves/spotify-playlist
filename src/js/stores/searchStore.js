@@ -14,7 +14,8 @@ var SearchStore = Reflux.createStore({
 
   getInitialState() {
     return { 
-      results: {}
+      results: {},
+      selectedArtist : {}
     };
   },
 

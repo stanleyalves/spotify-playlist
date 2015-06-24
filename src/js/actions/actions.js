@@ -1,17 +1,20 @@
 var Reflux = require('reflux');
 
 import {
-	searchArtist
+	searchArtist,
+	selectArtist
 } from '../modules';
 
 let Actions = Reflux.createActions({
   'updateAge': {}, 
-  'searchArtist': { asyncResult: true }
+  'searchArtist': { asyncResult: true },
+  'selectArtist': { asyncResult: true },
 });
 
 Actions.searchArtist.listenAndPromise(searchArtist);
+Actions.selectArtist.listenAndPromise(selectArtist);
 
-// Actions.selectArtist.listenAndPromise(SelectArtist);
+
 // // Actions.getArtistBio.listenAndPromise(GetArtistBio);
 
 // //Do the chain of actions here. 
