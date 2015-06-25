@@ -19,7 +19,7 @@ var SearchStore = Reflux.createStore({
     };
   },
 
-  onSearchArtistCompleted(data){
+  onSearchArtistApiCompleted(data){
     this.trigger({
       results: data
     });

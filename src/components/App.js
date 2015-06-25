@@ -19,7 +19,6 @@ var App = React.createClass({
   ],
 
   render(){
-    var p = this.state.person;
     console.log(this.state.selectedArtist);
     console.log(this.state.results)
     return ( 

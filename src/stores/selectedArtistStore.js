@@ -11,7 +11,7 @@ var SelectedArtistStore = Reflux.createStore({
   },
 
   //Set state in here for results. 
-  onSelectArtistCompleted(artist){
+  onSelectArtistApiCompleted(artist){
     console.log('on selected artist in store')
     console.log(artist)
     this.trigger({
