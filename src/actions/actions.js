@@ -7,12 +7,12 @@ import {
 
 let Actions = Reflux.createActions({
   'updateAge': {}, 
-  'searchArtist': { asyncResult: true },
-  'selectArtist': { asyncResult: true },
+  'searchArtistApi': { asyncResult: true },
+  'selectArtistApi': { asyncResult: true },
 });
 
-Actions.searchArtist.listenAndPromise(searchArtist);
-Actions.selectArtist.listenAndPromise(selectArtist);
+Actions.searchArtistApi.listenAndPromise(searchArtist);
+Actions.selectArtistApi.listenAndPromise(selectArtist);
 
 
 // // Actions.getArtistBio.listenAndPromise(GetArtistBio);

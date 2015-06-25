@@ -8,7 +8,7 @@ var Search = React.createClass({
   handleSubmit(e) {
     e.preventDefault();    
     var query = encodeURI(React.findDOMNode(this.refs.searchBar).value.trim());
-    Actions.searchArtist(query);  
+    Actions.searchArtistApi(query);  
   },
 
   render() {
